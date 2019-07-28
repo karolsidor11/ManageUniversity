@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Setter
 @Builder
 @ToString
-class Adres {
+ public class Adres {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
