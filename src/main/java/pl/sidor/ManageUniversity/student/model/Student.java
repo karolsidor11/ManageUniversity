@@ -1,9 +1,7 @@
 package pl.sidor.ManageUniversity.student.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import pl.sidor.ManageUniversity.model.Adres;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -13,6 +11,8 @@ import java.sql.Date;
 @Setter
 @Builder
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class Student {
 
     @Id

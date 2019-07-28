@@ -6,7 +6,7 @@ import pl.sidor.ManageUniversity.student.model.Student;
 @Component
 public interface StudentDao {
 
-    Student findById(long id);
+    Student findById(long id) throws Exception;
 
     Student create(Student student);
 
@@ -14,3 +14,4 @@ public interface StudentDao {
 
     void delete(long id);
 }
+

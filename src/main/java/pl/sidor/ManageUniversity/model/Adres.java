@@ -1,4 +1,4 @@
-package pl.sidor.ManageUniversity.student.model;
+package pl.sidor.ManageUniversity.model;
 
 import lombok.Builder;
 import lombok.Getter;

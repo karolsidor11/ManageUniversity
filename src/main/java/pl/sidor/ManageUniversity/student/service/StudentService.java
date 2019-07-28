@@ -3,17 +3,16 @@ package pl.sidor.ManageUniversity.student.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.sidor.ManageUniversity.exception.StudentNotFoundException;
 import pl.sidor.ManageUniversity.student.dao.StudentDao;
-import pl.sidor.ManageUniversity.student.model.Adres;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 
-import java.sql.Date;
 import java.util.Optional;
 
 @Service
 @Transactional
-public class StudentService  implements StudentDao{
+public class StudentService implements StudentDao {
 
     private StudentRepo studentRepo;
 
@@ -23,7 +22,8 @@ public class StudentService  implements StudentDao{
     }
 
     @Override
-    public Student findById(long id) {
+    public Student findById(long id)  {
+
         return studentRepo.findById(id).get();
     }
 
@@ -37,14 +37,14 @@ public class StudentService  implements StudentDao{
 
         Optional<Student> byId = studentRepo.findById(student.getId());
 
-            Student actualStudent = byId.get();
+        Student actualStudent = byId.get();
 
-            actualStudent.setName(student.getName());
-            actualStudent.setLastName(student.getLastName());
-            actualStudent.setEmail(student.getEmail());
-            actualStudent.setPhoneNumber(student.getPhoneNumber());
-            actualStudent.setAdres(student.getAdres());
-            actualStudent.setDate(student.getDate());
+        actualStudent.setName(student.getName());
+        actualStudent.setLastName(student.getLastName());
+        actualStudent.setEmail(student.getEmail());
+        actualStudent.setPhoneNumber(student.getPhoneNumber());
+        actualStudent.setAdres(student.getAdres());
+        actualStudent.setDate(student.getDate());
     }
 
     @Override
