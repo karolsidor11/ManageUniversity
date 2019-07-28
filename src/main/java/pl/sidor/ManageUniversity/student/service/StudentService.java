@@ -3,7 +3,6 @@ package pl.sidor.ManageUniversity.student.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.sidor.ManageUniversity.exception.StudentNotFoundException;
 import pl.sidor.ManageUniversity.student.dao.StudentDao;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
@@ -22,7 +21,7 @@ public class StudentService implements StudentDao {
     }
 
     @Override
-    public Student findById(long id)  {
+    public Student findById(long id) {
 
         return studentRepo.findById(id).get();
     }
@@ -45,6 +44,8 @@ public class StudentService implements StudentDao {
         actualStudent.setPhoneNumber(student.getPhoneNumber());
         actualStudent.setAdres(student.getAdres());
         actualStudent.setDate(student.getDate());
+
+        studentRepo.save(actualStudent);
     }
 
     @Override

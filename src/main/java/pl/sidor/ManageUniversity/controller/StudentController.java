@@ -21,7 +21,7 @@ public class StudentController {
     }
 
 
-    @GetMapping(value = "/find/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/findStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> findStudentByID(@PathVariable long id) {
 
         Optional<Student> byId = Optional.of(studentService.findById(id));
@@ -32,7 +32,7 @@ public class StudentController {
 
     }
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/saveStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
 
         Student student1 = studentService.create(student);
@@ -40,8 +40,7 @@ public class StudentController {
         return new ResponseEntity<>(student1, HttpStatus.OK);
     }
 
-
-    @DeleteMapping(value = "/delete/{id}")
+    @DeleteMapping(value = "/deleteStudent/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
 
         studentService.delete(id);
@@ -49,8 +48,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
-    @PostMapping(value = "update" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "updateStudent" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
 
         studentService.update(student);

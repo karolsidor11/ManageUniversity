@@ -35,12 +35,16 @@ public class LecturerService implements LecturerDao {
 
         Lecturer lecturer1 = byId.get();
 
+        lecturer1.setId(lecturer.getId());
         lecturer1.setName(lecturer.getName());
         lecturer1.setLastName(lecturer.getLastName());
         lecturer1.setEmail(lecturer.getEmail());
         lecturer1.setAdres(lecturer.getAdres());
         lecturer1.setGrade(lecturer.getGrade());
         lecturer1.setPhoneNumber(lecturer.getPhoneNumber());
+
+        lecturerRepo.save(lecturer1);
+
     }
 
     @Override
