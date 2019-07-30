@@ -3,9 +3,11 @@ package pl.sidor.ManageUniversity.student.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.sidor.ManageUniversity.exception.StudentException;
 import pl.sidor.ManageUniversity.student.dao.StudentDao;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
+import pl.sidor.ManageUniversity.student.validation.StudentValidator;
 
 import java.util.Optional;
 
@@ -14,10 +16,12 @@ import java.util.Optional;
 public class StudentService implements StudentDao {
 
     private StudentRepo studentRepo;
+    private StudentValidator studentValidator;
 
     @Autowired
-    public StudentService(StudentRepo studentRepo) {
+    public StudentService(StudentRepo studentRepo, StudentValidator studentValidator) {
         this.studentRepo = studentRepo;
+        this.studentValidator = studentValidator;
     }
 
     @Override
@@ -27,8 +31,12 @@ public class StudentService implements StudentDao {
     }
 
     @Override
-    public Student create(Student student) {
-        return studentRepo.save(student);
+    public Student create(Student student) throws StudentException {
+        if (!studentValidator.test(student)) {
+            return studentRepo.save(student);
+        } else {
+            throw new StudentException("W bazie istnieje Student o podanym emailu lub numerze telefonu.");
+        }
     }
 
     @Override

@@ -1,16 +1,21 @@
 package pl.sidor.ManageUniversity.student.service
 
+import pl.sidor.ManageUniversity.exception.StudentException
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
+import pl.sidor.ManageUniversity.student.validation.StudentValidator
+import spock.lang.Ignore
 
 class StudentServiceTest extends spock.lang.Specification {
 
     private StudentRepo studentRepo
     private StudentService service
+    private StudentValidator studentValidator
 
     void setup() {
         studentRepo = Mock(StudentRepo.class)
-        service = new StudentService(studentRepo)
+        studentValidator = Mock(StudentValidator.class)
+        service = new StudentService(studentRepo, studentValidator)
     }
 
     def "should find student by ID "() {
@@ -22,7 +27,6 @@ class StudentServiceTest extends spock.lang.Specification {
                 .lastName("Sidor")
                 .email("karolsidor11@wp.pl")
                 .build()
-
         studentRepo.findById(1) >> Optional.of(student)
 
         when:
@@ -42,6 +46,7 @@ class StudentServiceTest extends spock.lang.Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
+        studentValidator.test(student) >> false
         studentRepo.save(student) >> student
 
         when:
@@ -49,6 +54,27 @@ class StudentServiceTest extends spock.lang.Specification {
 
         then:
         actualStudent == student
+    }
+
+    @Ignore
+    def "should return StudentException"() {
+
+        given:
+        Student student = Student.builder()
+                .id(1)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karolsidor11@wp.pl")
+                .build()
+
+        studentValidator.test(student) >> true
+        studentRepo.save(student)
+
+        when:
+        service.create(student)
+
+        then:
+        thrown(StudentException.class)
     }
 
     def "should delete student"() {
@@ -67,9 +93,7 @@ class StudentServiceTest extends spock.lang.Specification {
     }
 
     def "should update student"() {
-
         given:
-
         Student student = Student.builder()
                 .id(1)
                 .name("Karol")
@@ -77,10 +101,9 @@ class StudentServiceTest extends spock.lang.Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
-        studentRepo.findById(1)>>Optional.of(student)
+        studentRepo.findById(1) >> Optional.of(student)
 
         when:
-
         Student actualStudent = service.findById(1)
 
         actualStudent.setName("Jan")
@@ -90,8 +113,8 @@ class StudentServiceTest extends spock.lang.Specification {
         service.update(actualStudent)
 
         then:
-        actualStudent.getName()=="Jan"
-        actualStudent.getLastName()=="Nowak"
-        actualStudent.getEmail()=="nowak@wp.pl"
+        actualStudent.getName() == "Jan"
+        actualStudent.getLastName() == "Nowak"
+        actualStudent.getEmail() == "nowak@wp.pl"
     }
 }
