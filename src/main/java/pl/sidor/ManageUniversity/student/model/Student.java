@@ -1,43 +1,52 @@
 package pl.sidor.ManageUniversity.student.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.sidor.ManageUniversity.model.Adres;
 
 import javax.persistence.*;
-import java.sql.Date;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    @Column(name = "Imie")
+    @Column(name = "Name")
+    @NotNull(message = "Imie nie może być null.")
     private String name;
 
-    @Column(name = "Nazwisko")
+    @Column(name = "LastName")
+    @NotNull(message = "Nazwisko nie może być null.")
     private String lastName;
 
-    @Column(name = "Data_urodzenia")
+    @Column(name = "Date_of_birth")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date date;
 
     @Column(name = "Email")
+    @Email(message = "Nieprawidłowy adres email.")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "Adres_id")
+    @Embedded
+    @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "Numer_telefonu")
+    @Column(name = "PhoneNumber")
+    @NotNull(message = "Niepoprawny numer telefonu. Numer musi być 9 cyfrowy.")
+    @Size(min = 9, max = 9)
     private int phoneNumber;
 
-    @Column(name = "Czy_student")
+    @Column(name = "isStudent")
+    @NotNull(message = "Czy Student nie może być null.")
     private boolean isStudent;
 }

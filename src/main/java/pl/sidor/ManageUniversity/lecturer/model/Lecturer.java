@@ -1,40 +1,46 @@
 package pl.sidor.ManageUniversity.lecturer.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import pl.sidor.ManageUniversity.model.Adres;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
-@ToString
-@AllArgsConstructor
-@NoArgsConstructor
 public class Lecturer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  long id;
+    private Long id;
 
-    @Column(name = "Imie")
+    @Column(name = "Name")
+    @NotNull(message = "Imię nie może być null.")
     private String name;
 
-    @Column(name = "Nazwisko")
+    @Column(name = "LastName")
+    @NotNull(message = "Nazwisko nie może być null.")
     private String lastName;
 
     @Column(name = "Email")
+    @Email(message = "Nieprawidłowy adres eamail.")
     private String email;
 
-    @OneToOne
-    @JoinColumn(name = "Adres_id")
+    @Embedded
+    @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "Numer_telefonu")
+    @Column(name = "PhoneNmber")
+    @NotNull(message = "Nieprawidłowy numer telefonu. Numer musi być 9 cyfrowy.")
+    @Size(min = 9, max = 9)
     private int phoneNumber;
 
-    @Column(name = "Stopien")
+    @Column(name = "Degree")
+    @NotNull(message = "Stopień naukowy nie może byc null.")
     private String grade;
 
 }

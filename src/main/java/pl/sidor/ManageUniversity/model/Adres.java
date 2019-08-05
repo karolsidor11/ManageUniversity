@@ -1,32 +1,31 @@
 package pl.sidor.ManageUniversity.model;
 
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-@Entity
-@Getter
-@Setter
+@Embeddable
+@Data
 @Builder
-@ToString
- public class Adres {
+public class Adres {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
-    @Column(name = "Miasto")
+    @Column(name = "City")
+    @NotNull(message = "Nazwa miasta nie może być null.")
     private String city;
 
-    @Column(name = "Ulica")
+    @Column(name = "Street")
+    @NotNull(message = "Nazwa ulicy nie może być null.")
     private String streetAdress;
 
-    @Column(name = "Kod_pocztowy")
+    @Column(name = "ZipCode")
+    @NotNull(message = "Kod pocztowy nie może być null.")
     private String zipCode;
 
-    @Column(name = "Numer_domu")
+    @Column(name = "HouseNumber")
+    @Size(min = 1, max = 999)
     private int houseNumber;
 }

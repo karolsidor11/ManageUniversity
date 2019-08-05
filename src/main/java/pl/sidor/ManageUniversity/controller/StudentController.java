@@ -7,25 +7,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.exception.StudentException;
 import pl.sidor.ManageUniversity.student.model.Student;
-import pl.sidor.ManageUniversity.student.service.StudentService;
+import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
 import java.util.Optional;
 
 @RestController
 public class StudentController {
 
-    private StudentService studentService;
+    private StudentServiceImpl studentServiceImpl;
 
     @Autowired
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentController(StudentServiceImpl studentServiceImpl) {
+        this.studentServiceImpl = studentServiceImpl;
     }
 
 
     @GetMapping(value = "/findStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> findStudentByID(@PathVariable long id) {
 
-        Optional<Student> byId = Optional.of(studentService.findById(id));
+        Optional<Student> byId = Optional.of(studentServiceImpl.findById(id));
 
         HttpStatus httpStatus = byId.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 
@@ -36,7 +36,7 @@ public class StudentController {
     @PostMapping(value = "/saveStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> createStudent(@RequestBody Student student) throws StudentException {
 
-        Student student1 = studentService.create(student);
+        Student student1 = studentServiceImpl.create(student);
 
         return new ResponseEntity<>(student1, HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class StudentController {
     @DeleteMapping(value = "/deleteStudent/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
 
-        studentService.delete(id);
+        studentServiceImpl.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -52,7 +52,7 @@ public class StudentController {
     @PostMapping(value = "updateStudent" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
 
-        studentService.update(student);
+        studentServiceImpl.update(student);
 
         return new ResponseEntity<>( HttpStatus.OK);
     }

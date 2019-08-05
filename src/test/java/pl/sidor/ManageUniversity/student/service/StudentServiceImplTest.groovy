@@ -6,16 +6,16 @@ import pl.sidor.ManageUniversity.student.repository.StudentRepo
 import pl.sidor.ManageUniversity.student.validation.StudentValidator
 import spock.lang.Ignore
 
-class StudentServiceTest extends spock.lang.Specification {
+class StudentServiceImplTest extends spock.lang.Specification {
 
     private StudentRepo studentRepo
-    private StudentService service
+    private StudentServiceImpl service
     private StudentValidator studentValidator
 
     void setup() {
         studentRepo = Mock(StudentRepo.class)
         studentValidator = Mock(StudentValidator.class)
-        service = new StudentService(studentRepo, studentValidator)
+        service = new StudentServiceImpl(studentRepo, studentValidator)
     }
 
     def "should find student by ID "() {
@@ -56,8 +56,8 @@ class StudentServiceTest extends spock.lang.Specification {
         actualStudent == student
     }
 
-    @Ignore
-    def "should return StudentException"() {
+
+    def "should throw StudentException"() {
 
         given:
         Student student = Student.builder()
@@ -68,7 +68,7 @@ class StudentServiceTest extends spock.lang.Specification {
                 .build()
 
         studentValidator.test(student) >> true
-        studentRepo.save(student)
+        studentRepo.save(student)>>student
 
         when:
         service.create(student)

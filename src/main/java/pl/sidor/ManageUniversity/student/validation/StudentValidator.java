@@ -21,7 +21,7 @@ public class StudentValidator implements Predicate<Student> {
     @Override
     public boolean test(Student student) {
 
-        return emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber());
+        return !emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber());
     }
 
     private boolean emialIsUniqe(String email) {
