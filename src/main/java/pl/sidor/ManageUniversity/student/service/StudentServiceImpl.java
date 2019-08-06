@@ -3,10 +3,11 @@ package pl.sidor.ManageUniversity.student.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.sidor.ManageUniversity.exception.StudentException;
+import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
-import pl.sidor.ManageUniversity.student.validation.StudentValidator;
+import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 
 import java.util.Optional;
 
@@ -17,12 +18,12 @@ import static java.util.Optional.of;
 public class StudentServiceImpl implements StudentService {
 
     private StudentRepo studentRepo;
-    private StudentValidator studentValidator;
+    private CheckUniqeStudentPredicate checkUniqeStudentPredicate;
 
     @Autowired
-    public StudentServiceImpl(StudentRepo studentRepo, StudentValidator studentValidator) {
+    public StudentServiceImpl(StudentRepo studentRepo, CheckUniqeStudentPredicate checkUniqeStudentPredicate) {
         this.studentRepo = studentRepo;
-        this.studentValidator = studentValidator;
+        this.checkUniqeStudentPredicate = checkUniqeStudentPredicate;
     }
 
     @Override
@@ -32,11 +33,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student create(Student student) throws StudentException {
+    public Student create(Student student) throws UniversityException {
 
       return   of(studentRepo.save(student))
-                .filter(students -> studentValidator.test(students))
-                .orElseThrow(() -> new StudentException("W bazie istnieje Student o podanym emailu lub numerze telefonu."));
+                .filter(students -> checkUniqeStudentPredicate.test(students))
+                .orElseThrow(ExceptionFactory::studentInDatabase);
     }
 
     @Override

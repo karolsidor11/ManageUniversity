@@ -4,14 +4,14 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import spock.lang.Specification
 
-class LecturerServiceTest extends Specification {
+class LecturerServiceImplTest extends Specification {
 
     private LecturerRepo lecturerRepo
-    private LecturerService lecturerService
+    private LecturerServiceImpl lecturerService
 
     void setup() {
         lecturerRepo = Mock(LecturerRepo.class)
-        lecturerService = new LecturerService(lecturerRepo)
+        lecturerService = new LecturerServiceImpl(lecturerRepo)
     }
 
 

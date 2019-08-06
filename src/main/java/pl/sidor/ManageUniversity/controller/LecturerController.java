@@ -6,22 +6,22 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
-import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
+import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 
 @RestController
 public class LecturerController {
 
-    private LecturerService lecturerService;
+    private LecturerServiceImpl lecturerServiceImpl;
 
     @Autowired
-    public LecturerController(LecturerService lecturerService) {
-        this.lecturerService = lecturerService;
+    public LecturerController(LecturerServiceImpl lecturerServiceImpl) {
+        this.lecturerServiceImpl = lecturerServiceImpl;
     }
 
     @GetMapping(value = "/findLecturer/{id}")
     public ResponseEntity<Lecturer> findByID(@PathVariable long id) {
 
-        Lecturer byId = lecturerService.findById(id);
+        Lecturer byId = lecturerServiceImpl.findById(id);
 
         return new ResponseEntity<>(byId, HttpStatus.OK);
     }
@@ -29,7 +29,7 @@ public class LecturerController {
     @PostMapping(value = "/saveLecturer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> create(@RequestBody Lecturer lecturer) {
 
-        Lecturer lecturer1 = lecturerService.create(lecturer);
+        Lecturer lecturer1 = lecturerServiceImpl.create(lecturer);
 
         return new ResponseEntity<>(lecturer1, HttpStatus.OK);
     }
@@ -37,7 +37,7 @@ public class LecturerController {
     @DeleteMapping(value = "/deleteLecturer/{id}")
     public ResponseEntity<Lecturer> deleteLecturer(@PathVariable long id) {
 
-        lecturerService.delete(id);
+        lecturerServiceImpl.delete(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class LecturerController {
     @PostMapping(value = "updateLecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces =  MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer){
 
-        lecturerService.update(lecturer);
+        lecturerServiceImpl.update(lecturer);
 
         return  new ResponseEntity<>(HttpStatus.OK);
     }

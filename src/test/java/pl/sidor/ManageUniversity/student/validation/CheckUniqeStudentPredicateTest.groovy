@@ -2,19 +2,19 @@ package validation
 
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
-import pl.sidor.ManageUniversity.student.validation.StudentValidator
+import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
 import spock.lang.Specification
 
-class StudentValidatorTest extends Specification {
+class CheckUniqeStudentPredicateTest extends Specification {
 
-    private StudentValidator studentValidator
+    private CheckUniqeStudentPredicate studentValidator
     private StudentRepo studentRepo
 
 
     void setup() {
 
         studentRepo = Mock(StudentRepo.class)
-        studentValidator = new StudentValidator(studentRepo)
+        studentValidator = new CheckUniqeStudentPredicate(studentRepo)
     }
 
     def " should return true when email is uqnige"() {
@@ -74,6 +74,7 @@ class StudentValidatorTest extends Specification {
         studentRepo.findByPhoneNumber(_) >> student
         when:
         boolean result = studentValidator.test(student)
+
         then:
         result == true
     }

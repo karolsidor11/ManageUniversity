@@ -9,12 +9,12 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @Component
-public class StudentValidator implements Predicate<Student> {
+public class CheckUniqeStudentPredicate implements Predicate<Student> {
 
     private StudentRepo studentRepo;
 
     @Autowired
-    public StudentValidator(StudentRepo studentRepo) {
+    public CheckUniqeStudentPredicate(StudentRepo studentRepo) {
         this.studentRepo = studentRepo;
     }
 

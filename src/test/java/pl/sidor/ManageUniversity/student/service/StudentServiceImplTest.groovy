@@ -1,20 +1,19 @@
 package pl.sidor.ManageUniversity.student.service
 
-import pl.sidor.ManageUniversity.exception.StudentException
+
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
-import pl.sidor.ManageUniversity.student.validation.StudentValidator
-import spock.lang.Ignore
+import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
 
 class StudentServiceImplTest extends spock.lang.Specification {
 
     private StudentRepo studentRepo
     private StudentServiceImpl service
-    private StudentValidator studentValidator
+    private CheckUniqeStudentPredicate studentValidator
 
     void setup() {
         studentRepo = Mock(StudentRepo.class)
-        studentValidator = Mock(StudentValidator.class)
+        studentValidator = Mock(CheckUniqeStudentPredicate.class)
         service = new StudentServiceImpl(studentRepo, studentValidator)
     }
 

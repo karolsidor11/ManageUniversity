@@ -2,12 +2,16 @@ package pl.sidor.ManageUniversity.lecturer.model;
 
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.SortNatural;
 import pl.sidor.ManageUniversity.model.Adres;
+import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 @Data
@@ -42,5 +46,9 @@ public class Lecturer {
     @Column(name = "Degree")
     @NotNull(message = "Stopień naukowy nie może byc null.")
     private String grade;
+
+    @OneToMany
+    @JoinColumn(name = "subject_id")
+    private List<Subject> subject;
 
 }
