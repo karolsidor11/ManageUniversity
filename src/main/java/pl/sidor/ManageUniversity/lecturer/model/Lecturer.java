@@ -1,10 +1,10 @@
 package pl.sidor.ManageUniversity.lecturer.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.SortNatural;
+import lombok.NoArgsConstructor;
 import pl.sidor.ManageUniversity.model.Adres;
-import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import javax.persistence.*;
@@ -15,6 +15,8 @@ import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Lecturer {
 
@@ -48,7 +50,7 @@ public class Lecturer {
     private String grade;
 
     @OneToMany
-    @JoinColumn(name = "subject_id")
+    @JoinColumn(name = "Lecturer_id")
     private List<Subject> subject;
 
 }

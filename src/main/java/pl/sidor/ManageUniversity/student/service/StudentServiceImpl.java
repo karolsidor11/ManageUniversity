@@ -33,11 +33,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student create(Student student) throws UniversityException {
+    public Student create(Student student) throws Throwable {
 
-      return   of(studentRepo.save(student))
-                .filter(students -> checkUniqeStudentPredicate.test(students))
-                .orElseThrow(ExceptionFactory::studentInDatabase);
+        return of(student)
+                .filter(checkUniqeStudentPredicate)
+                .map(student1 -> studentRepo.save(student))
+                .orElseThrow(ExceptionFactory.studentInDatabase(student.getEmail()));
     }
 
     @Override

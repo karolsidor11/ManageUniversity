@@ -34,7 +34,7 @@ public class StudentController {
     }
 
     @PostMapping(value = "/saveStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) throws  UniversityException {
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) throws Throwable {
 
         Student student1 = studentServiceImpl.create(student);
 

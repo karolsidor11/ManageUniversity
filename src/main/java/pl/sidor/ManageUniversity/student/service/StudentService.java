@@ -9,7 +9,7 @@ public interface StudentService {
 
     Student findById(long id);
 
-    Student create(Student student) throws UniversityException;
+    Student create(Student student) throws Throwable;
 
     void update(Student student);
 

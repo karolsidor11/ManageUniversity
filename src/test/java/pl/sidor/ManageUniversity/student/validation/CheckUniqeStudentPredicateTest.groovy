@@ -48,11 +48,13 @@ class CheckUniqeStudentPredicateTest extends Specification {
                 .name("Karol")
                 .lastName("Sidor")
                 .email("karolsidor11@wp.pl")
+                .phoneNumber(997)
                 .build()
 
-        studentRepo.findByEmail("karolsidor11@wp.pl") >> student
+        studentRepo.findByEmail("karolsidor11@wp.pl") >> Arrays.asList(student)
+        studentRepo.findByPhoneNumber(997)>>Arrays.asList(student)
 
-              when:
+        when:
         boolean result = studentValidator.test(student)
 
         then:
@@ -70,12 +72,12 @@ class CheckUniqeStudentPredicateTest extends Specification {
                 .phoneNumber(500600301)
                 .build()
 
-        studentRepo.findByEmail(_) >> student
-        studentRepo.findByPhoneNumber(_) >> student
+        studentRepo.findByEmail(_) >> Arrays.asList(student)
+        studentRepo.findByPhoneNumber(_) >> Arrays.asList(student)
         when:
         boolean result = studentValidator.test(student)
 
         then:
-        result == true
+        result == false
     }
 }

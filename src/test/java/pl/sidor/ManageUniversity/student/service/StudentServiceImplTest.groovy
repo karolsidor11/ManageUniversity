@@ -1,6 +1,6 @@
 package pl.sidor.ManageUniversity.student.service
 
-
+import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
@@ -45,7 +45,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
-        studentValidator.test(student) >> false
+        studentValidator.test(student) >> true
         studentRepo.save(student) >> student
 
         when:
@@ -66,14 +66,14 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
-        studentValidator.test(student) >> true
+        studentValidator.test(student) >> false
         studentRepo.save(student)>>student
 
         when:
         service.create(student)
 
         then:
-        thrown(StudentException.class)
+        thrown(UniversityException.class)
     }
 
     def "should delete student"() {

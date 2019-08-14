@@ -1,7 +1,9 @@
 package pl.sidor.ManageUniversity.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -10,6 +12,8 @@ import javax.validation.constraints.Size;
 
 @Embeddable
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Adres {
 

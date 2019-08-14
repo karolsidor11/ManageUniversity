@@ -1,18 +1,23 @@
 package pl.sidor.ManageUniversity.student.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.sidor.ManageUniversity.model.Adres;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class Student {
 
@@ -43,8 +48,8 @@ public class Student {
 
     @Column(name = "PhoneNumber")
     @NotNull(message = "Niepoprawny numer telefonu. Numer musi być 9 cyfrowy.")
-    @Size(min = 9, max = 9)
-    private int phoneNumber;
+//    @Size(min = 1 , max = 9)
+    private Integer phoneNumber;
 
     @Column(name = "isStudent")
     @NotNull(message = "Czy Student nie może być null.")
