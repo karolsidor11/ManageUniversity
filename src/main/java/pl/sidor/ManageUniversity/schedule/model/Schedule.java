@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@JsonDeserialize
 public class Schedule {
 
     @Id
@@ -24,7 +23,7 @@ public class Schedule {
     @NotNull(message = "Dzień tygodnia nie może być null.")
     private Days dayOfWeek;
 
-    @ManyToMany(cascade = {
+    @OneToMany(cascade = {
             CascadeType.MERGE
     })
     @JoinTable(name = "schedule_2_subject",

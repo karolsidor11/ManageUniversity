@@ -1,25 +1,17 @@
 package pl.sidor.ManageUniversity.schedule.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 import java.time.LocalTime;
 import java.util.List;
 
-
 @Entity
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder
-@JsonDeserialize
 public class Subject {
 
     @Id
@@ -47,7 +39,7 @@ public class Subject {
 //    @Past(message = "Podana godzina musi być z przyszłości.")
     private LocalTime endTime;
 
-    @ManyToMany(mappedBy = "subjects")
+    @OneToMany(mappedBy = "subjects")
     private List<Schedule> schedule;
 
 }

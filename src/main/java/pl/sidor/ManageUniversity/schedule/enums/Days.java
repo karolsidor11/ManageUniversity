@@ -6,11 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum Days {
-    Poniedziałek ("Poniedziałek"),
+    Poniedzialek ("Poniedziałek"),
     Wtorek("Wtorek"),
-    Środa("Środa"),
+    Sroda("Środa"),
     Czwartek("Czwartek"),
-    Piątek("Piątek");
+    Piatek("Piątek");
 
     private final String day;
 }

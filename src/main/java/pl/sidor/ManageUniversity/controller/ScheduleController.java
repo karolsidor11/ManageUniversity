@@ -5,26 +5,37 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
+import pl.sidor.ManageUniversity.schedule.service.ScheduleServiceImpl;
 
 @RestController
 @RequestMapping(value = "/schedule")
 public class ScheduleController {
 
-    private ScheduleService scheduleService;
+    private ScheduleServiceImpl scheduleService;
 
     @Autowired
-    public ScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleServiceImpl scheduleService) {
         this.scheduleService = scheduleService;
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Schedule> getScheduleByID(@PathVariable long id) {
+    public ResponseEntity<Schedule> getScheduleByID(@PathVariable Long id) {
 
         Schedule scheduleById = scheduleService.getScheduleById(id);
 
         return new ResponseEntity<>(scheduleById, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getByDay/{day}" , produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Schedule> getByDay(@PathVariable Days day){
+
+        Schedule byDay = scheduleService.findByDay(day);
+
+        return  new ResponseEntity<>(byDay, HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -41,6 +52,14 @@ public class ScheduleController {
         boolean result = scheduleService.deleteByID(id);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "deleteBy/{day}")
+    public ResponseEntity<Boolean> deleteByDay(@PathVariable Days day) {
+
+         scheduleService.deleteByDay(day);
+
+        return new ResponseEntity<>( HttpStatus.OK);
     }
 
     @PostMapping(value = "update")

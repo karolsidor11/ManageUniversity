@@ -2,6 +2,8 @@ package pl.sidor.ManageUniversity.schedule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 
@@ -9,6 +11,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 @Service
+@Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepo scheduleRepo;
@@ -29,27 +32,33 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public Schedule findByDay(Days day) {
+
+        return scheduleRepo.findByDayOfWeek(day);
+    }
+
+    @Override
     public boolean deleteByID(Long id) {
         scheduleRepo.deleteById(id);
         return true;
     }
 
     @Override
+    public void deleteByDay(Days day) {
+         scheduleRepo.deleteByDayOfWeek(day);
+    }
+
+    @Override
     public Schedule updateSchedule(Schedule schedule) {
 
-        Optional<Schedule> byId = scheduleRepo.findById(schedule.getId());
+        Optional<Schedule> byDayOfWeek = Optional.ofNullable(scheduleRepo.findByDayOfWeek(schedule.getDayOfWeek()));
 
         Schedule.ScheduleBuilder builder = Schedule.builder();
 
-        byId.ifPresent(getUpdateSchedule(schedule, builder));
-        Schedule build = builder.build();
+        byDayOfWeek.ifPresent(getUpdateSchedule(schedule, builder));
+        Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
 
         return scheduleRepo.save(build);
-
-//        return byId.get().builder()
-//                .id(schedule.getId())
-//                .subjects(schedule.getSubjects())
-//                .build();
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {
