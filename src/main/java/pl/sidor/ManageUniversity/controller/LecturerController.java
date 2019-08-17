@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 
@@ -19,7 +20,7 @@ public class LecturerController {
     }
 
     @GetMapping(value = "/findLecturer/{id}")
-    public ResponseEntity<Lecturer> findByID(@PathVariable long id) {
+    public ResponseEntity<Lecturer> findByID(@PathVariable long id) throws UniversityException {
 
         Lecturer byId = lecturerServiceImpl.findById(id);
 
@@ -27,7 +28,7 @@ public class LecturerController {
     }
 
     @PostMapping(value = "/saveLecturer", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Lecturer> create(@RequestBody Lecturer lecturer) {
+    public ResponseEntity<Lecturer> create(@RequestBody Lecturer lecturer) throws Throwable {
 
         Lecturer lecturer1 = lecturerServiceImpl.create(lecturer);
 
@@ -35,7 +36,7 @@ public class LecturerController {
     }
 
     @DeleteMapping(value = "/deleteLecturer/{id}")
-    public ResponseEntity<Lecturer> deleteLecturer(@PathVariable long id) {
+    public ResponseEntity<Lecturer> deleteLecturer(@PathVariable long id) throws UniversityException {
 
         lecturerServiceImpl.delete(id);
 
@@ -43,7 +44,7 @@ public class LecturerController {
     }
 
     @PostMapping(value = "updateLecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer){
+    public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer) throws UniversityException {
 
         lecturerServiceImpl.update(lecturer);
 

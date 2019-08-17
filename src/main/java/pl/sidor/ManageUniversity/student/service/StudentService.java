@@ -7,12 +7,12 @@ import pl.sidor.ManageUniversity.student.model.Student;
 @Component
 public interface StudentService {
 
-    Student findById(long id);
+    Student findById(Long id) throws Throwable;
 
     Student create(Student student) throws Throwable;
 
-    void update(Student student);
+    void update(Student student) throws UniversityException;
 
-    void delete(long id);
+    void delete(Long id) throws UniversityException;
 }
 

@@ -12,6 +12,7 @@ import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 import java.util.Optional;
 
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 @Service
 @Transactional
@@ -27,41 +28,52 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student findById(long id) {
+    public Student findById(Long id) throws Throwable {
+        Optional<Student> byId = studentRepo.findById(id);
+        if(!byId.isPresent()){
+            throw  ExceptionFactory.incorrectStudentID(String.valueOf(id));
+        }
+        return byId.get();
 
-        return studentRepo.findById(id).get();
     }
 
     @Override
     public Student create(Student student) throws Throwable {
 
-        return of(student)
-                .filter(checkUniqeStudentPredicate)
+        return of(student).filter(checkUniqeStudentPredicate)
                 .map(student1 -> studentRepo.save(student))
                 .orElseThrow(ExceptionFactory.studentInDatabase(student.getEmail()));
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Student student) throws UniversityException {
 
         Optional<Student> byId = studentRepo.findById(student.getId());
 
-        Student actualStudent = byId.get();
+        if(!byId.isPresent()){
+            throw ExceptionFactory.incorrectStudentID(String.valueOf(student.getId()));
+        } else{
+            Student actualStudent = byId.get();
+            Student.builder()
+                    .name(student.getName())
+                    .lastName(student.getLastName())
+                    .email(student.getEmail())
+                    .phoneNumber(student.getPhoneNumber())
+                    .adres(student.getAdres())
+                    .date(student.getDate())
+                    .build();
 
-        Student.builder()
-                .name(student.getName())
-                .lastName(student.getLastName())
-                .email(student.getEmail())
-                .phoneNumber(student.getPhoneNumber())
-                .adres(student.getAdres())
-                .date(student.getDate())
-                .build();
-
-        studentRepo.save(actualStudent);
+            studentRepo.save(actualStudent);
+        }
     }
 
     @Override
-    public void delete(long id) {
-        studentRepo.deleteById(id);
+    public void delete(Long id) throws UniversityException {
+
+        Optional<Student> byId = studentRepo.findById(id);
+        byId.ifPresent(student -> studentRepo.deleteById(id));
+        if (!byId.isPresent()) {
+            throw ExceptionFactory.incorrectStudentID(String.valueOf(id));
+        }
     }
 }

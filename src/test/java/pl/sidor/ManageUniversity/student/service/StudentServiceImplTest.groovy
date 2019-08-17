@@ -36,6 +36,20 @@ class StudentServiceImplTest extends spock.lang.Specification {
         actualStudent.id == 1
     }
 
+
+    def "should  throw Exception when id is incorrect"() {
+        given:
+        Long id = -1
+
+        studentRepo.findById(id) >> Optional.empty()
+        when:
+        service.findById(id)
+
+        then:
+        thrown(UniversityException.class)
+
+    }
+
     def "should create student"() {
         given:
         Student student = Student.builder()
@@ -67,7 +81,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .build()
 
         studentValidator.test(student) >> false
-        studentRepo.save(student)>>student
+        studentRepo.save(student) >> student
 
         when:
         service.create(student)
@@ -79,9 +93,8 @@ class StudentServiceImplTest extends spock.lang.Specification {
     def "should delete student"() {
 
         given:
-
         long id = 1
-
+        studentRepo.findById(id) >> Optional.of(Student.builder().id(1).build())
         studentRepo.deleteById(id)
 
         when:
@@ -89,6 +102,19 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         then:
         1 * studentRepo.deleteById(_)
+    }
+
+    def "should throw Exception when student id is incorrect"() {
+
+        given:
+        Long studentId = 999
+        studentRepo.findById(studentId) >> Optional.empty()
+
+        when:
+        service.delete(studentId)
+
+        then:
+        thrown(UniversityException.class)
     }
 
     def "should update student"() {
@@ -115,5 +141,23 @@ class StudentServiceImplTest extends spock.lang.Specification {
         actualStudent.getName() == "Jan"
         actualStudent.getLastName() == "Nowak"
         actualStudent.getEmail() == "nowak@wp.pl"
+    }
+
+    def "should throw Exception during update student"() {
+
+        given:
+        Long id = 9999
+        studentRepo.findById(id) >> Optional.empty()
+
+        when:
+        Student actualStudent = service.findById(id)
+        actualStudent.setName("Jan")
+        actualStudent.setLastName("Nowak")
+        actualStudent.setEmail("nowak@wp.pl")
+
+        service.update(actualStudent)
+
+        then:
+        thrown(UniversityException.class)
     }
 }

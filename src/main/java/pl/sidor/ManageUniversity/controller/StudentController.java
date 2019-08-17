@@ -23,7 +23,7 @@ public class StudentController {
 
 
     @GetMapping(value = "/findStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> findStudentByID(@PathVariable long id) {
+    public ResponseEntity<Student> findStudentByID(@PathVariable long id) throws Throwable {
 
         Optional<Student> byId = Optional.of(studentServiceImpl.findById(id));
 
@@ -42,7 +42,7 @@ public class StudentController {
     }
 
     @DeleteMapping(value = "/deleteStudent/{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable long id) {
+    public ResponseEntity<Student> deleteStudent(@PathVariable long id) throws UniversityException {
 
         studentServiceImpl.delete(id);
 
@@ -50,7 +50,7 @@ public class StudentController {
     }
 
     @PostMapping(value = "updateStudent" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> updateStudent(@RequestBody Student student) throws UniversityException {
 
         studentServiceImpl.update(student);
 

@@ -17,7 +17,7 @@ class CheckUniqeStudentPredicateTest extends Specification {
         studentValidator = new CheckUniqeStudentPredicate(studentRepo)
     }
 
-    def " should return true when email is uqnige"() {
+    def " should return false when email is uqnige"() {
 
         given:
 
@@ -29,11 +29,11 @@ class CheckUniqeStudentPredicateTest extends Specification {
                 .phoneNumber(4534534)
                 .build()
 
-        studentRepo.findByEmail("jan@wp.pl") >> null
-        studentRepo.findByPhoneNumber(42323) >> null
+        studentRepo.findByEmail("jan@wp.pl") >> Collections.emptyList()
+        studentRepo.findByPhoneNumber(42323) >> Collections.emptyList()
 
         when:
-        boolean result = studentValidator.test(student)
+        boolean result = !studentValidator.test(student)
 
         then:
         result == false
@@ -52,7 +52,7 @@ class CheckUniqeStudentPredicateTest extends Specification {
                 .build()
 
         studentRepo.findByEmail("karolsidor11@wp.pl") >> Arrays.asList(student)
-        studentRepo.findByPhoneNumber(997)>>Arrays.asList(student)
+        studentRepo.findByPhoneNumber(997) >> Arrays.asList(student)
 
         when:
         boolean result = studentValidator.test(student)
@@ -79,5 +79,26 @@ class CheckUniqeStudentPredicateTest extends Specification {
 
         then:
         result == false
+    }
+
+    def "should return true when  phoneNumber is unige"() {
+
+        given:
+        Student student = Student.builder()
+                .id(1)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karolsidor11@wp.pl")
+                .phoneNumber(500600301)
+                .build()
+
+        studentRepo.findByPhoneNumber(500600301) >> Collections.emptyList()
+        studentRepo.findByEmail(_)>>Collections.emptyList()
+
+        when:
+        boolean result = !studentValidator.test(student)
+
+        then:
+        result==true
     }
 }

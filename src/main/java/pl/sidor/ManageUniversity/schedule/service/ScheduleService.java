@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
@@ -11,9 +12,9 @@ public interface ScheduleService {
 
     Schedule findByDay(Days day);
 
-    boolean deleteByID(Long id);
+    boolean deleteByID(Long id) throws UniversityException;
 
-    void deleteByDay(Days day);
+    void deleteByDay(Days day) throws UniversityException;
 
     Schedule updateSchedule(Schedule schedule);
 }

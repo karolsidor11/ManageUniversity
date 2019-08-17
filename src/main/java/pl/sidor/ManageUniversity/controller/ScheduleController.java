@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
@@ -47,7 +48,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping(value = "delete/{id}")
-    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long id) throws UniversityException {
 
         boolean result = scheduleService.deleteByID(id);
 
@@ -55,7 +56,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping(value = "deleteBy/{day}")
-    public ResponseEntity<Boolean> deleteByDay(@PathVariable Days day) {
+    public ResponseEntity<Boolean> deleteByDay(@PathVariable Days day) throws UniversityException {
 
          scheduleService.deleteByDay(day);
 

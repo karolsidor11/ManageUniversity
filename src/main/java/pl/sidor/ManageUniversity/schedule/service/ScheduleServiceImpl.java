@@ -3,6 +3,9 @@ package pl.sidor.ManageUniversity.schedule.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.exception.MessageException;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
@@ -38,14 +41,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public boolean deleteByID(Long id) {
+    public boolean deleteByID(Long id) throws UniversityException {
+
+        Optional<Schedule> byId = scheduleRepo.findById(id);
+        if (!byId.isPresent()) {
+            throw ExceptionFactory.incorrectScheduleID(String.valueOf(id));
+        }
         scheduleRepo.deleteById(id);
         return true;
     }
 
     @Override
-    public void deleteByDay(Days day) {
-         scheduleRepo.deleteByDayOfWeek(day);
+    public void deleteByDay(Days day) throws UniversityException {
+
+        Optional<Schedule> byDayOfWeek = Optional.ofNullable(scheduleRepo.findByDayOfWeek(day));
+        if (!byDayOfWeek.isPresent()) {
+            throw ExceptionFactory.incorrectPlanDay(day.getDay());
+        }
+        scheduleRepo.deleteByDayOfWeek(day);
     }
 
     @Override

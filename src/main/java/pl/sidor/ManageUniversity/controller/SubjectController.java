@@ -21,18 +21,16 @@ public class SubjectController {
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws UniversityException {
+    public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws Throwable {
         subjectService.save(subject);
 
         return new ResponseEntity<>(subject, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Subject> getById(@PathVariable long id){
+    public ResponseEntity<Subject> getById(@PathVariable long id) throws UniversityException {
 
         Subject byId = subjectService.getById(id);
-
-
         return  new ResponseEntity<>(byId, HttpStatus.OK);
     }
 

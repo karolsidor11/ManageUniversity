@@ -21,14 +21,14 @@ public class CheckUniqeStudentPredicate implements Predicate<Student> {
     @Override
     public boolean test(Student student) {
 
-        return !emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber());
+        return (emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber()));
     }
 
     private boolean emialIsUniqe(String email) {
-        return Optional.ofNullable(studentRepo.findByEmail(email)).isPresent();
+        return !Optional.ofNullable(studentRepo.findByEmail(email)).isPresent();
     }
 
     private boolean phoneNumberIsUniqe(int phoneNumber) {
-        return Optional.ofNullable(studentRepo.findByPhoneNumber(phoneNumber)).isPresent();
+        return !Optional.ofNullable(studentRepo.findByPhoneNumber(phoneNumber)).isPresent();
     }
 }
