@@ -18,7 +18,6 @@ class CheckUniqeStudentPredicateTest extends Specification {
     }
 
     def " should return false when email is uqnige"() {
-
         given:
 
         Student student = Student.builder()
@@ -40,7 +39,6 @@ class CheckUniqeStudentPredicateTest extends Specification {
     }
 
     def " should return false when email is  not uqnige"() {
-
         given:
 
         Student student = Student.builder()
@@ -62,7 +60,6 @@ class CheckUniqeStudentPredicateTest extends Specification {
     }
 
     def "should return false when phoneNumber is  not uniqe"() {
-
         given:
         Student student = Student.builder()
                 .id(1)
@@ -82,7 +79,6 @@ class CheckUniqeStudentPredicateTest extends Specification {
     }
 
     def "should return true when  phoneNumber is unige"() {
-
         given:
         Student student = Student.builder()
                 .id(1)

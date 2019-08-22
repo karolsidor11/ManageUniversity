@@ -45,7 +45,7 @@ public class LecturerServiceImpl implements LecturerService {
         of(lecturer).filter(checkLecturer)
                 .map(lecturer1 -> lecturerRepo.save(lecturer))
                 .orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
-        return lecturerRepo.save(lecturer);
+        return lecturer;
     }
 
     @Override

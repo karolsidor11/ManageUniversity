@@ -49,7 +49,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "updateStudent" ,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/updateStudent" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) throws UniversityException {
 
         studentServiceImpl.update(student);

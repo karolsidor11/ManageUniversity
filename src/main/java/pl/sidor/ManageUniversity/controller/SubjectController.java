@@ -27,8 +27,8 @@ public class SubjectController {
         return new ResponseEntity<>(subject, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Subject> getById(@PathVariable long id) throws UniversityException {
+    @GetMapping(value = "/findSubject/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Subject> getById(@PathVariable Long id) throws UniversityException {
 
         Subject byId = subjectService.getById(id);
         return  new ResponseEntity<>(byId, HttpStatus.OK);

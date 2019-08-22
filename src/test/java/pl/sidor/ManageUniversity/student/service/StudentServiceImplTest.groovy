@@ -36,7 +36,6 @@ class StudentServiceImplTest extends spock.lang.Specification {
         actualStudent.id == 1
     }
 
-
     def "should  throw Exception when id is incorrect"() {
         given:
         Long id = -1
@@ -47,7 +46,6 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         then:
         thrown(UniversityException.class)
-
     }
 
     def "should create student"() {
@@ -128,19 +126,18 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         studentRepo.findById(1) >> Optional.of(student)
 
+        Student studentSecondVersion=Student.builder()
+                .id(1)
+                .name("Jan")
+                .lastName("Nowak")
+                .build()
+
+        studentRepo.save(studentSecondVersion)>>studentSecondVersion
         when:
-        Student actualStudent = service.findById(1)
-
-        actualStudent.setName("Jan")
-        actualStudent.setLastName("Nowak")
-        actualStudent.setEmail("nowak@wp.pl")
-
-        service.update(actualStudent)
+        service.update(studentSecondVersion)
 
         then:
-        actualStudent.getName() == "Jan"
-        actualStudent.getLastName() == "Nowak"
-        actualStudent.getEmail() == "nowak@wp.pl"
+        1*studentRepo.save(studentSecondVersion)
     }
 
     def "should throw Exception during update student"() {

@@ -63,7 +63,7 @@ public class ScheduleController {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    @PostMapping(value = "update")
+    @PostMapping(value = "/update")
     public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule) {
 
         Schedule updateSchedule = scheduleService.updateSchedule(schedule);

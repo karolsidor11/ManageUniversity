@@ -50,21 +50,20 @@ public class StudentServiceImpl implements StudentService {
 
         Optional<Student> byId = studentRepo.findById(student.getId());
 
-        if(!byId.isPresent()){
-            throw ExceptionFactory.incorrectStudentID(String.valueOf(student.getId()));
-        } else{
-            Student actualStudent = byId.get();
-            Student.builder()
-                    .name(student.getName())
-                    .lastName(student.getLastName())
-                    .email(student.getEmail())
-                    .phoneNumber(student.getPhoneNumber())
-                    .adres(student.getAdres())
-                    .date(student.getDate())
-                    .build();
+        Student student1 = byId
+                .map(studentOld -> buildStudnet(studentOld,student))
+                .orElseThrow(() -> ExceptionFactory.incorrectStudentID(String.valueOf(student.getId())));
 
-            studentRepo.save(actualStudent);
-        }
+        studentRepo.save(student1);
+
+    }
+
+    private Student buildStudnet(Student studentOld, Student newStudent) {
+       studentOld.setId(newStudent.getId());
+       studentOld.setName(newStudent.getName());
+       studentOld.setName(newStudent.getLastName());
+       studentOld.setName(newStudent.getEmail());
+        return  newStudent;
     }
 
     @Override
