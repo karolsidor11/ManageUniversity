@@ -1,6 +1,5 @@
 package pl.sidor.ManageUniversity.schedule.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import javax.persistence.*;

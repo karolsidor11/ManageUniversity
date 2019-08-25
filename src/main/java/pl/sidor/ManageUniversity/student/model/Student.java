@@ -5,13 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
 import pl.sidor.ManageUniversity.model.Adres;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -54,4 +53,9 @@ public class Student {
     @Column(name = "isStudent")
     @NotNull(message = "Czy Student nie może być null.")
     private boolean isStudent;
+
+    @OneToOne
+    @JoinColumn(name = "ratings_id")
+    private StudentRatingsCard studentRatingsCard;
+
 }
