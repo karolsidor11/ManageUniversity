@@ -14,7 +14,7 @@ public final class ExceptionFactory {
         return  new UniversityException(MessageException.W_BAZIE_ISTNIEJE_WYKLADOWCA.message+":"+details);
     }
 
-    public static  UniversityException incorrectStudentID(String details){
+    public static  UniversityException incorrectStudentID(Long details){
         return  new UniversityException(MessageException.W_BAZIE_BRAK_STUDENTA.message+":"+details);
     }
     public static  UniversityException incorrectLecturerID(String details){
@@ -38,5 +38,21 @@ public final class ExceptionFactory {
 
      public static  UniversityException incorrectPlanDay(String details){
         return  new UniversityException(MessageException.W_BAZIE_BRAK_PLANU_O_PODANYM_DNIU+":"+details);
+     }
+
+     public static UniversityException inncorectRatingSetID(String details){
+        return  new UniversityException(MessageException.W_BAZIE_BRAK_ZESTAW_OCEN+":"+details);
+     }
+
+     public  static  UniversityException incorrectStudentCardID(String details){
+        return  new UniversityException(MessageException.W_BAZIE_BRAK_KARTY_STUDENTA+":"+details);
+     }
+
+     public static UniversityException incorectStudentName(String name, String lastName){
+        return  new UniversityException(MessageException.W_BAZIE_BRAK_STUDENTA_O_DANYCH.message+": "+name+" "+lastName);
+     }
+
+     public  static UniversityException incorectScheduleDay(String details){
+        return  new UniversityException(MessageException.W_BAZIE_ISTNIEJE_ROZKLAD.message+": "+details);
      }
 }

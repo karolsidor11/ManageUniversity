@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import pl.sidor.ManageUniversity.student.model.Student;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface StudentRepo extends CrudRepository<Student, Long> {
@@ -13,5 +12,7 @@ public interface StudentRepo extends CrudRepository<Student, Long> {
     List<Student> findByEmail(String email);
 
     List<Student> findByPhoneNumber(int phoneNumber);
+
+    Student findByNameAndLastName(String name, String lastName);
 
 }

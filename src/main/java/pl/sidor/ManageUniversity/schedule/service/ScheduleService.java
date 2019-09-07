@@ -6,15 +6,15 @@ import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
 public interface ScheduleService {
 
-    Schedule create(Schedule schedule);
+    Schedule create(Schedule schedule) throws Throwable;
 
-    Schedule getScheduleById(Long id);
+    Schedule getScheduleById(Long id) throws Throwable;
 
-    Schedule findByDay(Days day);
+    Schedule findByDay(Days day) throws Throwable;
 
-    boolean deleteByID(Long id) throws UniversityException;
+    boolean deleteByID(Long id) throws Throwable;
 
-    void deleteByDay(Days day) throws UniversityException;
+    void deleteByDay(Days day) throws Throwable;
 
-    Schedule updateSchedule(Schedule schedule);
+    Schedule updateSchedule(Schedule schedule) throws Throwable;
 }

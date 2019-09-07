@@ -41,6 +41,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
         Long id = -1
 
         studentRepo.findById(id) >> Optional.empty()
+
         when:
         service.findById(id)
 
@@ -66,6 +67,28 @@ class StudentServiceImplTest extends spock.lang.Specification {
         then:
         actualStudent == student
     }
+
+
+    def "should  not create student"() {
+        given:
+        Student student = Student.builder()
+                .id(1)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karolsidor11@wp.pl")
+                .build()
+
+        studentValidator.test(student) >> true
+        studentRepo.save(student) >> student
+
+        when:
+        Student actualStudent = service.create(null)
+
+        then:
+        actualStudent == student
+    }
+
+
 
 
     def "should throw StudentException"() {
@@ -99,7 +122,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
         service.delete(id)
 
         then:
-        1 * studentRepo.deleteById(_)
+        1 * studentRepo.deleteById(id)
     }
 
     def "should throw Exception when student id is incorrect"() {

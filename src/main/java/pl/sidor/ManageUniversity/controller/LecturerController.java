@@ -20,23 +20,19 @@ public class LecturerController {
     }
 
     @GetMapping(value = "/findLecturer/{id}")
-    public ResponseEntity<Lecturer> findByID(@PathVariable long id) throws UniversityException {
+    public ResponseEntity<Lecturer> findByID(@PathVariable Long id) throws Throwable {
 
-        Lecturer byId = lecturerServiceImpl.findById(id);
-
-        return new ResponseEntity<>(byId, HttpStatus.OK);
+        return new ResponseEntity<>(lecturerServiceImpl.findById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/saveLecturer", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> create(@RequestBody Lecturer lecturer) throws Throwable {
 
-        Lecturer lecturer1 = lecturerServiceImpl.create(lecturer);
-
-        return new ResponseEntity<>(lecturer1, HttpStatus.OK);
+        return new ResponseEntity<>(lecturerServiceImpl.create(lecturer), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/deleteLecturer/{id}")
-    public ResponseEntity<Lecturer> deleteLecturer(@PathVariable long id) throws UniversityException {
+    public ResponseEntity<Lecturer> deleteLecturer(@PathVariable Long id) throws Throwable {
 
         lecturerServiceImpl.delete(id);
 
@@ -44,7 +40,7 @@ public class LecturerController {
     }
 
     @PostMapping(value = "updateLecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer) throws UniversityException {
+    public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer) throws Throwable {
 
         lecturerServiceImpl.update(lecturer);
 

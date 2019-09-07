@@ -7,7 +7,9 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 @Component
 public interface SubjectService {
 
-    Subject getById(Long id) throws UniversityException;
+    Subject getById(Long id) throws Throwable;
 
     Subject save(Subject subject) throws Throwable;
+
+    void delete(Long id) throws Throwable;
 }

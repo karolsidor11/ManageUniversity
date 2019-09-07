@@ -1,6 +1,7 @@
 package pl.sidor.ManageUniversity.student.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
@@ -29,30 +30,29 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student findById(Long id) throws Throwable {
-        Optional<Student> byId = studentRepo.findById(id);
-        if(!byId.isPresent()){
-            throw  ExceptionFactory.incorrectStudentID(String.valueOf(id));
-        }
-        return byId.get();
+      return  studentRepo.findById(id).orElseThrow(ExceptionFactory.incorrectStudentID(id));
+    }
 
+    @Override
+    public Student findByNameAndLastName(String name, String lastName) throws Throwable {
+      return   of(studentRepo.findByNameAndLastName(name, lastName))
+              .orElseThrow(ExceptionFactory.incorectStudentName(name, lastName));
     }
 
     @Override
     public Student create(Student student) throws Throwable {
-
-        return of(student).filter(checkUniqeStudentPredicate)
+        return ofNullable(student)
+                .filter(checkUniqeStudentPredicate)
                 .map(student1 -> studentRepo.save(student))
                 .orElseThrow(ExceptionFactory.studentInDatabase(student.getEmail()));
     }
 
     @Override
-    public void update(Student student) throws UniversityException {
+    public void update(Student student) throws Throwable {
 
-        Optional<Student> byId = studentRepo.findById(student.getId());
-
-        Student student1 = byId
+        Student student1 = of(findById(student.getId()))
                 .map(studentOld -> buildStudnet(studentOld,student))
-                .orElseThrow(() -> ExceptionFactory.incorrectStudentID(String.valueOf(student.getId())));
+                .orElseThrow(() -> ExceptionFactory.incorrectStudentID(student.getId()));
 
         studentRepo.save(student1);
 
@@ -67,12 +67,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void delete(Long id) throws UniversityException {
-
-        Optional<Student> byId = studentRepo.findById(id);
-        byId.ifPresent(student -> studentRepo.deleteById(id));
-        if (!byId.isPresent()) {
-            throw ExceptionFactory.incorrectStudentID(String.valueOf(id));
-        }
+    public void delete(Long id) throws Throwable {
+        of(findById(id)).ifPresent(student -> studentRepo.deleteById(id));
     }
 }

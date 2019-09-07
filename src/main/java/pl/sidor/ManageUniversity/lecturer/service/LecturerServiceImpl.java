@@ -9,8 +9,6 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
 
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -23,58 +21,53 @@ public class LecturerServiceImpl implements LecturerService {
     private CheckLecturer checkLecturer;
 
     @Autowired
-    public LecturerServiceImpl(LecturerRepo lecturerRepo,CheckLecturer checkLecturer) {
+    public LecturerServiceImpl(LecturerRepo lecturerRepo, CheckLecturer checkLecturer) {
         this.lecturerRepo = lecturerRepo;
         this.checkLecturer = checkLecturer;
     }
 
     @Override
-    public Lecturer findById(long id) throws UniversityException {
+    public Lecturer findById(long id) throws Throwable {
 
-        Optional<Lecturer> byId = lecturerRepo.findById(id);
-        if (!byId.isPresent()) {
-            log.info("Podano nieprawidłowy identyfikator");
-            throw ExceptionFactory.incorrectLecturerID(String.valueOf(id));
-        }
-        return byId.get();
+        return lecturerRepo.findById(id).orElseThrow(ExceptionFactory.incorrectLecturerID(String.valueOf(id)));
     }
 
     @Override
     public Lecturer create(Lecturer lecturer) throws Throwable {
 
-        of(lecturer).filter(checkLecturer)
+        return of(lecturer)
+                .filter(checkLecturer)
                 .map(lecturer1 -> lecturerRepo.save(lecturer))
                 .orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
-        return lecturer;
     }
 
     @Override
-    public void update(Lecturer lecturer) throws UniversityException {
+    public void update(Lecturer lecturer) throws Throwable {
 
-        Optional<Lecturer> byId = lecturerRepo.findById(lecturer.getId());
-        if(!byId.isPresent()){
-            throw   ExceptionFactory.incorrectLecturerID(String .valueOf(lecturer.getId()));
-        }
-        Lecturer lecturer1 = byId.get();
-        lecturer1.builder()
-                .id(lecturer.getId())
-                .name(lecturer.getName())
-                .lastName(lecturer.getLastName())
-                .email(lecturer.getEmail())
-                .adres(lecturer.getAdres())
-                .phoneNumber(lecturer.getPhoneNumber())
-                .grade(lecturer.getGrade())
-                .build();
+        Lecturer lecturer2 = of(findById(lecturer.getId()))
+                .map(lecturer1 -> createLecturer(lecturer1, lecturer))
+                .orElseThrow(ExceptionFactory.incorrectLecturerID(String.valueOf(lecturer.getId())));
 
-        lecturerRepo.save(lecturer1);
+        lecturerRepo.save(lecturer2);
     }
 
     @Override
-    public void delete(long id) throws UniversityException {
-        Optional<Lecturer> byId = lecturerRepo.findById(id);
-        byId.ifPresent(lecturer -> lecturerRepo.deleteById(id));
-        if (!byId.isPresent()) {
-            throw ExceptionFactory.incorrectLecturerID(String.valueOf(id));
-        }
+    public void delete(long id) throws Throwable {
+
+        of(findById(id)).ifPresent(lecturer -> lecturerRepo.deleteById(id));
+    }
+
+    private Lecturer createLecturer(Lecturer actual, Lecturer updateLecturer) {
+
+        actual.setId(updateLecturer.getId());
+        actual.setName(updateLecturer.getName());
+        actual.setLastName(updateLecturer.getLastName());
+        actual.setEmail(updateLecturer.getEmail());
+        actual.setPhoneNumber(updateLecturer.getPhoneNumber());
+        actual.setAdres(updateLecturer.getAdres());
+        actual.setGrade(updateLecturer.getGrade());
+        actual.setSubject(updateLecturer.getSubject());
+
+        return updateLecturer;
     }
 }

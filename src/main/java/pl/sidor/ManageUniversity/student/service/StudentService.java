@@ -9,10 +9,12 @@ public interface StudentService {
 
     Student findById(Long id) throws Throwable;
 
+    Student findByNameAndLastName(String name, String lastName) throws Throwable;
+
     Student create(Student student) throws Throwable;
 
-    void update(Student student) throws UniversityException;
+    void update(Student student) throws Throwable;
 
-    void delete(Long id) throws UniversityException;
+    void delete(Long id) throws Throwable;
 }
 

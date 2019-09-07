@@ -26,15 +26,8 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject getById(Long id) throws UniversityException {
-
-        Optional<Subject> byId = subjectRepo.findById(id);
-
-        if (!byId.isPresent()) {
-            throw ExceptionFactory.incorrectSubjectID(String.valueOf(id));
-        }
-        return byId.get();
-
+    public Subject getById(Long id) throws Throwable {
+        return subjectRepo.findById(id).orElseThrow(ExceptionFactory.incorrectSubjectID(String.valueOf(id)));
     }
 
     @Override
@@ -43,5 +36,12 @@ public class SubjectServiceImpl implements SubjectService {
        return of(subject).filter(subjectValidator)
                 .map(subject1 -> subjectRepo.save(subject))
                 .orElseThrow(ExceptionFactory.incorrectTime(subject.getEndTime().toString()));
+    }
+
+    @Override
+    public void delete(Long id) throws Throwable {
+
+       of(getById(id)).ifPresent(subject -> subjectRepo.deleteById(id));
+
     }
 }

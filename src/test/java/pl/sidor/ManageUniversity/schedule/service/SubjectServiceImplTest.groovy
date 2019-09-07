@@ -113,6 +113,20 @@ class SubjectServiceImplTest extends Specification {
 
         then:
         UniversityException exception = thrown()
-        exception.message=="W_BAZIE_ISTNIEJE_PRZEDMIOT_W_CZASIE:"+end.toString()
+        exception.message == "W_BAZIE_ISTNIEJE_PRZEDMIOT_W_CZASIE:" + end.toString()
+    }
+
+    def "should delete subject by ID"() {
+        given:
+        long id = 1
+        subjectRepo.findById(id) >> Optional.of(Subject.builder().id(id).build())
+        subjectRepo.deleteById(id)
+
+        when:
+        service.delete(id)
+
+        then:
+        1*subjectRepo.deleteById(id)
+
     }
 }

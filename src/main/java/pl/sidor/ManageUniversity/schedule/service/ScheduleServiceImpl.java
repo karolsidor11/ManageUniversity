@@ -4,71 +4,68 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
-import pl.sidor.ManageUniversity.exception.MessageException;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
+import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
-import java.util.Optional;
 import java.util.function.Consumer;
+
+import static java.util.Optional.of;
 
 @Service
 @Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepo scheduleRepo;
+    private ScheduleValidator scheduleValidator;
 
     @Autowired
-    public ScheduleServiceImpl(ScheduleRepo scheduleRepo) {
+    public ScheduleServiceImpl(ScheduleRepo scheduleRepo, ScheduleValidator scheduleValidator) {
         this.scheduleRepo = scheduleRepo;
+        this.scheduleValidator = scheduleValidator;
     }
 
     @Override
-    public Schedule create(Schedule schedule) {
-        return scheduleRepo.save(schedule);
+    public Schedule create(Schedule schedule) throws Throwable {
+
+      return   of(schedule).filter(schedule1 -> scheduleValidator.test(schedule.getDayOfWeek()))
+                .map(schedule1 -> scheduleRepo.save(schedule))
+                .orElseThrow(ExceptionFactory.incorectScheduleDay(schedule.getDayOfWeek().getDay()));
     }
 
     @Override
-    public Schedule getScheduleById(Long id) {
-        return scheduleRepo.findById(id).get();
+    public Schedule getScheduleById(Long id) throws Throwable {
+        return scheduleRepo.findById(id).orElseThrow(ExceptionFactory.incorrectScheduleID(String.valueOf(id)));
+
     }
 
     @Override
-    public Schedule findByDay(Days day) {
+    public Schedule findByDay(Days day) throws Throwable {
 
-        return scheduleRepo.findByDayOfWeek(day);
+        return scheduleRepo.findByDayOfWeek(day).orElseThrow(ExceptionFactory.incorrectPlanDay(day.getDay()));
     }
 
     @Override
-    public boolean deleteByID(Long id) throws UniversityException {
+    public boolean deleteByID(Long id) throws Throwable {
 
-        Optional<Schedule> byId = scheduleRepo.findById(id);
-        if (!byId.isPresent()) {
-            throw ExceptionFactory.incorrectScheduleID(String.valueOf(id));
-        }
-        scheduleRepo.deleteById(id);
+        of(getScheduleById(id)).ifPresent(schedule -> scheduleRepo.deleteById(id));
+
         return true;
     }
 
     @Override
-    public void deleteByDay(Days day) throws UniversityException {
+    public void deleteByDay(Days day) throws Throwable {
 
-        Optional<Schedule> byDayOfWeek = Optional.ofNullable(scheduleRepo.findByDayOfWeek(day));
-        if (!byDayOfWeek.isPresent()) {
-            throw ExceptionFactory.incorrectPlanDay(day.getDay());
-        }
-        scheduleRepo.deleteByDayOfWeek(day);
+        of(findByDay(day)).ifPresent(schedule -> scheduleRepo.deleteByDayOfWeek(day));
     }
 
     @Override
-    public Schedule updateSchedule(Schedule schedule) {
-
-        Optional<Schedule> byDayOfWeek = Optional.ofNullable(scheduleRepo.findByDayOfWeek(schedule.getDayOfWeek()));
+    public Schedule updateSchedule(Schedule schedule) throws Throwable {
 
         Schedule.ScheduleBuilder builder = Schedule.builder();
 
-        byDayOfWeek.ifPresent(getUpdateSchedule(schedule, builder));
+        of(findByDay(schedule.getDayOfWeek())).ifPresent(getUpdateSchedule(schedule, builder));
         Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
 
         return scheduleRepo.save(build);

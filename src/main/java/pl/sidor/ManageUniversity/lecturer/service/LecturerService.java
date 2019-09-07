@@ -10,11 +10,11 @@ import java.util.List;
 @Component
 public interface LecturerService {
 
-    Lecturer findById(long id) throws UniversityException;
+    Lecturer findById(long id) throws Throwable;
 
     Lecturer create(Lecturer lecturer) throws Throwable;
 
-    void update(Lecturer lecturer) throws UniversityException;
+    void update(Lecturer lecturer) throws Throwable;
 
-    void delete(long id) throws UniversityException;
+    void delete(long id) throws Throwable;
 }

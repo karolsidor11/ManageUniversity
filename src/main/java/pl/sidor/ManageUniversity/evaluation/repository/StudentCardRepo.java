@@ -6,4 +6,6 @@ import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
 
 @Repository
 public interface StudentCardRepo extends CrudRepository<StudentRatingsCard, Long> {
+
+    StudentRatingsCard findByStudent(Long student_id);
 }

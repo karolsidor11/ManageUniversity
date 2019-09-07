@@ -23,40 +23,31 @@ public class ScheduleController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Schedule> getScheduleByID(@PathVariable Long id) {
+    public ResponseEntity<Schedule> getScheduleByID(@PathVariable Long id) throws Throwable {
 
-        Schedule scheduleById = scheduleService.getScheduleById(id);
-
-        return new ResponseEntity<>(scheduleById, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.getScheduleById(id), HttpStatus.OK);
     }
 
     @GetMapping(value = "/getByDay/{day}" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Schedule> getByDay(@PathVariable Days day){
+    public ResponseEntity<Schedule> getByDay(@PathVariable Days day) throws Throwable {
 
-        Schedule byDay = scheduleService.findByDay(day);
-
-        return  new ResponseEntity<>(byDay, HttpStatus.OK);
-
+        return  new ResponseEntity<>(scheduleService.findByDay(day), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Schedule> create(@RequestBody Schedule schedule) {
+    public ResponseEntity<Schedule> create(@RequestBody Schedule schedule) throws Throwable {
 
-        Schedule schedule1 = scheduleService.create(schedule);
-
-        return new ResponseEntity<>(schedule1, HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "delete/{id}")
-    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long id) throws UniversityException {
+    public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long id) throws Throwable {
 
-        boolean result = scheduleService.deleteByID(id);
-
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.deleteByID(id), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "deleteBy/{day}")
-    public ResponseEntity<Boolean> deleteByDay(@PathVariable Days day) throws UniversityException {
+    public ResponseEntity deleteByDay(@PathVariable Days day) throws Throwable {
 
          scheduleService.deleteByDay(day);
 
@@ -64,10 +55,8 @@ public class ScheduleController {
     }
 
     @PostMapping(value = "/update")
-    public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule) {
+    public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule) throws Throwable {
 
-        Schedule updateSchedule = scheduleService.updateSchedule(schedule);
-
-        return new ResponseEntity<>(updateSchedule, HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.updateSchedule(schedule), HttpStatus.CREATED);
     }
 }

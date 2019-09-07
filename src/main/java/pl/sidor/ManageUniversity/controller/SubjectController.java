@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.service.SubjectService;
 
@@ -20,19 +19,23 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws Throwable {
-        subjectService.save(subject);
 
-        return new ResponseEntity<>(subject, HttpStatus.CREATED);
+        return new ResponseEntity<>(subjectService.save(subject), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/findSubject/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Subject> getById(@PathVariable Long id) throws UniversityException {
+    public ResponseEntity<Subject> getById(@PathVariable Long id) throws Throwable {
 
         Subject byId = subjectService.getById(id);
-        return  new ResponseEntity<>(byId, HttpStatus.OK);
+        return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
+    @DeleteMapping(value = "delete/{id}")
+    public ResponseEntity<Subject> deleteSubject(@PathVariable Long id) throws Throwable {
 
+        subjectService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

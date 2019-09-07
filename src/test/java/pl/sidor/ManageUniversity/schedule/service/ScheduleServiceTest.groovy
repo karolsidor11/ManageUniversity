@@ -1,4 +1,4 @@
-package service
+package ManageUniversity.schedule.service
 
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.schedule.enums.Days
@@ -6,19 +6,22 @@ import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService
 import pl.sidor.ManageUniversity.schedule.service.ScheduleServiceImpl
+import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator
 import spock.lang.Specification
 
 class ScheduleServiceTest extends Specification {
 
     private ScheduleRepo scheduleRepo
     private ScheduleService scheduleService
+    private ScheduleValidator scheduleValidator
 
     void setup() {
         scheduleRepo = Mock(ScheduleRepo.class)
-        scheduleService = new ScheduleServiceImpl(scheduleRepo)
+        scheduleValidator=Mock(ScheduleValidator.class)
+        scheduleService = new ScheduleServiceImpl(scheduleRepo,scheduleValidator)
     }
 
-    def " should   delete Schedule  by ID"() {
+    def " should  delete Schedule  by ID"() {
 
         given:
         Long id = 12
@@ -30,7 +33,7 @@ class ScheduleServiceTest extends Specification {
         scheduleRepo.findById(id) >> Optional.of(schedule)
 
         when:
-        boolean result = scheduleService.deleteByID(id)
+        def result = scheduleService.deleteByID(id)
 
         then:
         result == true
@@ -54,10 +57,10 @@ class ScheduleServiceTest extends Specification {
 
         given:
         Days days = Days.Poniedzialek
-        scheduleRepo.findByDayOfWeek(days) >> Schedule.builder()
+        scheduleRepo.findByDayOfWeek(days) >> Optional.of(Schedule.builder()
                 .id(1)
                 .dayOfWeek(days)
-                .build()
+                .build())
         scheduleRepo.deleteByDayOfWeek(days)
 
         when:
@@ -72,13 +75,49 @@ class ScheduleServiceTest extends Specification {
         given:
         Days days = Days.Czwartek
 
-        scheduleRepo.findByDayOfWeek(days) >> null
+        scheduleRepo.findByDayOfWeek(days) >> Optional.empty()
+        scheduleRepo.deleteByDayOfWeek(days)
 
         when:
         scheduleService.deleteByDay(days)
 
         then:
         UniversityException exception = thrown()
-        exception.message=="W_BAZIE_BRAK_PLANU_O_PODANYM_DNIU:"+days.toString()
+        exception.message == "W_BAZIE_BRAK_PLANU_O_PODANYM_DNIU:" + days.toString()
+    }
+
+
+    def "should find schedule by ID"() {
+        given:
+
+        Schedule schedule = Schedule.builder()
+                .id(1L)
+                .dayOfWeek(Days.Poniedzialek)
+                .build()
+
+        scheduleRepo.findById(1L) >> Optional.of(schedule)
+
+        when:
+        def actualSchedule = scheduleService.getScheduleById(1L)
+
+        then:
+        actualSchedule != null
+        actualSchedule == schedule
+    }
+
+
+    def "should throw when Schedule id is incorrect"() {
+
+        given:
+        Long id = 999
+        scheduleRepo.findById(id) >> Optional.empty()
+
+        when:
+
+        scheduleService.getScheduleById(id)
+
+        then:
+        thrown(UniversityException.class)
+
     }
 }
