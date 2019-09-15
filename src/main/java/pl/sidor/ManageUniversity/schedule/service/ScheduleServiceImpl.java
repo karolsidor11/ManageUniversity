@@ -9,6 +9,8 @@ import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.util.Optional.of;
@@ -69,6 +71,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
 
         return scheduleRepo.save(build);
+    }
+
+    @Override
+    public List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber) {
+
+        return scheduleRepo.findByStudentGroupAndWeekNumber(studentGroup, weekNumber).get();
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {

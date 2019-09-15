@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
+import pl.sidor.ManageUniversity.schedule.model.Schedule;
+
+import java.util.List;
 
 @RestController
 public class LecturerController {
@@ -45,5 +48,13 @@ public class LecturerController {
         lecturerServiceImpl.update(lecturer);
 
         return  new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "findSchedule/lecturer")
+    public ResponseEntity<List<Schedule> >findScheduleForLecturer(@RequestParam String name, @RequestParam String lastName, Integer weekNumber) throws Throwable {
+
+        List<Schedule> scheduleForLecturer = lecturerServiceImpl.findScheduleForLecturer(name, lastName, weekNumber);
+        return  new ResponseEntity<>( scheduleForLecturer, HttpStatus.OK);
+
     }
 }

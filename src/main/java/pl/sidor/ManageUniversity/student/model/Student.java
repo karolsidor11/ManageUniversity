@@ -11,6 +11,7 @@ import pl.sidor.ManageUniversity.model.Adres;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -47,12 +48,15 @@ public class Student {
 
     @Column(name = "PhoneNumber")
     @NotNull(message = "Niepoprawny numer telefonu. Numer musi być 9 cyfrowy.")
-//    @Size(min = 1 , max = 9)
+    @Size(min = 1 , max = 9)
     private Integer phoneNumber;
 
     @Column(name = "isStudent")
     @NotNull(message = "Czy Student nie może być null.")
     private boolean isStudent;
+
+    @Column(name = "StudentGroup")
+    private Double studentGroup;
 
     @OneToOne
     @JoinColumn(name = "ratings_id")

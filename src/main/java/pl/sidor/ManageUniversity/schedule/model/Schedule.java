@@ -4,7 +4,9 @@ import lombok.*;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.function.DoubleBinaryOperator;
 
 @Entity
 @Data
@@ -21,6 +23,13 @@ public class Schedule {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Dzień tygodnia nie może być null.")
     private Days dayOfWeek;
+
+    @Column(name = "StudentGroup")
+    private Double studentGroup;
+
+    @Column(name = "WeekNumber")
+    @Size(min = 1, max = 52)
+    private Integer weekNumber;
 
     @OneToMany(cascade = {
             CascadeType.MERGE

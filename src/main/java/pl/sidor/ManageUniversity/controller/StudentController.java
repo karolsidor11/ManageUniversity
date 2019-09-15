@@ -5,13 +5,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.sidor.ManageUniversity.exception.UniversityException;
+import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
-import java.util.Optional;
-
-import static java.util.Optional.of;
+import java.util.List;
 
 @RestController
 public class StudentController {
@@ -44,11 +42,20 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/updateStudent" , consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/updateStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateStudent(@RequestBody Student student) throws Throwable {
 
         studentServiceImpl.update(student);
 
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(value = "findSchedule/student")
+    public ResponseEntity<List> findScheduleForStudent(@RequestParam("name") String name,
+      @RequestParam("lastName") String lastName, @RequestParam("weekNumber") Integer weekNumber) throws Throwable {
+
+        List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(name, lastName, weekNumber);
+
+        return new ResponseEntity<>( scheduleForStudent, HttpStatus.OK);
     }
 }

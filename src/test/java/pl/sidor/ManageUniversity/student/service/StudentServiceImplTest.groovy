@@ -1,6 +1,9 @@
 package pl.sidor.ManageUniversity.student.service
 
 import pl.sidor.ManageUniversity.exception.UniversityException
+import pl.sidor.ManageUniversity.schedule.enums.Days
+import pl.sidor.ManageUniversity.schedule.model.Schedule
+import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
@@ -9,12 +12,14 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
     private StudentRepo studentRepo
     private StudentServiceImpl service
+    private ScheduleRepo scheduleRepo
     private CheckUniqeStudentPredicate studentValidator
 
     void setup() {
         studentRepo = Mock(StudentRepo.class)
+        scheduleRepo = Mock(ScheduleRepo.class)
         studentValidator = Mock(CheckUniqeStudentPredicate.class)
-        service = new StudentServiceImpl(studentRepo, studentValidator)
+        service = new StudentServiceImpl(studentRepo, studentValidator, scheduleRepo)
     }
 
     def "should find student by ID "() {
@@ -68,7 +73,6 @@ class StudentServiceImplTest extends spock.lang.Specification {
         actualStudent == student
     }
 
-
     def "should  not create student"() {
         given:
         Student student = Student.builder()
@@ -82,13 +86,12 @@ class StudentServiceImplTest extends spock.lang.Specification {
         studentRepo.save(student) >> student
 
         when:
-        Student actualStudent = service.create(null)
+        service.create(null)
 
         then:
-        actualStudent == student
+        UniversityException exception = thrown()
+        exception.message == "Przekazywany obiekt jest pusty.:!!!"
     }
-
-
 
 
     def "should throw StudentException"() {
@@ -149,18 +152,18 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         studentRepo.findById(1) >> Optional.of(student)
 
-        Student studentSecondVersion=Student.builder()
+        Student studentSecondVersion = Student.builder()
                 .id(1)
                 .name("Jan")
                 .lastName("Nowak")
                 .build()
 
-        studentRepo.save(studentSecondVersion)>>studentSecondVersion
+        studentRepo.save(studentSecondVersion) >> studentSecondVersion
         when:
         service.update(studentSecondVersion)
 
         then:
-        1*studentRepo.save(studentSecondVersion)
+        1 * studentRepo.save(studentSecondVersion)
     }
 
     def "should throw Exception during update student"() {
@@ -179,5 +182,85 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         then:
         thrown(UniversityException.class)
+    }
+
+    def "test should find schedule for student"() {
+
+        given:
+
+        Student student = Student.builder()
+                .id(1L)
+                .name("Karol")
+                .lastName("Sidor")
+                .studentGroup(new Double(2.3))
+                .build()
+
+        Schedule schedule = Schedule.builder()
+                .id(1L)
+                .dayOfWeek(Days.Czwartek)
+                .studentGroup(new Double(2.3))
+                .weekNumber(12)
+                .build()
+
+        studentRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.of(student)
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Optional.of(Arrays.asList(schedule))
+
+        when:
+
+        def result = service.findScheduleForStudent("Karol", "Sidor", 12)
+
+        then:
+        result != null
+        result.weekNumber.get(0) == 12
+        result.studentGroup.get(0) == 2.3
+
+
+    }
+
+    def " test should find schedule for Student"() {
+        given:
+        Student student = getStudent()
+
+        Schedule schedule = Schedule.builder()
+                .id(1)
+                .dayOfWeek(Days.Poniedzialek)
+                .weekNumber(12)
+                .build()
+        studentRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.of(student)
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Optional.of(Arrays.asList(schedule))
+
+        when:
+
+        List<Schedule> actualSchedule = service.findScheduleForStudent("Karol", "Sidor", 12)
+
+        then:
+        actualSchedule != null
+        actualSchedule.get(0).weekNumber == 12
+        actualSchedule.size() == 1
+    }
+
+    private static Student getStudent() {
+        Student.builder()
+                .id(1)
+                .name("Karol")
+                .lastName("Sidor")
+                .build()
+    }
+
+    def "test should throw Exception"() {
+
+        given:
+        Student student = getStudent()
+
+        studentRepo.findByNameAndLastName("Karol","Sidor")>>Optional.of(student)
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>Optional.empty()
+        when:
+        service.findScheduleForStudent("Karol","Sidor", 12)
+
+        then:
+        UniversityException exception = thrown()
+        exception.message=="Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów :  Karol Sidor 12"
+
+
     }
 }

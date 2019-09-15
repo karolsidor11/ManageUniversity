@@ -50,7 +50,6 @@ public class Lecturer {
     private String grade;
 
     @OneToMany
-    @JoinColumn(name = "Lecturer_id")
     private List<Subject> subject;
 
 }

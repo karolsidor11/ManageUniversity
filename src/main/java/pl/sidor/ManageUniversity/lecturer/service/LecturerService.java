@@ -1,10 +1,9 @@
 package pl.sidor.ManageUniversity.lecturer.service;
 
 import org.springframework.stereotype.Component;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @Component
@@ -17,4 +16,7 @@ public interface LecturerService {
     void update(Lecturer lecturer) throws Throwable;
 
     void delete(long id) throws Throwable;
+
+    List<Schedule> findScheduleForLecturer(String name, String lastName, Integer weekNumber) throws Throwable;
+
 }

@@ -24,8 +24,11 @@ public class Subject {
     @NotNull(message = "Nazwa przedmiotu nie może być null.")
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "Subject_id")
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "schedule_2_subject",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "lecturer_id")
+    )
     @NotNull(message = "Lista wykładowców nie może być null.")
     private List<Lecturer> lecturer;
 
@@ -40,8 +43,5 @@ public class Subject {
     @Column(name = "endTime")
     @Past(message = "Podana godzina musi być z przyszłości.")
     private LocalTime endTime;
-
-    @OneToMany(mappedBy = "subjects")
-    private List<Schedule> schedule;
 
 }

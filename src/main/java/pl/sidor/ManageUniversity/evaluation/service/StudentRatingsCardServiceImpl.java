@@ -32,7 +32,7 @@ public class StudentRatingsCardServiceImpl implements StudentRatingsCardService 
 
     @Override
     public StudentRatingsCard findByStudent(String name, String lastName) {
-        Student byNameAndLastName = studentRepo.findByNameAndLastName(name, lastName);
+        Student byNameAndLastName = studentRepo.findByNameAndLastName(name, lastName).get();
         return studentCardRepo.findByStudent(byNameAndLastName.getId());
     }
 

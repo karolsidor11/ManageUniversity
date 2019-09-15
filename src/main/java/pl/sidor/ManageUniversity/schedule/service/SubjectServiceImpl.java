@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
 import pl.sidor.ManageUniversity.exception.UniversityException;
+import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator;
@@ -18,11 +20,13 @@ public class SubjectServiceImpl implements SubjectService {
 
     private SubjectRepo subjectRepo;
     private SubjectValidator subjectValidator;
+    private LecturerRepo lecturerRepo;
 
     @Autowired
-    public SubjectServiceImpl(SubjectRepo subjectRepo, SubjectValidator subjectValidator) {
+    public SubjectServiceImpl(SubjectRepo subjectRepo, SubjectValidator subjectValidator,LecturerRepo lecturerRepo) {
         this.subjectRepo = subjectRepo;
         this.subjectValidator = subjectValidator;
+        this.lecturerRepo=lecturerRepo;
     }
 
     @Override
@@ -43,5 +47,19 @@ public class SubjectServiceImpl implements SubjectService {
 
        of(getById(id)).ifPresent(subject -> subjectRepo.deleteById(id));
 
+    }
+
+    @Override
+    public Optional<Subject> findByLecturer(Long id, String name, String lastName) {
+
+        Long id1 = lecturerRepo.findByNameAndLastName(name, lastName).get().getId();
+
+        return subjectRepo.findByLecturer(new Lecturer());
+
+    }
+
+    @Override
+    public Subject findByLecturer(Lecturer lecturer) {
+        return subjectRepo.findByLecturer(lecturer).get();
     }
 }
