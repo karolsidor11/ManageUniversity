@@ -2,7 +2,6 @@ package pl.sidor.ManageUniversity.lecturer.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.sidor.ManageUniversity.lecturer.dto.LecturerDto;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 

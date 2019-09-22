@@ -4,6 +4,7 @@ import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer
+import pl.sidor.ManageUniversity.request.FindScheduleRequest
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.model.Subject
@@ -182,11 +183,19 @@ class LecturerServiceImplTest extends Specification {
         scheduleRepo.findBySubjects(subject) >> Arrays.asList(schedule)
 
         when:
-        List<Schedule> actualList = lecturerService.findScheduleForLecturer("Jan", "Nowak", 12)
+        List<Schedule> actualList = lecturerService.findScheduleForLecturer(getRequest())
 
         then:
         actualList != null
         actualList.get(0).weekNumber == 12
+    }
+
+    private FindScheduleRequest getRequest() {
+        return FindScheduleRequest.builder()
+                .name("Jan")
+                .lastName("Nowak")
+                .weekNumber(12)
+                .build()
     }
 
     private static Lecturer getLecturer() {
@@ -221,16 +230,16 @@ class LecturerServiceImplTest extends Specification {
         Subject subject = getSubject()
 
         lecturerRepo.findByNameAndLastName("Jan", "Nowak") >> Optional.of(lecturer)
-        subjectRepo.findByLecturer(lecturer)>>Optional.of(subject)
+        subjectRepo.findByLecturer(lecturer) >> Optional.of(subject)
 
-        scheduleRepo.findBySubjects(subject)>>Collections.emptyList()
+        scheduleRepo.findBySubjects(subject) >> Collections.emptyList()
 
         when:
-        lecturerService.findScheduleForLecturer("Jan", "Nowak", 13)
+        lecturerService.findScheduleForLecturer(getRequest())
 
         then:
         UniversityException exception = thrown()
-        exception.message=="Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów :  Jan Nowak 13"
+        exception.message == "Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów :  Jan Nowak 12"
 
     }
 }

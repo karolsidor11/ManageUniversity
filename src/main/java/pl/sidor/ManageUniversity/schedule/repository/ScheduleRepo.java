@@ -16,7 +16,7 @@ public interface ScheduleRepo extends CrudRepository<Schedule, Long> {
 
     Optional<Schedule> findByDayOfWeek(Days day);
 
-    Optional<List<Schedule>> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber);
+    List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber);
 
     Schedule findByStudentGroup(Double group);
 

@@ -1,6 +1,7 @@
 package pl.sidor.ManageUniversity.student.service
 
 import pl.sidor.ManageUniversity.exception.UniversityException
+import pl.sidor.ManageUniversity.request.FindScheduleRequest
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
@@ -202,12 +203,14 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .weekNumber(12)
                 .build()
 
-        studentRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.of(student)
+       FindScheduleRequest request= getRequest()
+
+        studentRepo.findByNameAndLastName(request.getName(), request.getLastName()) >> Optional.of(student)
         scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Optional.of(Arrays.asList(schedule))
 
         when:
 
-        def result = service.findScheduleForStudent("Karol", "Sidor", 12)
+        def result = service.findScheduleForStudent(request)
 
         then:
         result != null
@@ -215,6 +218,13 @@ class StudentServiceImplTest extends spock.lang.Specification {
         result.studentGroup.get(0) == 2.3
 
 
+    }
+
+    private FindScheduleRequest getRequest() {
+        FindScheduleRequest.builder()
+                .name("Karol")
+                .lastName("Sidor")
+                .weekNumber(12).build()
     }
 
     def " test should find schedule for Student"() {
@@ -231,7 +241,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
         when:
 
-        List<Schedule> actualSchedule = service.findScheduleForStudent("Karol", "Sidor", 12)
+        List<Schedule> actualSchedule = service.findScheduleForStudent(getRequest())
 
         then:
         actualSchedule != null
@@ -255,7 +265,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
         studentRepo.findByNameAndLastName("Karol","Sidor")>>Optional.of(student)
         scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>Optional.empty()
         when:
-        service.findScheduleForStudent("Karol","Sidor", 12)
+        service.findScheduleForStudent(getRequest())
 
         then:
         UniversityException exception = thrown()

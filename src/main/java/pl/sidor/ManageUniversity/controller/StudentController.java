@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
+import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
 import java.util.List;
@@ -51,10 +52,9 @@ public class StudentController {
     }
 
     @GetMapping(value = "findSchedule/student")
-    public ResponseEntity<List> findScheduleForStudent(@RequestParam("name") String name,
-      @RequestParam("lastName") String lastName, @RequestParam("weekNumber") Integer weekNumber) throws Throwable {
+    public ResponseEntity<List> findScheduleForStudent(@RequestBody FindScheduleRequest request) throws Throwable {
 
-        List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(name, lastName, weekNumber);
+        List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(request);
 
         return new ResponseEntity<>( scheduleForStudent, HttpStatus.OK);
     }

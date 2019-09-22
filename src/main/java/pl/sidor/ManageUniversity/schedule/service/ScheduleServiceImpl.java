@@ -4,13 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.mapper.LecturerDTO;
+import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import static java.util.Optional.of;
@@ -31,8 +37,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule create(Schedule schedule) throws Throwable {
 
-      return   of(schedule).filter(schedule1 -> scheduleValidator.test(schedule.getDayOfWeek()))
-                .map(schedule1 -> scheduleRepo.save(schedule))
+        return of(schedule).filter(schedule1 -> scheduleValidator
+                .test(schedule.getDayOfWeek())).map(schedule1 -> scheduleRepo.save(schedule))
                 .orElseThrow(ExceptionFactory.incorectScheduleDay(schedule.getDayOfWeek().getDay()));
     }
 
@@ -76,7 +82,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber) {
 
-        return scheduleRepo.findByStudentGroupAndWeekNumber(studentGroup, weekNumber).get();
+        return scheduleRepo.findByStudentGroupAndWeekNumber(studentGroup, weekNumber);
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {

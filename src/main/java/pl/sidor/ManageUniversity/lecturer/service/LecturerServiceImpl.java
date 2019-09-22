@@ -7,6 +7,7 @@ import pl.sidor.ManageUniversity.exception.ExceptionFactory;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
+import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
@@ -65,19 +66,19 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    public List<Schedule> findScheduleForLecturer(String name, String lastName, Integer weekNumber) throws Throwable {
+    public List<Schedule> findScheduleForLecturer(FindScheduleRequest request) throws Throwable {
 
-        Optional<Lecturer> byNameAndLastName = lecturerRepo.findByNameAndLastName(name, lastName);
+        Optional<Lecturer> byNameAndLastName = lecturerRepo.findByNameAndLastName(request.getName(), request.getLastName());
         Optional<Subject> subject = subjectRepo.findByLecturer(byNameAndLastName.get());
         List<Schedule> bySubjects = scheduleRepo.findBySubjects(subject.get());
 
         Optional<List<Schedule>> collect = of(bySubjects.stream()
                 .filter(schedule -> Objects.nonNull(schedule.getWeekNumber()))
-                .filter(schedule -> schedule.getWeekNumber().equals(weekNumber))
+                .filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber()))
                 .collect(Collectors.toList()));
 
         if (collect.get().isEmpty()) {
-            throw ExceptionFactory.nieoczekianyBladSystemu(name, lastName, weekNumber);
+            throw ExceptionFactory.nieoczekianyBladSystemu(request.getName(), request.getLastName(), request.getWeekNumber());
         }
 
         return collect.get();
