@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.mapper
 
+import pl.sidor.ManageUniversity.dto.LecturerDTO
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import spock.lang.Specification
 

@@ -1,9 +1,7 @@
 package pl.sidor.ManageUniversity.schedule.model;
 
 import lombok.*;
-import pl.sidor.ManageUniversity.lecturer.dto.LecturerDto;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
-import pl.sidor.ManageUniversity.mapper.LecturerDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

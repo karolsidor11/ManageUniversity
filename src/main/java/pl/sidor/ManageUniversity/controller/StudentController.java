@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.dto.ScheduleDTO;
+import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
-import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
 import java.util.List;
@@ -56,6 +57,13 @@ public class StudentController {
 
         List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(request);
 
-        return new ResponseEntity<>( scheduleForStudent, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleForStudent, HttpStatus.OK);
+    }
+
+    @GetMapping("scheduleStudent")
+    public ResponseEntity<List<? extends ScheduleDTO>> findSchedule(@RequestBody FindScheduleRequest request) throws Throwable {
+        List<ScheduleDTO> schedule = studentServiceImpl.findSchedule(request);
+        return new ResponseEntity<>(schedule, HttpStatus.OK);
+
     }
 }

@@ -7,6 +7,8 @@ import pl.sidor.ManageUniversity.exception.ExceptionFactory;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
+import pl.sidor.ManageUniversity.dto.LecturerDTO;
+import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
@@ -46,6 +48,12 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
+    public LecturerDTO findLecturerDTO(long id) {
+        Lecturer lecturer = lecturerRepo.findById(id).get();
+        return LecturerMapper.mapTo(lecturer);
+    }
+
+    @Override
     public Lecturer create(Lecturer lecturer) throws Throwable {
 
         return of(lecturer).filter(checkLecturer).map(lecturer1 -> lecturerRepo.save(lecturer)).orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
@@ -72,10 +80,7 @@ public class LecturerServiceImpl implements LecturerService {
         Optional<Subject> subject = subjectRepo.findByLecturer(byNameAndLastName.get());
         List<Schedule> bySubjects = scheduleRepo.findBySubjects(subject.get());
 
-        Optional<List<Schedule>> collect = of(bySubjects.stream()
-                .filter(schedule -> Objects.nonNull(schedule.getWeekNumber()))
-                .filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber()))
-                .collect(Collectors.toList()));
+        Optional<List<Schedule>> collect = of(bySubjects.stream().filter(schedule -> Objects.nonNull(schedule.getWeekNumber())).filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber())).collect(Collectors.toList()));
 
         if (collect.get().isEmpty()) {
             throw ExceptionFactory.nieoczekianyBladSystemu(request.getName(), request.getLastName(), request.getWeekNumber());

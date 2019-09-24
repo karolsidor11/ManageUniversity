@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
+import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
@@ -43,19 +43,26 @@ public class LecturerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "updateLecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces =  MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "updateLecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer) throws Throwable {
 
         lecturerServiceImpl.update(lecturer);
 
-        return  new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping(value = "findSchedule/lecturer")
-    public ResponseEntity<List<Schedule> >findScheduleForLecturer(@RequestBody FindScheduleRequest request) throws Throwable {
+    public ResponseEntity<List<Schedule>> findScheduleForLecturer(@RequestBody FindScheduleRequest request) throws Throwable {
 
         List<Schedule> scheduleForLecturer = lecturerServiceImpl.findScheduleForLecturer(request);
-        return  new ResponseEntity<>( scheduleForLecturer, HttpStatus.OK);
+        return new ResponseEntity<>(scheduleForLecturer, HttpStatus.OK);
+
+    }
+
+    @GetMapping(value = "lecturerDTO/{id}")
+    public ResponseEntity<LecturerDTO> findLecturerDTO(@PathVariable Long id) {
+        LecturerDTO lecturerDTO = lecturerServiceImpl.findLecturerDTO(id);
+        return new ResponseEntity<>(lecturerDTO, HttpStatus.OK);
 
     }
 }

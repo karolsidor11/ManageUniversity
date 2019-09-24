@@ -1,9 +1,10 @@
 package pl.sidor.ManageUniversity.student.service;
 
 import org.springframework.stereotype.Component;
+import pl.sidor.ManageUniversity.dto.ScheduleDTO;
+import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
-import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface StudentService {
 
     void delete(Long id) throws Throwable;
 
-   List<Schedule> findScheduleForStudent(FindScheduleRequest request) throws Throwable;
+    List<Schedule> findScheduleForStudent(FindScheduleRequest request) throws Throwable;
+
+    List<ScheduleDTO> findSchedule(FindScheduleRequest request) throws Throwable;
 }
 

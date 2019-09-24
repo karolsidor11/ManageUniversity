@@ -1,4 +1,4 @@
-package pl.sidor.ManageUniversity.mapper;
+package pl.sidor.ManageUniversity.dto;
 
 import lombok.*;
 

@@ -1,5 +1,7 @@
 package pl.sidor.ManageUniversity.student.service
 
+import org.hibernate.engine.internal.Collections
+import org.springframework.context.annotation.Profile
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.request.FindScheduleRequest
 import pl.sidor.ManageUniversity.schedule.enums.Days
@@ -9,6 +11,7 @@ import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
 
+@Profile("dev")
 class StudentServiceImplTest extends spock.lang.Specification {
 
     private StudentRepo studentRepo
@@ -206,7 +209,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
        FindScheduleRequest request= getRequest()
 
         studentRepo.findByNameAndLastName(request.getName(), request.getLastName()) >> Optional.of(student)
-        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Optional.of(Arrays.asList(schedule))
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Arrays.asList(schedule)
 
         when:
 
@@ -237,7 +240,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .weekNumber(12)
                 .build()
         studentRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.of(student)
-        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Optional.of(Arrays.asList(schedule))
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.getStudentGroup(), 12) >> Arrays.asList(schedule)
 
         when:
 
@@ -263,7 +266,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
         Student student = getStudent()
 
         studentRepo.findByNameAndLastName("Karol","Sidor")>>Optional.of(student)
-        scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>Optional.empty()
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>java.util.Collections.emptyList()
         when:
         service.findScheduleForStudent(getRequest())
 

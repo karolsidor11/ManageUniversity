@@ -1,4 +1,4 @@
-package ManageUniversity.evaluation
+package pl.sidor.ManageUniversity.evaluation
 
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo

@@ -4,18 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
-import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
-import pl.sidor.ManageUniversity.mapper.LecturerDTO;
-import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
-import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
