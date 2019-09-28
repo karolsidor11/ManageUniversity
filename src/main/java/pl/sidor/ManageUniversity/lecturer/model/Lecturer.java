@@ -40,7 +40,7 @@ public class Lecturer {
     @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "PhoneNmber")
+    @Column(name = "PhoneNumber")
     @NotNull(message = "Nieprawidłowy numer telefonu. Numer musi być 9 cyfrowy.")
     @Size(min = 9, max = 9)
     private int phoneNumber;
@@ -50,6 +50,7 @@ public class Lecturer {
     private String grade;
 
     @OneToMany
+    @Column(name = "SubjectID")
     private List<Subject> subject;
 
 }

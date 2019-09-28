@@ -5,5 +5,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SpringProfile {
     private static final String DEV ="dev";
-    private static final String TEST ="dev";
+    private static final String TEST ="test";
 }
