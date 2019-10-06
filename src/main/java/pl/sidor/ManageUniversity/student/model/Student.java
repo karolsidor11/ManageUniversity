@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
@@ -19,7 +20,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Student {
+public class Student implements Serializable {
+
+    private static final long serialVersionUID = 8573582585029283903L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -48,7 +51,7 @@ public class Student {
 
     @Column(name = "PhoneNumber")
     @NotNull(message = "Niepoprawny numer telefonu. Numer musi być 9 cyfrowy.")
-    @Size(min = 1 , max = 9)
+    @Size(min = 1, max = 9)
     private Integer phoneNumber;
 
     @Column(name = "isStudent")
@@ -61,5 +64,4 @@ public class Student {
     @OneToOne
     @JoinColumn(name = "ratings_id")
     private StudentRatingsCard studentRatingsCard;
-
 }

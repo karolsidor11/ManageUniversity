@@ -1,4 +1,4 @@
-CREATE SCHEMA IF NOT EXISTS dev;
+CREATE SCHEMA IF NOT EXISTS prod;
 
 CREATE TABLE `student` (
   `id` bigint(20) NOT NULL,

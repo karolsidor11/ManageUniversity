@@ -5,15 +5,17 @@ import pl.sidor.ManageUniversity.schedule.enums.Days;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
-import java.util.function.DoubleBinaryOperator;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Schedule {
+public class Schedule  implements Serializable{
+
+    private static final long serialVersionUID = -5710572541401522890L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

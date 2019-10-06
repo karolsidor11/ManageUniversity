@@ -6,6 +6,7 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -14,7 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @Builder
-public class Subject {
+public class Subject implements Serializable {
+
+    private static final long serialVersionUID = -5195553206423356155L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,5 +46,4 @@ public class Subject {
     @Column(name = "endTime")
     @Past(message = "Podana godzina musi być z przyszłości.")
     private LocalTime endTime;
-
 }
