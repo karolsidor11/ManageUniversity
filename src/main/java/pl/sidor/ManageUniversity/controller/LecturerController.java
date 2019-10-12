@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 import pl.sidor.ManageUniversity.dto.LecturerDTO;
@@ -60,7 +61,7 @@ public class LecturerController {
     }
 
     @GetMapping(value = "lecturerDTO/{id}")
-    public ResponseEntity<LecturerDTO> findLecturerDTO(@PathVariable Long id) {
+    public ResponseEntity<LecturerDTO> findLecturerDTO(@PathVariable Long id) throws UniversityException {
         LecturerDTO lecturerDTO = lecturerServiceImpl.findLecturerDTO(id);
         return new ResponseEntity<>(lecturerDTO, HttpStatus.OK);
 

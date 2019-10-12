@@ -1,6 +1,7 @@
 package pl.sidor.ManageUniversity.lecturer.service;
 
 import org.springframework.stereotype.Component;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
@@ -13,7 +14,7 @@ public interface LecturerService {
 
     Lecturer findById(long id) throws Throwable;
 
-    LecturerDTO findLecturerDTO(long id);
+    LecturerDTO findLecturerDTO(long id) throws UniversityException;
 
     Lecturer create(Lecturer lecturer) throws Throwable;
 

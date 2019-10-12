@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.integation_test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -62,11 +64,10 @@ public class LecturerControllerIT {
         objectMapper = new ObjectMapper();
     }
 
-//    todo  sprawdz przy braku id
     @Test
     public void should_find_lecturer_by_id() throws Exception {
 
-        // given:
+        // given
         Lecturer lecturer = Lecturer.builder()
                 .id(1L)
                 .name("Jan")
@@ -77,7 +78,7 @@ public class LecturerControllerIT {
 
         when(lecturerRepo.findById(1L)).thenReturn(Optional.of(lecturer));
 
-        // when:
+        // when
         MvcResult mvcResult = mockMvc.perform(get("/findLecturer/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.is(1)))
@@ -89,17 +90,35 @@ public class LecturerControllerIT {
         String contentAsString = mvcResult.getResponse().getContentAsString();
         Lecturer lecturer1 = objectMapper.readValue(contentAsString, Lecturer.class);
 
-        // then:
+        // then
         verify(lecturerRepo, times(1)).findById(1L);
         assertEquals(lecturer, lecturer1);
 
     }
 
-//    todo Test na puste pola -> sprawdzenei czy podano imie, nazwisko , email
+    @Test
+    public void test_should_throw_exception_when_id_is_incorrect() throws Exception {
+
+        // given
+        Long id= 9999L;
+
+        when(lecturerRepo.findById(id)).thenReturn(Optional.empty());
+
+        // expected
+        MvcResult result = mockMvc.perform(get("findLecturer/{id}", id))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        // then
+        assertEquals(404, result.getResponse().getStatus());
+
+    }
+
     @Test
     public void should_save_lecturer() throws Exception {
 
-    // given
+        // given
         Lecturer lecturer= Lecturer.builder()
                 .id(1L)
                 .name("Jan")
@@ -110,8 +129,8 @@ public class LecturerControllerIT {
         when(checkLecturer.test(lecturer)).thenReturn(true);
         when(lecturerRepo.save(lecturer)).thenReturn(lecturer);
 
-    // when
-      MvcResult result=  mockMvc.perform(post("/saveLecturer")
+         // when
+        MvcResult result=  mockMvc.perform(post("/saveLecturer")
                 .content(objectMapper.writeValueAsString(lecturer))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -132,30 +151,68 @@ public class LecturerControllerIT {
 
     }
 
-//    todo  sprawdz przy braku id
+    @Test
+    public void test_should_throw_exception_when_lecturer_null() throws Exception {
+
+        // given
+        Lecturer lecturer = Lecturer.builder().build();
+
+        when(checkLecturer.test(lecturer)).thenReturn(true);
+
+        // then
+        mockMvc.perform(post("/saveLecturer")
+        .content(objectMapper.writeValueAsString(lecturer))
+        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
     @Test
     public void should_delete_lecturer() throws Exception {
 
-    // given:
+        // given
         Long id= 1L;
 
         when(lecturerRepo.findById(id)).thenReturn(Optional.of(Lecturer.builder().id(id).build()));
         doNothing().when(lecturerRepo).deleteById(id);
 
-    // when:
+         // when
         mockMvc.perform(delete("/deleteLecturer/{id}", id))
                 .andExpect(status().isOk())
                 .andReturn();
 
-    // then:
+         // then
         verify( lecturerRepo, times(1)).deleteById(id);
     }
+
+    @Test
+    public void test_should_throw_exception_when_id_incorrect() throws Exception {
+
+        // given
+        Long id =123212L;
+
+        // when
+        when(lecturerRepo.findById(id)).thenReturn(Optional.empty());
+        doNothing().when(lecturerRepo).deleteById(id);
+
+
+        MvcResult result = mockMvc.perform(delete("deleteLecturer/{id}", id))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andReturn();
+
+        // then
+        assertEquals(404, result.getResponse().getStatus());
+
+    }
+
 
 //    todo  update  brak uzytkownika w bazie, sprawdz czy przy update pozostałę pola się zachowaja
     @Test
      public  void should_update_lecturer() throws Exception {
 
-        // given:
+        // given
         Lecturer lecturer= Lecturer.builder()
                 .id(1L)
                 .name("Jan")
@@ -173,23 +230,49 @@ public class LecturerControllerIT {
         when(lecturerRepo.findById(1L)).thenReturn(Optional.of(lecturer));
         when(lecturerRepo.save(updateLecturer)).thenReturn(updateLecturer);
 
-        // when:
+        // when
         mockMvc.perform(post("/updateLecturer")
                 .content(objectMapper.writeValueAsString(updateLecturer))
                  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // then:
+        // then
         verify(lecturerRepo, times(1)).save(any(Lecturer.class));
 
      }
 
-//     todo przy barku id
+     @Test
+     public void  test_should_throw_exception_when_update_lecturer() throws Exception {
+
+        //  given
+         Lecturer lecturer = Lecturer.builder()
+                 .id(1L)
+                 .name("Janek")
+                 .lastName("Nowak")
+                 .build();
+
+         Lecturer updateLecturer= Lecturer.builder()
+                 .id(1L)
+                 .name("Paweł")
+                 .lastName("Nowak")
+                 .build();
+
+         when(lecturerRepo.findById(lecturer.getId())).thenReturn(Optional.empty());
+
+        //  expect
+
+         mockMvc.perform(post("updateLecturer")
+                 .content(objectMapper.writeValueAsString(updateLecturer))
+                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                 .andExpect(status().isNotFound())
+                 .andReturn();
+     }
+
      @Test
      public void testShouldFindLecturerDTO() throws Exception {
 
-        // given:
+        // given
          Lecturer lecturer= Lecturer.builder()
                  .id(1L)
                  .name("Jan")
@@ -199,7 +282,7 @@ public class LecturerControllerIT {
                  .build();
           when(lecturerRepo.findById(lecturer.getId())).thenReturn(Optional.of(lecturer));
 
-        // expected:
+        // expected
          mockMvc.perform(get("/lecturerDTO/1", 1L))
                  .andExpect(status().isOk())
                  .andExpect(jsonPath("$.name", Matchers.is("Jan")))
@@ -207,28 +290,44 @@ public class LecturerControllerIT {
                  .andExpect(jsonPath("$.email", Matchers.is("jan@wp.pl")))
                  .andExpect(jsonPath("$.grade", Matchers.is("Doktor")))
                  .andReturn();
+     }
+
+     @Test
+     public void test_should_throw_exception_when_lecturerDto_incorrect_id() throws Exception {
+
+        // given
+         Long id=2324343L;
+
+         when(lecturerRepo.findById(id)).thenReturn(Optional.empty());
+
+        //  when
+         MvcResult result = mockMvc.perform(get("/lecturerDTO/{id}", id))
+                 .andDo(print())
+                 .andExpect(status().isNotFound())
+                 .andReturn();
+
+        // then
+         assertEquals(404, result.getResponse().getStatus());
 
      }
 
      @Test
      public void testShouldFindScheduleForLecturer() throws Exception {
 
-        // given:
+        // given
          Lecturer lecturer = getLecturer();
 
          FindScheduleRequest request= getRequest(lecturer);
 
          Subject subject= getSubject(lecturer);
 
-
          Schedule schedule = getSchdule(subject);
-
 
          when(lecturerRepo.findByNameAndLastName(lecturer.getName(), lecturer.getLastName())).thenReturn(Optional.of(lecturer));
          when(subjectRepo.findByLecturer(lecturer)).thenReturn(Optional.of(subject));
          when(scheduleRepo.findBySubjects(subject)).thenReturn(Arrays.asList(schedule));
 
-        // expected:
+        // expected
          mockMvc.perform(get("/findSchedule/lecturer")
                  .content(objectMapper.writeValueAsString(request))
                  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
@@ -236,23 +335,41 @@ public class LecturerControllerIT {
                  .andReturn();
      }
 
-//     todo nieprawidlowy lektor
      @Test
      public void testShouldThrowExceptionWhenSearchScheduleForLecturer() throws Exception {
 
-        // given:
+        // given
          Lecturer lecturer= getLecturer();
          FindScheduleRequest request = getRequest(lecturer);
 
          when(lecturerRepo.findByNameAndLastName(lecturer.getName(), lecturer.getLastName())).thenReturn(Optional.of(lecturer));
          when(subjectRepo.findByLecturer(lecturer)).thenReturn(Optional.of(getSubject(lecturer)));
 
-        // expected:
+        // expected
          mockMvc.perform(get("/findSchedule/lecturer")
                  .content(objectMapper.writeValueAsString(request))
                  .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                  .andExpect(status().isNotFound())
                  .andReturn();
+     }
+
+     @Test
+     public  void  test_should_throw_exception_if_lecturer_incorrect() throws Exception {
+
+        // given
+        FindScheduleRequest request = getRequest(Lecturer.builder().build());
+
+        when(lecturerRepo.findByNameAndLastName("Jan", "Nowakowski")).thenReturn(Optional.empty());
+        when(subjectRepo.findByLecturer(null)).thenReturn(Optional.empty());
+
+        //  expected
+         mockMvc.perform(get("findSchedule/lecturer")
+                 .content(objectMapper.writeValueAsString(request))
+                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                 .andDo(print())
+                 .andExpect(status().isNotFound())
+                 .andReturn();
+
      }
 
     private Schedule getSchdule(Subject subject) {

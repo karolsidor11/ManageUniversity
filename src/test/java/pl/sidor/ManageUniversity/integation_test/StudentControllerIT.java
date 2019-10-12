@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -63,12 +62,12 @@ public class StudentControllerIT {
     @Test
     public void should_find_student_by_id() throws Exception {
 
-        // given :
+        // given
         Student student = Student.builder().id(1L).name("Karol").lastName("Sidor").build();
 
         when(studentRepo.findById(1L)).thenReturn(Optional.of(student));
 
-        // expect:
+        // expect
         mockMvc.perform(get("/findStudent/1", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
@@ -76,14 +75,28 @@ public class StudentControllerIT {
     }
 
     @Test
+    public  void test_should_throw_exception_when_incorrect_id() throws Exception {
+
+        // given
+        Long studentID=9830984L;
+        when(studentRepo.findById(studentID)).thenReturn(Optional.empty());
+
+        // expect
+        mockMvc.perform(get("/findStudent/{id}", studentID))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
     public void should_save_student() throws Exception {
 
-        // given:
+        // given
         Student student = getStudent();
         when(checkUniqeStudentPredicate.test(student)).thenReturn(true);
         when(studentRepo.save(student)).thenReturn(student);
 
-        // when:
+        // when
         MvcResult mvcResult = mockMvc.perform(post("/saveStudent")
                 .content(objectMapper.writeValueAsString(student))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -96,42 +109,59 @@ public class StudentControllerIT {
         String contentAsString = mvcResult.getResponse().getContentAsString();
         Student student1 = objectMapper.readValue(contentAsString, Student.class);
 
-        // then:
+        // then
         verify(studentRepo, times(1)).save(student);
         assertNotNull(student1);
         assertEquals(student, student1);
 
     }
 
-    private Student getStudent() {
-        return Student.builder()
-                .id(1L)
-                .name("Karol")
-                .lastName("Sidor")
-                .email("karolsidor11@wp.pl")
-                .studentGroup(2.2)
-                .build();
+    @Test
+    public void test_should_throw_exception_when_save_empty_student() throws Exception {
+
+        // given
+        Student student = null;
+
+        when(checkUniqeStudentPredicate.test(student)).thenReturn(true);
+
+        // expect
+        mockMvc.perform(post("/saveStudent")
+                .content(objectMapper.writeValueAsString(student))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest())
+                .andReturn();
     }
 
     @Test
     public void should_delete_student() throws Exception {
 
-        // given:
+        // given
         when(studentRepo.findById(1L)).thenReturn(Optional.of(Student.builder().id(1l).build()));
         doNothing().when(studentRepo).deleteById(1L);
 
-        //  when:
+        //  when
         mockMvc.perform(delete("/deleteStudent/{id}", 1)).andExpect(status().isOk());
 
-        // then:
+        // then
         verify(studentRepo, times(1)).deleteById(anyLong());
+    }
 
+    @Test
+    public  void  test_should_throw_exception_delete_student() throws Exception {
+
+        // given
+        Long studentId=9999L;
+
+        // expect
+        mockMvc.perform(delete("/deleteStudent/{id}", studentId))
+                .andExpect(status().isNotFound())
+                .andReturn();
     }
 
     @Test
     public void should_update_student() throws Exception {
 
-        // given:
+        // given
         Student student = Student.builder().id(1L).name("Jan").lastName("Nowak").email("nowak@wp.pl").build();
 
         Student updateStudent = Student.builder().id(1L).name("Marek").lastName("Nowak").email("nowak@wp.pl").build();
@@ -140,21 +170,45 @@ public class StudentControllerIT {
         when(studentRepo.findById(1L)).thenReturn(Optional.of(student));
         when(studentRepo.save(updateStudent)).thenReturn(updateStudent);
 
-        // when:
-        MvcResult mvcResult = mockMvc.
-                perform(post("/updateStudent")
+        // when
+        MvcResult mvcResult = mockMvc.perform(post("/updateStudent")
                         .content(objectMapper.writeValueAsString(updateStudent))
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
-        // then:
+                        .andExpect(status().isOk()).andReturn();
+        // then
         verify(studentRepo, times(1)).save(updateStudent);
         assertEquals(200, mvcResult.getResponse().getStatus());
     }
 
     @Test
+    public void test_should_throw_exception_update_student() throws Exception {
+
+        // given
+        Student student = Student.builder()
+                .id(1L)
+                .name("Jan")
+                .build();
+
+        Student newStudent= Student.builder()
+                .id(1L)
+                .name("Mariusz")
+                .lastName("Nowak")
+                .build();
+
+        when(studentRepo.findById(student.getId())).thenReturn(Optional.empty());
+
+        //  expect
+        mockMvc.perform(post("updateStudent")
+                .content(objectMapper.writeValueAsString(newStudent))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    @Test
     public void shouldFindScheduleForStudent() throws Exception {
 
-        //given:
+        //given
         FindScheduleRequest request = getFindScheduleRequest();
 
         Student student = getStudent();
@@ -162,7 +216,7 @@ public class StudentControllerIT {
         when(studentRepo.findByNameAndLastName(request.getName(), request.getLastName())).thenReturn(Optional.of(student));
         when(scheduleRepo.findByStudentGroupAndWeekNumber(2.2, 12)).thenReturn(getSchedule());
 
-        // expected:
+        // expected
         mockMvc.perform(get("/findSchedule/student").content(objectMapper.writeValueAsString(request))
         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -170,32 +224,17 @@ public class StudentControllerIT {
                 .andExpect(jsonPath("$[0].dayOfWeek", is("Poniedzialek")));
     }
 
-    private static FindScheduleRequest getFindScheduleRequest() {
-        return FindScheduleRequest.builder()
-                    .name("Karol")
-                    .lastName("Sidor")
-                    .weekNumber(12)
-                    .build();
-    }
-
-    private  static List<Schedule> getSchedule(){
-        return Arrays.asList(
-                Schedule.builder().id(1L).dayOfWeek(Days.Poniedzialek).studentGroup(2.2).weekNumber(12).build()
-
-        );
-    }
-
     @Test
     public void shouldNotFindScheduleForStudent() throws Exception {
 
-        // given:
+        // given
         FindScheduleRequest request= getFindScheduleRequest();
         Student student = getStudent();
 
         when(studentRepo.findByNameAndLastName(request.getName(), request.getLastName())).thenReturn(Optional.of(student));
         when(scheduleRepo.findByStudentGroupAndWeekNumber(2.2, 12)).thenReturn(Collections.emptyList());
 
-        // expected:
+        // expected
         MvcResult result = mockMvc.perform(get("/findSchedule/student")
                 .content(objectMapper.writeValueAsString(request))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
@@ -207,14 +246,14 @@ public class StudentControllerIT {
     @Test
     public void testShouldThrowExceptionWhenStudentNameIsNull() throws Exception {
 
-        // given:
+        // given
         FindScheduleRequest request = FindScheduleRequest.builder()
                 .name(null)
                 .lastName(null)
                 .weekNumber(12)
                 .build();
 
-        // expected:
+        // expected
         MvcResult result = mockMvc.perform(get("/findSchedule/student")
                 .content(objectMapper.writeValueAsString(request))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -227,16 +266,16 @@ public class StudentControllerIT {
     @Test
     public void  testShouldThrowExceptionWhenWeekNumberIsEmpty() throws Exception {
 
-        // given:
+        // given
         Student student= getStudent();
         FindScheduleRequest request= getFindScheduleRequest();
 
-        List<Schedule> schedules=Arrays.asList(Schedule.builder().id(1L).studentGroup(2.2).build());
+        List<Schedule> schedules= Collections.singletonList(Schedule.builder().id(1L).studentGroup(2.2).build());
 
         when(studentRepo.findByNameAndLastName(student.getName(), student.getLastName())).thenReturn(Optional.of(student));
         when(scheduleRepo.findByStudentGroupAndWeekNumber(2.2, 12)).thenReturn(schedules);
 
-        // expected:
+        // expected
         MvcResult result = mockMvc.perform(get("/findSchedule/student")
                 .content(objectMapper.writeValueAsString(student))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -244,6 +283,30 @@ public class StudentControllerIT {
                 .andReturn();
 
         assertEquals(result.getResponse().getStatus(), 404);
+    }
 
+    private Student getStudent() {
+        return Student.builder()
+                .id(1L)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karolsidor11@wp.pl")
+                .studentGroup(2.2)
+                .build();
+    }
+    private static FindScheduleRequest getFindScheduleRequest() {
+        return FindScheduleRequest.builder()
+                .name("Karol")
+                .lastName("Sidor")
+                .weekNumber(12)
+                .build();
+    }
+
+    private  static List<Schedule> getSchedule(){
+        return Collections.singletonList(Schedule.builder().
+                id(1L)
+                .dayOfWeek(Days.Poniedzialek).studentGroup(2.2)
+                .weekNumber(12).build()
+        );
     }
 }

@@ -3,11 +3,12 @@ package pl.sidor.ManageUniversity.lecturer.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
-import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
@@ -15,6 +16,7 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -48,21 +50,36 @@ public class LecturerServiceImpl implements LecturerService {
     }
 
     @Override
-    public LecturerDTO findLecturerDTO(long id) {
-        Lecturer lecturer = lecturerRepo.findById(id).get();
-        return LecturerMapper.mapTo(lecturer);
+    public LecturerDTO findLecturerDTO(long id) throws UniversityException {
+        Optional<Lecturer> byId = lecturerRepo.findById(id);
+
+        if (byId.isPresent()) {
+            return LecturerMapper.mapTo(byId.get());
+        }
+        throw ExceptionFactory.incorrectLecturerID(String.valueOf(id));
     }
 
     @Override
     public Lecturer create(Lecturer lecturer) throws Throwable {
 
-        return of(lecturer).filter(checkLecturer).map(lecturer1 -> lecturerRepo.save(lecturer)).orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
+        checkObject(lecturer);
+
+        return of(lecturer).filter(checkLecturer).map(lecturer1 -> lecturerRepo.save(lecturer))
+                .orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
+    }
+
+    private void checkObject(Lecturer lecturer) throws UniversityException {
+        if(lecturer.getName()==null || lecturer.getLastName()==null ||lecturer.getEmail()==null){
+            throw  ExceptionFactory.objectIsEmpty("Wymagane jest imię, nazwisko, email. !!!");
+        }
     }
 
     @Override
     public void update(Lecturer lecturer) throws Throwable {
 
-        Lecturer lecturer2 = of(findById(lecturer.getId())).map(lecturer1 -> createLecturer(lecturer1, lecturer)).orElseThrow(ExceptionFactory.incorrectLecturerID(String.valueOf(lecturer.getId())));
+        Lecturer lecturer2 = of(findById(lecturer.getId()))
+                .map(lecturer1 -> createLecturer(lecturer1, lecturer))
+                .orElseThrow(ExceptionFactory.incorrectLecturerID(String.valueOf(lecturer.getId())));
 
         lecturerRepo.save(lecturer2);
     }
