@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.sidor.ManageUniversity.exception.UniversityException;
+import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
-import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleServiceImpl;
+
+import java.util.Optional;
+
+import static java.util.Optional.of;
 
 @RestController
 @RequestMapping(value = "/schedule")
@@ -28,10 +31,10 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.getScheduleById(id), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getByDay/{day}" , produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getByDay/{day}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Schedule> getByDay(@PathVariable Days day) throws Throwable {
 
-        return  new ResponseEntity<>(scheduleService.findByDay(day), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.findByDay(day), HttpStatus.OK);
     }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -49,14 +52,25 @@ public class ScheduleController {
     @DeleteMapping(value = "deleteBy/{day}")
     public ResponseEntity deleteByDay(@PathVariable Days day) throws Throwable {
 
-         scheduleService.deleteByDay(day);
+        scheduleService.deleteByDay(day);
 
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(value = "/update")
     public ResponseEntity<Schedule> updateSchedule(@RequestBody Schedule schedule) throws Throwable {
 
         return new ResponseEntity<>(scheduleService.updateSchedule(schedule), HttpStatus.CREATED);
+    }
+
+    @PostMapping(value = "/modifySchedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Schedule> modifySchedule(@RequestBody ScheduleUpdate scheduleUpdate) throws Throwable {
+
+        Optional<Schedule> schedule = of(scheduleService.modifySchedule(scheduleUpdate));
+
+        HttpStatus httpStatus = schedule.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(schedule.get(), httpStatus);
+
     }
 }

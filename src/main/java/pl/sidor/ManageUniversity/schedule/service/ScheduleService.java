@@ -1,10 +1,10 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ScheduleService {
 
@@ -21,4 +21,6 @@ public interface ScheduleService {
     Schedule updateSchedule(Schedule schedule) throws Throwable;
 
     List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber);
+
+    Schedule modifySchedule(ScheduleUpdate scheduleUpdate) throws Throwable;
 }

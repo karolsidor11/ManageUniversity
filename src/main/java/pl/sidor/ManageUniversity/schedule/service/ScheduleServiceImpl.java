@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
@@ -76,6 +78,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber) {
 
         return scheduleRepo.findByStudentGroupAndWeekNumber(studentGroup, weekNumber);
+    }
+
+    @Override
+    public Schedule modifySchedule(ScheduleUpdate scheduleUpdate) throws Throwable {
+
+        Schedule schedule = scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
+                scheduleUpdate.getWeekNumber()).orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
+
+        List<Subject> subjects = schedule.getSubjects();
+
+        Subject subject1 = schedule.getSubjects()
+                .stream().filter(subject -> subject.getId().equals(scheduleUpdate.getSubjects().getId())).findFirst()
+                .orElseThrow(ExceptionFactory.objectIsEmpty("Brak przedmiotu o podanym ID."));
+
+        subjects.remove(subject1);
+        subjects.add(scheduleUpdate.getSubjects());
+
+        return  scheduleRepo.save(schedule);
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {

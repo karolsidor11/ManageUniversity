@@ -1,13 +1,15 @@
-package ManageUniversity.schedule.service
+package pl.sidor.ManageUniversity.schedule.service
 
 import pl.sidor.ManageUniversity.exception.UniversityException
+import pl.sidor.ManageUniversity.request.ScheduleUpdate
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
+import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
-import pl.sidor.ManageUniversity.schedule.service.ScheduleService
-import pl.sidor.ManageUniversity.schedule.service.ScheduleServiceImpl
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator
 import spock.lang.Specification
+
+import java.time.LocalTime
 
 class ScheduleServiceTest extends Specification {
 
@@ -120,4 +122,67 @@ class ScheduleServiceTest extends Specification {
         thrown(UniversityException.class)
 
     }
+
+    def "test should modify Schedule"(){
+
+        given:
+        ScheduleUpdate scheduleUpdate = prepareModifyRequest()
+
+        scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber)>>Optional.of(prepareSchedule())
+
+        when:
+
+         Schedule schedule=  scheduleService.modifySchedule(scheduleUpdate)
+
+        then:
+        schedule!=null
+
+    }
+
+    def "test  should  throw exception during modify Schedule"(){
+
+        given:
+
+        ScheduleUpdate scheduleUpdate=  prepareModifyRequest()
+        scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber)>>Optional.empty()
+
+        when:
+
+        scheduleService.modifySchedule(scheduleUpdate)
+
+        then:
+        thrown(UniversityException.class)
+
+    }
+
+    private static ScheduleUpdate prepareModifyRequest() {
+        ScheduleUpdate.builder()
+                .dayOfWeek(Days.Poniedzialek)
+                .weekNumber(12)
+                .subjects(prepareSubject())
+                .build()
+    }
+
+    private static Subject prepareSubject(){
+        return Subject.builder()
+            .id(1L)
+            .name("Polski")
+            .roomNumber(21)
+            .startTime(LocalTime.now())
+            .endTime(LocalTime.of(12,20))
+            .build()
+    }
+
+    private static  Schedule prepareSchedule(){
+        List<Subject> subjectList = new ArrayList<>();
+        subjectList.add(prepareSubject())
+
+        return Schedule.builder()
+            .id(1l)
+            .dayOfWeek(Days.Poniedzialek)
+            .weekNumber(12)
+            .subjects(subjectList)
+            .build()
+    }
+
 }
