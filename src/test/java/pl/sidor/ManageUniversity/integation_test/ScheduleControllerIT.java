@@ -1,8 +1,10 @@
 package pl.sidor.ManageUniversity.integation_test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +16,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.Assert.assertEquals;
@@ -191,5 +192,67 @@ public class ScheduleControllerIT {
         assertNotNull(schedule1);
         assertEquals(updateSchedule, schedule1);
 
+    }
+
+    @Test
+    @Ignore //todo Do weryfikacji NullPointerException
+    public  void  test_should_modify_schedule() throws Exception {
+
+        //  given
+
+        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder()
+                .dayOfWeek(Days.Poniedzialek)
+                .weekNumber(12)
+                .subjects(Subject.builder().id(1L).name("Polski").build())
+                .build();
+
+        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
+                scheduleUpdate.getWeekNumber())).thenReturn(Optional.of(prepareSchedule()));
+
+        when(scheduleRepo.save(prepareSchedule())).thenReturn(prepareSchedule());
+
+        //  expect
+
+        mockMvc.perform(post("/schedule/modifySchedule")
+                .content(objectMapper.writeValueAsString(scheduleUpdate))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    public  void  test_should_throw_exception_modify_schedule() throws Exception {
+
+        //  given
+
+        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder()
+                .dayOfWeek(Days.Poniedzialek)
+                .weekNumber(12)
+                .subjects(Subject.builder().id(1L).name("Polski").build())
+                .build();
+
+        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
+                scheduleUpdate.getWeekNumber())).thenReturn(Optional.empty());
+
+        //  expect
+
+        mockMvc.perform(post("/schedule/modifySchedule")
+                .content(objectMapper.writeValueAsString(scheduleUpdate))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isNotFound())
+                .andReturn();
+    }
+
+    private Schedule prepareSchedule(){
+        List<Subject> subjectList = new ArrayList<>();
+        subjectList.add(Subject.builder().id(1L).build());
+
+        return Schedule.builder()
+                .id(1L)
+                .weekNumber(12)
+                .dayOfWeek(Days.Poniedzialek)
+                .subjects(subjectList)
+                .studentGroup(2.2)
+                .build();
     }
 }

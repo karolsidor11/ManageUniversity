@@ -10,7 +10,6 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -44,8 +43,6 @@ public class Lecturer  implements Serializable{
     private Adres adres;
 
     @Column(name = "PhoneNumber")
-    @NotNull(message = "Nieprawidłowy numer telefonu. Numer musi być 9 cyfrowy.")
-    @Size(min = 9, max = 9)
     private int phoneNumber;
 
     @Column(name = "Degree")
