@@ -1,6 +1,5 @@
 package pl.sidor.ManageUniversity.integation_test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -42,6 +41,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class LecturerControllerIT {
 
+    private static final String NAME = "Jan";
+
+//    todo wydziel statyczne pold  do nowej klasy i dziedzicz po niej
+
     @MockBean
     private LecturerRepo lecturerRepo;
 
@@ -57,12 +60,9 @@ public class LecturerControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
     private ObjectMapper objectMapper;
 
-    @Before
-    public void setUp() throws Exception {
-        objectMapper = new ObjectMapper();
-    }
 
     @Test
     public void should_find_lecturer_by_id() throws Exception {
@@ -70,7 +70,7 @@ public class LecturerControllerIT {
         // given
         Lecturer lecturer = Lecturer.builder()
                 .id(1L)
-                .name("Jan")
+                .name(NAME)
                 .lastName("Kowalski")
                 .email("kowalski@wp.pl")
                 .grade("Doktor")

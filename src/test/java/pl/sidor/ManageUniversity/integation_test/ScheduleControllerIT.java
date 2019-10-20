@@ -1,10 +1,8 @@
 package pl.sidor.ManageUniversity.integation_test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,64 +193,40 @@ public class ScheduleControllerIT {
     }
 
     @Test
-    @Ignore //todo Do weryfikacji NullPointerException
-    public  void  test_should_modify_schedule() throws Exception {
+//    @Ignore //todo Do weryfikacji NullPointerException
+    public void test_should_modify_schedule() throws Exception {
 
         //  given
 
-        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder()
-                .dayOfWeek(Days.Poniedzialek)
-                .weekNumber(12)
-                .subjects(Subject.builder().id(1L).name("Polski").build())
-                .build();
+        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder().dayOfWeek(Days.Poniedzialek).weekNumber(12).subjects(Subject.builder().id(1L).name("Polski").build()).build();
 
-        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
-                scheduleUpdate.getWeekNumber())).thenReturn(Optional.of(prepareSchedule()));
+        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(), scheduleUpdate.getWeekNumber())).thenReturn(Optional.of(prepareSchedule()));
 
         when(scheduleRepo.save(prepareSchedule())).thenReturn(prepareSchedule());
 
         //  expect
 
-        mockMvc.perform(post("/schedule/modifySchedule")
-                .content(objectMapper.writeValueAsString(scheduleUpdate))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk())
-                .andReturn();
+        mockMvc.perform(post("/schedule/modifySchedule").content(objectMapper.writeValueAsString(scheduleUpdate)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isOk()).andReturn();
     }
 
     @Test
-    public  void  test_should_throw_exception_modify_schedule() throws Exception {
+    public void test_should_throw_exception_modify_schedule() throws Exception {
 
         //  given
 
-        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder()
-                .dayOfWeek(Days.Poniedzialek)
-                .weekNumber(12)
-                .subjects(Subject.builder().id(1L).name("Polski").build())
-                .build();
+        ScheduleUpdate scheduleUpdate = ScheduleUpdate.builder().dayOfWeek(Days.Poniedzialek).weekNumber(12).subjects(Subject.builder().id(1L).name("Polski").build()).build();
 
-        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
-                scheduleUpdate.getWeekNumber())).thenReturn(Optional.empty());
+        when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(), scheduleUpdate.getWeekNumber())).thenReturn(Optional.empty());
 
         //  expect
 
-        mockMvc.perform(post("/schedule/modifySchedule")
-                .content(objectMapper.writeValueAsString(scheduleUpdate))
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound())
-                .andReturn();
+        mockMvc.perform(post("/schedule/modifySchedule").content(objectMapper.writeValueAsString(scheduleUpdate)).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)).andExpect(status().isNotFound()).andReturn();
     }
 
-    private Schedule prepareSchedule(){
+    private Schedule prepareSchedule() {
         List<Subject> subjectList = new ArrayList<>();
         subjectList.add(Subject.builder().id(1L).build());
 
-        return Schedule.builder()
-                .id(1L)
-                .weekNumber(12)
-                .dayOfWeek(Days.Poniedzialek)
-                .subjects(subjectList)
-                .studentGroup(2.2)
-                .build();
+        return Schedule.builder().id(1L).weekNumber(12).dayOfWeek(Days.Poniedzialek).subjects(subjectList).studentGroup(2.2).build();
     }
 }

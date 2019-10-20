@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,20 +15,13 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 
-@Service
+@AllArgsConstructor
 @Transactional
 public class SubjectServiceImpl implements SubjectService {
 
     private SubjectRepo subjectRepo;
     private SubjectValidator subjectValidator;
     private LecturerRepo lecturerRepo;
-
-    @Autowired
-    public SubjectServiceImpl(SubjectRepo subjectRepo, SubjectValidator subjectValidator,LecturerRepo lecturerRepo) {
-        this.subjectRepo = subjectRepo;
-        this.subjectValidator = subjectValidator;
-        this.lecturerRepo=lecturerRepo;
-    }
 
     @Override
     public Subject getById(Long id) throws Throwable {

@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
@@ -15,14 +17,10 @@ import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class LecturerController {
 
-    private LecturerServiceImpl lecturerServiceImpl;
-
-    @Autowired
-    public LecturerController(LecturerServiceImpl lecturerServiceImpl) {
-        this.lecturerServiceImpl = lecturerServiceImpl;
-    }
+    private LecturerService lecturerServiceImpl;
 
     @GetMapping(value = "/findLecturer/{id}")
     public ResponseEntity<Lecturer> findByID(@PathVariable Long id) throws Throwable {

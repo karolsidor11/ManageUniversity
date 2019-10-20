@@ -129,10 +129,11 @@ class ScheduleServiceTest extends Specification {
         ScheduleUpdate scheduleUpdate = prepareModifyRequest()
 
         scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber)>>Optional.of(prepareSchedule())
+        scheduleRepo.save(Schedule.builder().build())>>Optional.of(prepareSchedule())
 
         when:
 
-         Schedule schedule=  scheduleService.modifySchedule(scheduleUpdate)
+        Schedule schedule=  scheduleService.modifySchedule(scheduleUpdate)
 
         then:
         schedule!=null
@@ -174,7 +175,7 @@ class ScheduleServiceTest extends Specification {
     }
 
     private static  Schedule prepareSchedule(){
-        List<Subject> subjectList = new ArrayList<>();
+        List<Subject> subjectList = new ArrayList<>()
         subjectList.add(prepareSubject())
 
         return Schedule.builder()
@@ -183,6 +184,13 @@ class ScheduleServiceTest extends Specification {
             .weekNumber(12)
             .subjects(subjectList)
             .build()
+    }
+    private static ScheduleUpdate prepareScheduleUpdate(){
+        return  ScheduleUpdate.builder()
+                .dayOfWeek(Days.Poniedzialek)
+                .weekNumber(12)
+                .subjects(prepareSubject())
+                .build()
     }
 
 }

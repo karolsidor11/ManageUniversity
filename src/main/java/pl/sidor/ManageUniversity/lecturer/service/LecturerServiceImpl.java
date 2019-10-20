@@ -1,8 +1,10 @@
 package pl.sidor.ManageUniversity.lecturer.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
 import pl.sidor.ManageUniversity.exception.UniversityException;
@@ -24,24 +26,14 @@ import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
 
-@Service
-@Slf4j
+@AllArgsConstructor
+@Transactional
 public class LecturerServiceImpl implements LecturerService {
 
     private LecturerRepo lecturerRepo;
     private CheckLecturer checkLecturer;
     private SubjectRepo subjectRepo;
     private ScheduleRepo scheduleRepo;
-
-
-    @Autowired
-    public LecturerServiceImpl(LecturerRepo lecturerRepo, CheckLecturer checkLecturer, SubjectRepo subjectRepo, ScheduleRepo scheduleRepo) {
-        this.lecturerRepo = lecturerRepo;
-        this.checkLecturer = checkLecturer;
-        this.subjectRepo = subjectRepo;
-        this.scheduleRepo = scheduleRepo;
-
-    }
 
     @Override
     public Lecturer findById(long id) throws Throwable {
@@ -97,7 +89,8 @@ public class LecturerServiceImpl implements LecturerService {
         Optional<Subject> subject = subjectRepo.findByLecturer(byNameAndLastName.get());
         List<Schedule> bySubjects = scheduleRepo.findBySubjects(subject.get());
 
-        Optional<List<Schedule>> collect = of(bySubjects.stream().filter(schedule -> Objects.nonNull(schedule.getWeekNumber())).filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber())).collect(Collectors.toList()));
+        Optional<List<Schedule>> collect = of(bySubjects.stream().filter(schedule -> Objects.nonNull(schedule.getWeekNumber()))
+                .filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber())).collect(Collectors.toList()));
 
         if (collect.get().isEmpty()) {
             throw ExceptionFactory.nieoczekianyBladSystemu(request.getName(), request.getLastName(), request.getWeekNumber());

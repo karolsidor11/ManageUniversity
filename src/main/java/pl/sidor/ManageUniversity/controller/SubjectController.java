@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,16 +15,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/subject")
+@AllArgsConstructor
 public class SubjectController {
 
     private SubjectService subjectService;
     private LecturerRepo lecturerRepo;
-
-    @Autowired
-    public SubjectController(SubjectService subjectService,LecturerRepo lecturerRepo) {
-        this.subjectService = subjectService;
-        this.lecturerRepo=lecturerRepo;
-    }
 
     @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws Throwable {
@@ -55,5 +51,4 @@ public class SubjectController {
         return  new ResponseEntity<>(byLecturer, HttpStatus.OK);
 
     }
-
 }

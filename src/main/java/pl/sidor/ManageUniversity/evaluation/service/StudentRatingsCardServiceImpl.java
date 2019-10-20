@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.evaluation.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
@@ -12,17 +13,11 @@ import java.util.Optional;
 
 import static java.util.Optional.of;
 
-@Service
+@AllArgsConstructor
 public class StudentRatingsCardServiceImpl implements StudentRatingsCardService {
 
     private StudentCardRepo studentCardRepo;
     private StudentRepo studentRepo;
-
-    @Autowired
-    public StudentRatingsCardServiceImpl(StudentCardRepo studentCardRepo, StudentRepo studentRepo) {
-        this.studentCardRepo = studentCardRepo;
-        this.studentRepo = studentRepo;
-    }
 
     @Override
     public StudentRatingsCard findByID(Long id) throws Throwable {

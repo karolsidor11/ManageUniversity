@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleServiceImpl;
 
 import java.util.Optional;
@@ -16,14 +18,10 @@ import static java.util.Optional.of;
 
 @RestController
 @RequestMapping(value = "/schedule")
+@AllArgsConstructor
 public class ScheduleController {
 
-    private ScheduleServiceImpl scheduleService;
-
-    @Autowired
-    public ScheduleController(ScheduleServiceImpl scheduleService) {
-        this.scheduleService = scheduleService;
-    }
+    private ScheduleService scheduleService;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Schedule> getScheduleByID(@PathVariable Long id) throws Throwable {

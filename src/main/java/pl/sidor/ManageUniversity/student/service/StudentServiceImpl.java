@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.student.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,20 +24,13 @@ import java.util.Objects;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
-@Service
 @Transactional
+@AllArgsConstructor
 public class StudentServiceImpl implements StudentService {
 
     private final StudentRepo studentRepo;
     private final CheckUniqeStudentPredicate checkUniqeStudentPredicate;
     private final ScheduleRepo scheduleRepo;
-
-    @Autowired
-    public StudentServiceImpl(StudentRepo studentRepo, CheckUniqeStudentPredicate checkUniqeStudentPredicate, ScheduleRepo scheduleRepo) {
-        this.studentRepo = studentRepo;
-        this.checkUniqeStudentPredicate = checkUniqeStudentPredicate;
-        this.scheduleRepo = scheduleRepo;
-    }
 
     @Override
     public Student findById(Long id) throws Throwable {
@@ -91,8 +85,6 @@ public class StudentServiceImpl implements StudentService {
             throw ExceptionFactory.nieoczekianyBladSystemu(request.getName(), request.getLastName(), request.getWeekNumber());
         }
 
-//        todo Test->   W request puste imie i nazwisko.
-//        todo -> Brak numeru tygodnia w bazie
         return schedules;
     }
 

@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,23 +12,19 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Optional.of;
 
-@Service
+@AllArgsConstructor
 @Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepo scheduleRepo;
     private ScheduleValidator scheduleValidator;
-
-    @Autowired
-    public ScheduleServiceImpl(ScheduleRepo scheduleRepo, ScheduleValidator scheduleValidator) {
-        this.scheduleRepo = scheduleRepo;
-        this.scheduleValidator = scheduleValidator;
-    }
 
     @Override
     public Schedule create(Schedule schedule) throws Throwable {
@@ -93,9 +90,11 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .orElseThrow(ExceptionFactory.objectIsEmpty("Brak przedmiotu o podanym ID."));
 
         subjects.remove(subject1);
-        subjects.add(scheduleUpdate.getSubjects());
+        schedule.setSubjects(Collections.singletonList(scheduleUpdate.getSubjects()));
 
-        return  scheduleRepo.save(schedule);
+         scheduleRepo.save(schedule);
+
+        return  schedule;
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {

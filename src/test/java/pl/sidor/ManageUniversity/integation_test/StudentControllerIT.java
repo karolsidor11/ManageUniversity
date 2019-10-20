@@ -269,6 +269,7 @@ public class StudentControllerIT {
         // given
         Student student= getStudent();
         FindScheduleRequest request= getFindScheduleRequest();
+        request.setWeekNumber(null);
 
         List<Schedule> schedules= Collections.singletonList(Schedule.builder().id(1L).studentGroup(2.2).build());
 
@@ -277,7 +278,7 @@ public class StudentControllerIT {
 
         // expected
         MvcResult result = mockMvc.perform(get("/findSchedule/student")
-                .content(objectMapper.writeValueAsString(student))
+                .content(objectMapper.writeValueAsString(request))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andReturn();

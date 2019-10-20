@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,20 +10,16 @@ import pl.sidor.ManageUniversity.dto.ScheduleDTO;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
+import pl.sidor.ManageUniversity.student.service.StudentService;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 public class StudentController {
 
-    private StudentServiceImpl studentServiceImpl;
-
-    @Autowired
-    public StudentController(StudentServiceImpl studentServiceImpl) {
-        this.studentServiceImpl = studentServiceImpl;
-    }
-
+    private StudentService studentServiceImpl;
 
     @GetMapping(value = "/findStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> findStudentByID(@PathVariable long id) throws Throwable {
