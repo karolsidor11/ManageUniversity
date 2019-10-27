@@ -103,7 +103,7 @@ class RatingSetServiceTest extends Specification {
          service.create(ratingSet)
 
         then:
-        thrown(Exception)
+        thrown(UniversityException)
     }
 
     def"should update RatingSet"(){

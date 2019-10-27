@@ -14,34 +14,34 @@ import pl.sidor.ManageUniversity.schedule.service.SubjectService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("subject")
 @AllArgsConstructor
 public class SubjectController {
 
     private SubjectService subjectService;
     private LecturerRepo lecturerRepo;
 
-    @PostMapping(value = "/create", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws Throwable {
 
         return new ResponseEntity<>(subjectService.save(subject), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/findSubject/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> getById(@PathVariable Long id) throws Throwable {
 
         Subject byId = subjectService.getById(id);
         return new ResponseEntity<>(byId, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Subject> deleteSubject(@PathVariable Long id) throws Throwable {
 
         subjectService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "lecturer/{id}")
+    @GetMapping(value = "/lecturer/{id}")
     public ResponseEntity<Subject> findByLecturer(@PathVariable Long id){
 
         Optional<Lecturer> byId = lecturerRepo.findById(id);
@@ -49,6 +49,5 @@ public class SubjectController {
         Subject byLecturer = subjectService.findByLecturer(byId.get());
 
         return  new ResponseEntity<>(byLecturer, HttpStatus.OK);
-
     }
 }

@@ -1,12 +1,10 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
-import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import java.util.Optional;
 
-@Component
 public interface SubjectService {
 
     Subject getById(Long id) throws Throwable;

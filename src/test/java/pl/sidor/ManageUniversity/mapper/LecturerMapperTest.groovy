@@ -21,11 +21,13 @@ class LecturerMapperTest extends Specification {
                 .email("jan@wp.pl")
                 .phoneNumber(500500500)
                 .build()
-        
+
         when:
         LecturerDTO lecturerDTO = LecturerMapper.mapTo(actualLecturer)
 
         then:
-        lecturerDTO!=null
+        lecturerDTO != null
+        lecturerDTO.name == "Jan"
+        lecturerDTO.lastName == "Nowak"
     }
 }

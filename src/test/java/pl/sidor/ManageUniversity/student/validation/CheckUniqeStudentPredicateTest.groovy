@@ -1,4 +1,4 @@
-package validation
+package pl.sidor.ManageUniversity.student.validation
 
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
@@ -10,14 +10,13 @@ class CheckUniqeStudentPredicateTest extends Specification {
     private CheckUniqeStudentPredicate studentValidator
     private StudentRepo studentRepo
 
-
     void setup() {
 
         studentRepo = Mock(StudentRepo.class)
         studentValidator = new CheckUniqeStudentPredicate(studentRepo)
     }
 
-    def " should return false when email is uqnige"() {
+    def "should return false when email is uqnige"() {
         given:
 
         Student student = Student.builder()
@@ -35,10 +34,10 @@ class CheckUniqeStudentPredicateTest extends Specification {
         boolean result = !studentValidator.test(student)
 
         then:
-        result == false
+        !result
     }
 
-    def " should return false when email is  not uqnige"() {
+    def "should return false when email is  not uqnige"() {
         given:
 
         Student student = Student.builder()
@@ -56,7 +55,7 @@ class CheckUniqeStudentPredicateTest extends Specification {
         boolean result = studentValidator.test(student)
 
         then:
-        result == false
+        !result
     }
 
     def "should return false when phoneNumber is  not uniqe"() {
@@ -75,7 +74,7 @@ class CheckUniqeStudentPredicateTest extends Specification {
         boolean result = studentValidator.test(student)
 
         then:
-        result == false
+        !result
     }
 
     def "should return true when  phoneNumber is unige"() {
@@ -95,6 +94,6 @@ class CheckUniqeStudentPredicateTest extends Specification {
         boolean result = !studentValidator.test(student)
 
         then:
-        result==true
+        result
     }
 }

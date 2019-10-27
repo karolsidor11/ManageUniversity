@@ -6,8 +6,12 @@ import org.springframework.stereotype.Service;
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet;
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.exception.UniversityException;
+
+import java.util.Objects;
 
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 @AllArgsConstructor
 public class RatingSetServiceImpl implements RatingSetService {
@@ -22,8 +26,10 @@ public class RatingSetServiceImpl implements RatingSetService {
     @Override
     public RatingSet create(RatingSet ratingSet) throws Throwable {
 
-      return of(ratingRepo.save(ratingSet)).orElseThrow(ExceptionFactory.objectIsEmpty(ratingSet.toString()));
-
+        if(Objects.isNull(ratingSet)){
+            throw ExceptionFactory.objectIsEmpty("!!!");
+        }
+        return ratingRepo.save(ratingSet);
     }
 
     @Override

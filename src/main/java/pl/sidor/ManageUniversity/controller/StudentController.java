@@ -17,23 +17,24 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@RequestMapping(value = "student")
 public class StudentController {
 
     private StudentService studentServiceImpl;
 
-    @GetMapping(value = "/findStudent/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> findStudentByID(@PathVariable long id) throws Throwable {
 
         return new ResponseEntity<>(studentServiceImpl.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/saveStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> createStudent(@RequestBody Student student) throws Throwable {
 
         return new ResponseEntity<>(studentServiceImpl.create(student), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/deleteStudent/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Student> deleteStudent(@PathVariable long id) throws Throwable {
 
         studentServiceImpl.delete(id);
@@ -41,7 +42,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/updateStudent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateStudent(@RequestBody Student student) throws Throwable {
 
         studentServiceImpl.update(student);
@@ -49,7 +50,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "findSchedule/student")
+    @GetMapping(value = "/findSchedule")
     public ResponseEntity<List> findScheduleForStudent(@RequestBody FindScheduleRequest request) throws Throwable {
 
         List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(request);
@@ -57,7 +58,7 @@ public class StudentController {
         return new ResponseEntity<>(scheduleForStudent, HttpStatus.OK);
     }
 
-    @GetMapping("scheduleStudent")
+    @GetMapping("/scheduleStudent")
     public ResponseEntity<List<? extends ScheduleDTO>> findSchedule(@RequestBody FindScheduleRequest request) throws Throwable {
         List<ScheduleDTO> schedule = studentServiceImpl.findSchedule(request);
         return new ResponseEntity<>(schedule, HttpStatus.OK);

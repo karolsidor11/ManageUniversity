@@ -1,9 +1,7 @@
 package pl.sidor.ManageUniversity.evaluation.service;
 
-import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet;
 
-@Component
 public interface RatingSetService {
 
     RatingSet findById(Long id) throws Throwable;

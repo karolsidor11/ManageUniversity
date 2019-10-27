@@ -1,9 +1,7 @@
 package pl.sidor.ManageUniversity.evaluation.service;
 
-import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
 
-@Component
 public interface StudentRatingsCardService {
 
     StudentRatingsCard findByID(Long id) throws Throwable;

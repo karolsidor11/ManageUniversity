@@ -60,7 +60,7 @@ public final class ExceptionFactory {
         return  new UniversityException(MessageException.W_BAZIE_NIE_ISTNIEJE_ROZKLAD.message+": "+details);
     }
 
-    public static UniversityException nieoczekianyBladSystemu(String name, String lastName, Integer weekNymber){
-        return  new UniversityException(MessageException.NIEOCZEKIWANY_BLAD_SYSTEMU.message+" "+name+" "+lastName+ " "+weekNymber);
+    public static UniversityException nieoczekianyBladSystemu(String name, String lastName, Integer weekNumber){
+        return  new UniversityException(MessageException.NIEOCZEKIWANY_BLAD_SYSTEMU.message+" "+name+" "+lastName+ " "+weekNumber);
     }
 }

@@ -32,9 +32,8 @@ class CheckLecturerTest extends Specification {
         boolean result = checkLecturer.test(lecturer)
 
         then:
-        result == true
+        result
     }
-
 
     def " should false when Lecturer emial is not uniqe"() {
 
@@ -51,7 +50,6 @@ class CheckLecturerTest extends Specification {
         boolean result = checkLecturer.test(lecturer)
 
         then:
-        result == false
-
+        !result
     }
 }

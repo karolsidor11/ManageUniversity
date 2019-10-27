@@ -24,5 +24,4 @@ public enum MessageException {
     NIEOCZEKIWANY_BLAD_SYSTEMU("Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów : ");
 
     public final String message;
-
 }

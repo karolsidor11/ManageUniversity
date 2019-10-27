@@ -17,8 +17,8 @@ import java.util.Optional;
 import static java.util.Optional.of;
 
 @RestController
-@RequestMapping(value = "/schedule")
 @AllArgsConstructor
+@RequestMapping(value = "schedule")
 public class ScheduleController {
 
     private ScheduleService scheduleService;
@@ -41,13 +41,13 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.CREATED);
     }
 
-    @DeleteMapping(value = "delete/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteSchedule(@PathVariable Long id) throws Throwable {
 
         return new ResponseEntity<>(scheduleService.deleteByID(id), HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "deleteBy/{day}")
+    @DeleteMapping(value = "/deleteBy/{day}")
     public ResponseEntity deleteByDay(@PathVariable Days day) throws Throwable {
 
         scheduleService.deleteByDay(day);
@@ -61,7 +61,7 @@ public class ScheduleController {
         return new ResponseEntity<>(scheduleService.updateSchedule(schedule), HttpStatus.CREATED);
     }
 
-    @PostMapping(value = "/modifySchedule", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/modify", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Schedule> modifySchedule(@RequestBody ScheduleUpdate scheduleUpdate) throws Throwable {
 
         Optional<Schedule> schedule = of(scheduleService.modifySchedule(scheduleUpdate));

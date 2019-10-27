@@ -1,7 +1,5 @@
 package pl.sidor.ManageUniversity.student.service
 
-import org.hibernate.engine.internal.Collections
-import org.springframework.context.annotation.Profile
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.request.FindScheduleRequest
 import pl.sidor.ManageUniversity.schedule.enums.Days
@@ -10,9 +8,10 @@ import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
 import pl.sidor.ManageUniversity.student.model.Student
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate
+import spock.lang.Specification
 
-@Profile("dev")
-class StudentServiceImplTest extends spock.lang.Specification {
+
+class StudentServiceImplTest extends Specification {
 
     private StudentRepo studentRepo
     private StudentServiceImpl service
@@ -196,13 +195,13 @@ class StudentServiceImplTest extends spock.lang.Specification {
                 .id(1L)
                 .name("Karol")
                 .lastName("Sidor")
-                .studentGroup(new Double(2.3))
+                .studentGroup(new Double(2.3 as double))
                 .build()
 
         Schedule schedule = Schedule.builder()
                 .id(1L)
                 .dayOfWeek(Days.Czwartek)
-                .studentGroup(new Double(2.3))
+                .studentGroup(new Double(2.3 as double))
                 .weekNumber(12)
                 .build()
 
@@ -223,7 +222,7 @@ class StudentServiceImplTest extends spock.lang.Specification {
 
     }
 
-    private FindScheduleRequest getRequest() {
+    private static FindScheduleRequest getRequest() {
         FindScheduleRequest.builder()
                 .name("Karol")
                 .lastName("Sidor")
@@ -266,14 +265,12 @@ class StudentServiceImplTest extends spock.lang.Specification {
         Student student = getStudent()
 
         studentRepo.findByNameAndLastName("Karol","Sidor")>>Optional.of(student)
-        scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>java.util.Collections.emptyList()
+        scheduleRepo.findByStudentGroupAndWeekNumber(student.studentGroup, 12)>>Collections.emptyList()
         when:
         service.findScheduleForStudent(getRequest())
 
         then:
         UniversityException exception = thrown()
         exception.message=="Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów :  Karol Sidor 12"
-
-
     }
 }

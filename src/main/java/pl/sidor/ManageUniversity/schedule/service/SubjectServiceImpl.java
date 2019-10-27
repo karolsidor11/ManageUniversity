@@ -11,6 +11,8 @@ import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator;
+
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.of;
@@ -31,9 +33,12 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject save(Subject subject) throws Throwable {
 
-       return of(subject).filter(subjectValidator)
-                .map(subject1 -> subjectRepo.save(subject))
-                .orElseThrow(ExceptionFactory.incorrectTime(subject.getEndTime().toString()));
+        if(!subjectValidator.test(subject)|| Objects.isNull(subject)){
+            throw  ExceptionFactory.incorrectTime(subject.getEndTime().toString());
+        }
+
+        return subjectRepo.save(subject);
+
     }
 
     @Override
