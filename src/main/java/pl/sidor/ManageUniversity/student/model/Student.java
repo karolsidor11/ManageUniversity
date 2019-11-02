@@ -50,8 +50,6 @@ public class Student implements Serializable {
     private Adres adres;
 
     @Column(name = "PhoneNumber")
-//    @NotNull(message = "Niepoprawny numer telefonu. Numer musi być 9 cyfrowy.")
-//    @Size(min = 1, max = 9)
     private Integer phoneNumber;
 
     @Column(name = "isStudent")

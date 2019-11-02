@@ -66,7 +66,7 @@ class StudentServiceImplTest extends Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
-        studentValidator.test(student) >> true
+        studentValidator.test(student) >> false
         studentRepo.save(student) >> student
 
         when:
@@ -107,7 +107,7 @@ class StudentServiceImplTest extends Specification {
                 .email("karolsidor11@wp.pl")
                 .build()
 
-        studentValidator.test(student) >> false
+        studentValidator.test(student) >> true
         studentRepo.save(student) >> student
 
         when:

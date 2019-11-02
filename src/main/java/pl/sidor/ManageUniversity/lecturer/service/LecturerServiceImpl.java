@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
 @AllArgsConstructor
 @Transactional
@@ -56,13 +57,16 @@ public class LecturerServiceImpl implements LecturerService {
 
         checkObject(lecturer);
 
-        return of(lecturer).filter(checkLecturer).map(lecturer1 -> lecturerRepo.save(lecturer))
-                .orElseThrow(ExceptionFactory.lecturerInDatabase(lecturer.getEmail()));
+        return lecturerRepo.save(lecturer);
     }
 
     private void checkObject(Lecturer lecturer) throws UniversityException {
         if(lecturer.getName()==null || lecturer.getLastName()==null ||lecturer.getEmail()==null){
             throw  ExceptionFactory.objectIsEmpty("Wymagane jest imię, nazwisko, email. !!!");
+        }
+
+        if(ofNullable(lecturerRepo.findByEmail(lecturer.getEmail())).isPresent()){
+            throw ExceptionFactory.lecturerInDatabase(lecturer.getEmail());
         }
     }
 

@@ -8,6 +8,7 @@ import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.dto.ScheduleDTO;
 import pl.sidor.ManageUniversity.dto.SubjectDTO;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.mapper.ScheduleMapper;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
@@ -48,9 +49,11 @@ public class StudentServiceImpl implements StudentService {
         if (Objects.isNull(student)) {
             throw ExceptionFactory.objectIsEmpty("!!!");
         }
-        return ofNullable(student).filter(checkUniqeStudentPredicate).map(student1 -> studentRepo.save(student))
-                .orElseThrow(ExceptionFactory.studentInDatabase(student.getEmail()));
+        checkStudentInDatabase(student);
+
+        return studentRepo.save(student);
     }
+
 
     @Override
     public void update(Student student) throws Throwable {
@@ -101,5 +104,10 @@ public class StudentServiceImpl implements StudentService {
             scheduleDTOS.add(scheduleDTO);
         }
         return scheduleDTOS;
+    }
+    private void checkStudentInDatabase(Student student) throws UniversityException {
+        if (checkUniqeStudentPredicate.test(student)) {
+            throw ExceptionFactory.studentInDatabase(student.getEmail());
+        }
     }
 }

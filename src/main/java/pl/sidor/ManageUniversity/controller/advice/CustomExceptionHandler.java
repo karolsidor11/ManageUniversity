@@ -21,8 +21,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         customErrorResponse.setErrorMessage(ex.getMessage());
         customErrorResponse.setStatus(HttpStatus.NOT_FOUND.value());
 
-//  todo nie może byc za kazdym razem status not found
-
         return new ResponseEntity<>(customErrorResponse, HttpStatus.NOT_FOUND);
     }
 }

@@ -1,18 +1,21 @@
 package pl.sidor.ManageUniversity.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.dto.ScheduleDTO;
+import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.service.StudentService;
-import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @RestController
@@ -21,6 +24,9 @@ import java.util.List;
 public class StudentController {
 
     private StudentService studentServiceImpl;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Student> findStudentByID(@PathVariable long id) throws Throwable {
@@ -63,5 +69,24 @@ public class StudentController {
         List<ScheduleDTO> schedule = studentServiceImpl.findSchedule(request);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
 
+    }
+
+    @PostMapping(value = "/add")
+    @Transactional
+    public ResponseEntity<Student> save() {
+
+        Student student = Student.builder()
+                .name("Maurycy")
+                .lastName("Nowak")
+                .email("maurycy@wp.pl")
+                .isStudent(true)
+                .adres(new Adres())
+                .studentGroup(2.2)
+                .phoneNumber(999999999)
+                .build();
+
+        entityManager.persist(student);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

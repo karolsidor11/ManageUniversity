@@ -4,6 +4,7 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class TestSubjectData {
@@ -21,7 +22,8 @@ public class TestSubjectData {
                 .name("Java")
                 .roomNumber(22)
                 .startTime(LocalTime.of(12,12))
-                .endTime(LocalTime.of(15,00))
+                .endTime(LocalTime.of(15,11))
+                .lecturer(new ArrayList<>())
                 .build();
     }
 }

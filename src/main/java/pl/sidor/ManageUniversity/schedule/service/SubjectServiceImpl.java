@@ -52,8 +52,9 @@ public class SubjectServiceImpl implements SubjectService {
     public Optional<Subject> findByLecturer(Long id, String name, String lastName) {
 
         Long id1 = lecturerRepo.findByNameAndLastName(name, lastName).get().getId();
+        Optional<Lecturer> byId = lecturerRepo.findById(id1);
 
-        return subjectRepo.findByLecturer(new Lecturer());
+        return subjectRepo.findByLecturer(byId.get());
 
     }
 

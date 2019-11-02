@@ -24,7 +24,7 @@ class LecturerServiceImplTest extends Specification {
         lecturerRepo = Mock(LecturerRepo.class)
         subjectRepo = Mock(SubjectRepo.class)
         scheduleRepo = Mock(ScheduleRepo)
-        checkLecturer = new CheckLecturer(lecturerRepo)
+        checkLecturer = Mock(CheckLecturer.class)
         lecturerService = new LecturerServiceImpl(lecturerRepo, checkLecturer, subjectRepo, scheduleRepo)
     }
 
@@ -71,6 +71,7 @@ class LecturerServiceImplTest extends Specification {
                 .email("jankowalski@wp.pl")
                 .build()
 
+        checkLecturer.test(lecturer)>>true
         lecturerRepo.save(lecturer) >> lecturer
 
         when:
