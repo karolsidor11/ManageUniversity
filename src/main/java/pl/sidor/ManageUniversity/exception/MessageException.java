@@ -19,9 +19,9 @@ public enum MessageException {
     W_BAZIE_BRAK_ZESTAW_OCEN("W bazie nie istnieje arkusz ocen o podanym id."),
     W_BAZIE_BRAK_KARTY_STUDENTA("W bazie nie istnieje karta studenta o podanym id."),
     W_BAZIE_ISTNIEJE_ROZKLAD("W bazie istnieje rozkład o podanym dniu tygodnia."),
-
-    OBJECT_IS_EMPTY("Przekazywany obiekt jest pusty.");
+    W_BAZIE_NIE_ISTNIEJE_ROZKLAD("W bazie istnieje rozkład o podanym numerze tygodnia."),
+    OBJECT_IS_EMPTY("Przekazywany obiekt jest pusty."),
+    NIEOCZEKIWANY_BLAD_SYSTEMU("Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów : ");
 
     public final String message;
-
 }

@@ -7,12 +7,14 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Entity
 @Data
 @Builder
-public class RatingSet {
+public class RatingSet implements Serializable {
+
+    private static final long serialVersionUID = 5431802168750467368L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

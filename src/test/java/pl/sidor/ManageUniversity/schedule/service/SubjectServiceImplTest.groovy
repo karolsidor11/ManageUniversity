@@ -2,6 +2,7 @@ package pl.sidor.ManageUniversity.schedule.service
 
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer
+import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator
@@ -14,11 +15,13 @@ class SubjectServiceImplTest extends Specification {
     private SubjectRepo subjectRepo
     private SubjectService service
     private SubjectValidator subjectValidator
+    private LecturerRepo lecturerRepo
 
     void setup() {
         subjectRepo = Mock(SubjectRepo.class)
+        lecturerRepo=Mock(LecturerRepo.class)
         subjectValidator = Mock(SubjectValidator.class)
-        service = new SubjectServiceImpl(subjectRepo, subjectValidator)
+        service = new SubjectServiceImpl(subjectRepo, subjectValidator,lecturerRepo)
     }
 
     def "should  find subject by id"() {

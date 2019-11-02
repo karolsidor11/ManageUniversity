@@ -55,4 +55,12 @@ public final class ExceptionFactory {
      public  static UniversityException incorectScheduleDay(String details){
         return  new UniversityException(MessageException.W_BAZIE_ISTNIEJE_ROZKLAD.message+": "+details);
      }
+
+    public  static UniversityException incorectScheduleWeek(Integer details){
+        return  new UniversityException(MessageException.W_BAZIE_NIE_ISTNIEJE_ROZKLAD.message+": "+details);
+    }
+
+    public static UniversityException nieoczekianyBladSystemu(String name, String lastName, Integer weekNumber){
+        return  new UniversityException(MessageException.NIEOCZEKIWANY_BLAD_SYSTEMU.message+" "+name+" "+lastName+ " "+weekNumber);
+    }
 }

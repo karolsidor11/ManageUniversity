@@ -1,4 +1,4 @@
-package ManageUniversity.evaluation
+package pl.sidor.ManageUniversity.evaluation
 
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo
@@ -103,7 +103,7 @@ class RatingSetServiceTest extends Specification {
          service.create(ratingSet)
 
         then:
-        thrown(Exception)
+        thrown(UniversityException)
     }
 
     def"should update RatingSet"(){

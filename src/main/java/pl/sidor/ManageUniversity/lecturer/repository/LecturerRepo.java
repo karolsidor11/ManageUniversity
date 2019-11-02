@@ -5,9 +5,12 @@ import org.springframework.stereotype.Repository;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LecturerRepo extends CrudRepository<Lecturer, Long> {
 
     List<Lecturer> findByEmail(String email);
+
+    Optional<Lecturer> findByNameAndLastName(String name, String lastName);
 }

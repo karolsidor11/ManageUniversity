@@ -18,23 +18,25 @@ class ScheduleValidatorTest extends Specification {
     }
 
     @Unroll
-    def "should return excpectResult"() {
+    def "should return #expectResult when #dane"() {
 
         given:
         Days days = Days.Poniedzialek
 
-        scheduleRepo.findByDayOfWeek(days) >> Optional.of(Schedule.builder().id(1).dayOfWeek(days).build())
+        scheduleRepo.findByDayOfWeek(days) >> Optional.of(Schedule.builder()
+                .id(1)
+                .dayOfWeek(days)
+                .build())
 
         expect:
-        result == scheduleValidator.test(dane)
+        expectResult == scheduleValidator.test(dane)
 
         where:
-        dane              || result
+        dane              || expectResult
         Days.Wtorek       || true
         Days.Poniedzialek || false
         Days.Sroda        || true
         Days.Czwartek     || true
         Days.Piatek       || true
     }
-
 }

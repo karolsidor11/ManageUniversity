@@ -10,7 +10,7 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -18,7 +18,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Lecturer {
+public class Lecturer  implements Serializable{
+
+    private static final long serialVersionUID = 2807717549783551827L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,9 +42,7 @@ public class Lecturer {
     @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "PhoneNmber")
-    @NotNull(message = "Nieprawidłowy numer telefonu. Numer musi być 9 cyfrowy.")
-    @Size(min = 9, max = 9)
+    @Column(name = "PhoneNumber")
     private int phoneNumber;
 
     @Column(name = "Degree")
@@ -50,7 +50,7 @@ public class Lecturer {
     private String grade;
 
     @OneToMany
-    @JoinColumn(name = "Lecturer_id")
+    @Column(name = "SubjectID")
     private List<Subject> subject;
 
 }

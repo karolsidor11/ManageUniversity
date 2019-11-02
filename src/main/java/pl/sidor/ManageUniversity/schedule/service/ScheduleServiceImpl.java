@@ -1,36 +1,36 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
+import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static java.util.Optional.of;
 
-@Service
+@AllArgsConstructor
 @Transactional
 public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepo scheduleRepo;
     private ScheduleValidator scheduleValidator;
 
-    @Autowired
-    public ScheduleServiceImpl(ScheduleRepo scheduleRepo, ScheduleValidator scheduleValidator) {
-        this.scheduleRepo = scheduleRepo;
-        this.scheduleValidator = scheduleValidator;
-    }
-
     @Override
     public Schedule create(Schedule schedule) throws Throwable {
 
-      return   of(schedule).filter(schedule1 -> scheduleValidator.test(schedule.getDayOfWeek()))
-                .map(schedule1 -> scheduleRepo.save(schedule))
+        return of(schedule).filter(schedule1 -> scheduleValidator
+                .test(schedule.getDayOfWeek())).map(schedule1 -> scheduleRepo.save(schedule))
                 .orElseThrow(ExceptionFactory.incorectScheduleDay(schedule.getDayOfWeek().getDay()));
     }
 
@@ -69,6 +69,32 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
 
         return scheduleRepo.save(build);
+    }
+
+    @Override
+    public List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber) {
+
+        return scheduleRepo.findByStudentGroupAndWeekNumber(studentGroup, weekNumber);
+    }
+
+    @Override
+    public Schedule modifySchedule(ScheduleUpdate scheduleUpdate) throws Throwable {
+
+        Schedule schedule = scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(),
+                scheduleUpdate.getWeekNumber()).orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
+
+        List<Subject> subjects = schedule.getSubjects();
+
+        Subject subject1 = schedule.getSubjects()
+                .stream().filter(subject -> subject.getId().equals(scheduleUpdate.getSubjects().getId())).findFirst()
+                .orElseThrow(ExceptionFactory.objectIsEmpty("Brak przedmiotu o podanym ID."));
+
+        subjects.remove(subject1);
+        schedule.setSubjects(Collections.singletonList(scheduleUpdate.getSubjects()));
+
+         scheduleRepo.save(schedule);
+
+        return  schedule;
     }
 
     private Consumer<Schedule> getUpdateSchedule(Schedule schedule, Schedule.ScheduleBuilder builder) {

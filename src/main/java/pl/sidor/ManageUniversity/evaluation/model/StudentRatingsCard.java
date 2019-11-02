@@ -5,12 +5,15 @@ import lombok.Data;
 import pl.sidor.ManageUniversity.student.model.Student;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Builder
 @Data
-public class StudentRatingsCard {
+public class StudentRatingsCard implements Serializable {
+
+    private static final long serialVersionUID = -356863025903339985L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

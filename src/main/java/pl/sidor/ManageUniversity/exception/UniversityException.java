@@ -12,7 +12,6 @@ public class UniversityException extends Exception implements Supplier<Throwable
     public UniversityException(String message) {
         super(message);
         this.message = message;
-
     }
 
     public UniversityException(String message, Throwable cause) {

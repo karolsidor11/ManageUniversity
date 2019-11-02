@@ -1,29 +1,29 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
 import pl.sidor.ManageUniversity.exception.UniversityException;
+import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator;
+
+import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.of;
 
-@Service
+@AllArgsConstructor
 @Transactional
 public class SubjectServiceImpl implements SubjectService {
 
     private SubjectRepo subjectRepo;
     private SubjectValidator subjectValidator;
-
-    @Autowired
-    public SubjectServiceImpl(SubjectRepo subjectRepo, SubjectValidator subjectValidator) {
-        this.subjectRepo = subjectRepo;
-        this.subjectValidator = subjectValidator;
-    }
+    private LecturerRepo lecturerRepo;
 
     @Override
     public Subject getById(Long id) throws Throwable {
@@ -33,9 +33,12 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public Subject save(Subject subject) throws Throwable {
 
-       return of(subject).filter(subjectValidator)
-                .map(subject1 -> subjectRepo.save(subject))
-                .orElseThrow(ExceptionFactory.incorrectTime(subject.getEndTime().toString()));
+        if(!subjectValidator.test(subject)|| Objects.isNull(subject)){
+            throw  ExceptionFactory.incorrectTime(subject.getEndTime().toString());
+        }
+
+        return subjectRepo.save(subject);
+
     }
 
     @Override
@@ -43,5 +46,20 @@ public class SubjectServiceImpl implements SubjectService {
 
        of(getById(id)).ifPresent(subject -> subjectRepo.deleteById(id));
 
+    }
+
+    @Override
+    public Optional<Subject> findByLecturer(Long id, String name, String lastName) {
+
+        Long id1 = lecturerRepo.findByNameAndLastName(name, lastName).get().getId();
+        Optional<Lecturer> byId = lecturerRepo.findById(id1);
+
+        return subjectRepo.findByLecturer(byId.get());
+
+    }
+
+    @Override
+    public Subject findByLecturer(Lecturer lecturer) {
+        return subjectRepo.findByLecturer(lecturer).get();
     }
 }

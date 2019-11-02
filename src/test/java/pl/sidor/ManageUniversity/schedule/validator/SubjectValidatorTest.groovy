@@ -1,4 +1,4 @@
-package validator
+package pl.sidor.ManageUniversity.schedule.validator
 
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
@@ -18,7 +18,7 @@ class SubjectValidatorTest extends Specification {
         subjectValidator = new SubjectValidator(subjectRepo)
     }
 
-    def " should true if timeStart is good"() {
+    def "should true if timeStart is good"() {
 
         given:
         LocalTime start = LocalTime.of(12, 00)
@@ -37,11 +37,10 @@ class SubjectValidatorTest extends Specification {
         boolean result = subjectValidator.test(subject)
 
         then:
-        result == true
+        result
     }
 
-
-    def " should false when timeStart is bad"() {
+    def "should false when timeStart is bad"() {
 
         given:
 
@@ -61,7 +60,6 @@ class SubjectValidatorTest extends Specification {
         boolean result = subjectValidator.test(subject)
 
         then:
-        result == false
-
+        !result
     }
 }
