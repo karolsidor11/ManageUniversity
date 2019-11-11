@@ -71,7 +71,7 @@ class LecturerServiceImplTest extends Specification {
                 .email("jankowalski@wp.pl")
                 .build()
 
-        checkLecturer.test(lecturer)>>true
+        lecturerRepo.findByEmail(lecturer.getEmail())>>null
         lecturerRepo.save(lecturer) >> lecturer
 
         when:

@@ -11,12 +11,16 @@ import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
+import pl.sidor.ManageUniversity.student.model.Student_;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
+
 
 @RestController
 @AllArgsConstructor
@@ -89,4 +93,28 @@ public class StudentController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @GetMapping(value = "/get")
+    @Transactional
+    public ResponseEntity<Student> saved() {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Student> query = criteriaBuilder.createQuery(Student.class);
+        Root<Student> from = query.from(Student.class);
+
+        Predicate maurycy = criteriaBuilder.equal(from.get(Student_.NAME), "Maurycy");
+        Predicate nowak = criteriaBuilder.equal(from.get(Student_.LAST_NAME), "Nowak");
+        Predicate aNull = criteriaBuilder.isNull(from.get(Student_.DATE));
+
+        Predicate jan = criteriaBuilder.equal(from.get(Student_.EMAIL), "Jan");
+
+        CriteriaQuery<Student> where = query.where(maurycy,nowak, aNull, jan);
+
+        Student student = entityManager.createQuery(where).getResultList().get(0);
+
+        return new ResponseEntity<>( student, HttpStatus.OK);
+    }
+
+
 }

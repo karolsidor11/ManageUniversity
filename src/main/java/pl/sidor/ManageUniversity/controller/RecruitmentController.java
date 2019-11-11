@@ -18,8 +18,9 @@ public class RecruitmentController {
 
     @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws UniversityException {
+        candidateService.create(candidate);
 
-        return new ResponseEntity<>(candidateService.create(candidate), HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(candidate);
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

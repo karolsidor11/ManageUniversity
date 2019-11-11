@@ -17,9 +17,8 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Candidate create(Candidate candidate) throws UniversityException {
-        if (Objects.isNull(candidate)) {
-            throw ExceptionFactory.objectIsEmpty("!!!");
-        }
+        if (Objects.isNull(candidate)) { throw ExceptionFactory.objectIsEmpty("!!!"); }
+
         return candidateRepo.save(candidate);
     }
 

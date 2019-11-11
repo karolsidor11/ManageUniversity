@@ -21,7 +21,6 @@ import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,10 +33,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareSchedule;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestStudentData.prepareStudent;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestStudentData.prepareUpdateStudent;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestStudentData.preparecheduleRequest;
+import static configuration.data.TestScheduleData.prepareSchedule;
+import static configuration.data.TestStudentData.prepareStudent;
+import static configuration.data.TestStudentData.prepareUpdateStudent;
+import static configuration.data.TestStudentData.preparecheduleRequest;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -94,7 +93,7 @@ public class StudentControllerIT {
 
         // given
         Student student = prepareStudent();
-        when(checkUniqeStudentPredicate.test(student)).thenReturn(true);
+        when(checkUniqeStudentPredicate.test(student)).thenReturn(false);
         when(studentRepo.save(student)).thenReturn(student);
 
         // when

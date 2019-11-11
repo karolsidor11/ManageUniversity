@@ -27,8 +27,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestLecturerData.prepareLecturer;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestSubjectData.prepareSubject;
+import static configuration.data.TestLecturerData.prepareLecturer;
+import static configuration.data.TestSubjectData.prepareSubject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -16,8 +16,11 @@ import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
 import pl.sidor.ManageUniversity.recruitment.repository.CandidateRepo;
+import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo;
 import pl.sidor.ManageUniversity.recruitment.service.CandidateService;
 import pl.sidor.ManageUniversity.recruitment.service.CandidateServiceImpl;
+import pl.sidor.ManageUniversity.recruitment.service.PaymentService;
+import pl.sidor.ManageUniversity.recruitment.service.PaymentServiceImpl;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
@@ -94,5 +97,10 @@ public class AppConfig {
     @Bean
     public CandidateService candidateService(CandidateRepo candidateRepo) {
         return new CandidateServiceImpl(candidateRepo);
+    }
+
+    @Bean
+    public PaymentService paymentService(PaymentRepo paymentRepo){
+        return  new PaymentServiceImpl(paymentRepo);
     }
 }

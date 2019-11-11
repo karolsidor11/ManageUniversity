@@ -1,4 +1,4 @@
-package pl.sidor.ManageUniversity.configuration.entity.data;
+package configuration.data;
 
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.student.model.Student;

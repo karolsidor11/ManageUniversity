@@ -24,9 +24,9 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareSchedule;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareScheduleUpdate;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareScheduleUpdates;
+import static configuration.data.TestScheduleData.prepareSchedule;
+import static configuration.data.TestScheduleData.prepareScheduleUpdate;
+import static configuration.data.TestScheduleData.prepareScheduleUpdates;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

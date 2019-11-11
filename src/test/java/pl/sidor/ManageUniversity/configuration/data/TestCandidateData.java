@@ -1,5 +1,6 @@
-package configuration.entity.data;
+package configuration.data;
 
+import pl.sidor.ManageUniversity.dto.CandidateDto;
 import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.recruitment.enums.StudyDirection;
 import pl.sidor.ManageUniversity.recruitment.model.Candidate;
@@ -17,6 +18,14 @@ public class TestCandidateData {
                 .maturaResults(new MaturaResults())
                 .studyDirection(StudyDirection.INFORMATYKA)
                 .phoneNumber(505050500)
+                .build();
+    }
+
+    public static CandidateDto prepareCandidateDto(){
+        return CandidateDto.builder()
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karolsidor11@wp.pl")
                 .build();
     }
 }

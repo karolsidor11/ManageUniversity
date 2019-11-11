@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.web.bind.annotation.RequestMapping;
 import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
@@ -34,11 +33,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestLecturerData.prepareLecturer;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestLecturerData.updatelecturer;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareScheduleRequest;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestSubjectData.prepareSubject;
-import static pl.sidor.ManageUniversity.configuration.entity.data.TestScheduleData.prepareSchedule;
+import static configuration.data.TestLecturerData.prepareLecturer;
+import static configuration.data.TestLecturerData.updatelecturer;
+import static configuration.data.TestScheduleData.prepareSchedule;
+import static configuration.data.TestScheduleData.prepareScheduleRequest;
+import static configuration.data.TestSubjectData.prepareSubject;
 
 
 @RunWith(SpringRunner.class)
@@ -82,7 +81,6 @@ public class LecturerControllerIT {
                 .andReturn();
     }
 
-
     @Test
     public void test_should_throw_exception_when_id_is_incorrect() throws Exception {
 
@@ -104,6 +102,7 @@ public class LecturerControllerIT {
         // given
         Lecturer lecturer =prepareLecturer();
 
+        when(lecturerRepo.findByEmail(lecturer.getEmail())).thenReturn(null);
         when(checkLecturer.test(lecturer)).thenReturn(true);
         when(lecturerRepo.save(lecturer)).thenReturn(lecturer);
 

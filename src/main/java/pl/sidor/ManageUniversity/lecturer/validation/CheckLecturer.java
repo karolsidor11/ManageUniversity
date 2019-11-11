@@ -17,6 +17,6 @@ public class CheckLecturer implements Predicate<Lecturer> {
 
     @Override
     public boolean test(Lecturer lecturerDto) {
-        return !(Optional.ofNullable(lecturerRepo.findByEmail(lecturerDto.getEmail())).isPresent());
+        return (!Optional.ofNullable(lecturerRepo.findByEmail(lecturerDto.getEmail())).isPresent());
     }
 }

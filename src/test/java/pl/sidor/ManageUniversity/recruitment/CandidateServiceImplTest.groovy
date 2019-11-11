@@ -1,6 +1,6 @@
 package recruitment
 
-import configuration.entity.data.TestCandidateData
+import configuration.data.TestCandidateData
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.recruitment.model.Candidate
 import pl.sidor.ManageUniversity.recruitment.repository.CandidateRepo
@@ -8,7 +8,7 @@ import pl.sidor.ManageUniversity.recruitment.service.CandidateService
 import pl.sidor.ManageUniversity.recruitment.service.CandidateServiceImpl
 import spock.lang.Specification
 
-class CandidateServiceTest extends Specification {
+class CandidateServiceImplTest extends Specification {
 
     private CandidateRepo candidateRepo
     private CandidateService candidateService

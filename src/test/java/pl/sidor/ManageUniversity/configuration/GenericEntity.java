@@ -1,4 +1,4 @@
-package pl.sidor.ManageUniversity.configuration.entity;
+package configuration;
 
 import lombok.NoArgsConstructor;
 
