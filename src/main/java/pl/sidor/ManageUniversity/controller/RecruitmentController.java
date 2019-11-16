@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.recruitment.model.Candidate;
-import pl.sidor.ManageUniversity.recruitment.service.CandidateService;
+import pl.sidor.ManageUniversity.recruitment.service.candidate.CandidateService;
 
 @RestController
 @RequestMapping(value = "recruitment")

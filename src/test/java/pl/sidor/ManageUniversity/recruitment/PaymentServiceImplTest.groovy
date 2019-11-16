@@ -4,8 +4,8 @@ import pl.sidor.ManageUniversity.dto.CandidateDto
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy
 import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo
-import pl.sidor.ManageUniversity.recruitment.service.PaymentService
-import pl.sidor.ManageUniversity.recruitment.service.PaymentServiceImpl
+import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentService
+import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentServiceImpl
 import spock.lang.Specification
 
 class PaymentServiceImplTest extends Specification {

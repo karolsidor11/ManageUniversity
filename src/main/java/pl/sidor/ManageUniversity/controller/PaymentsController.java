@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.dto.CandidateDto;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy;
-import pl.sidor.ManageUniversity.recruitment.service.PaymentService;
+import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentService;
 
 @RestController
 @AllArgsConstructor

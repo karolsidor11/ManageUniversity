@@ -17,10 +17,14 @@ import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
 import pl.sidor.ManageUniversity.recruitment.repository.CandidateRepo;
 import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo;
-import pl.sidor.ManageUniversity.recruitment.service.CandidateService;
-import pl.sidor.ManageUniversity.recruitment.service.CandidateServiceImpl;
-import pl.sidor.ManageUniversity.recruitment.service.PaymentService;
-import pl.sidor.ManageUniversity.recruitment.service.PaymentServiceImpl;
+import pl.sidor.ManageUniversity.recruitment.repository.RecrutationResultRepo;
+import pl.sidor.ManageUniversity.recruitment.service.candidate.CandidateService;
+import pl.sidor.ManageUniversity.recruitment.service.candidate.CandidateServiceImpl;
+import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentService;
+import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentServiceImpl;
+import pl.sidor.ManageUniversity.recruitment.service.recrutation.RecrutationService;
+import pl.sidor.ManageUniversity.recruitment.service.recrutationResult.RecrutationResultService;
+import pl.sidor.ManageUniversity.recruitment.service.recrutationResult.RecrutationResultServiceImpl;
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
@@ -33,6 +37,7 @@ import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
+import javax.persistence.EntityManager;
 
 @Configuration
 public class AppConfig {
@@ -95,12 +100,18 @@ public class AppConfig {
     }
 
     @Bean
-    public CandidateService candidateService(CandidateRepo candidateRepo) {
-        return new CandidateServiceImpl(candidateRepo);
+    public CandidateService candidateService(CandidateRepo candidateRepo,
+                                             RecrutationService recrutationService, RecrutationResultRepo recrutationResultRepo) {
+        return new CandidateServiceImpl(candidateRepo, recrutationService, recrutationResultRepo);
     }
 
     @Bean
-    public PaymentService paymentService(PaymentRepo paymentRepo){
-        return  new PaymentServiceImpl(paymentRepo);
+    public PaymentService paymentService(PaymentRepo paymentRepo, EntityManager entityManager){
+        return  new PaymentServiceImpl(entityManager, paymentRepo);
+    }
+
+    @Bean
+    public RecrutationResultService recrutationResultService(RecrutationResultRepo recrutationResultRepo){
+        return  new RecrutationResultServiceImpl(recrutationResultRepo);
     }
 }
