@@ -1,10 +1,8 @@
 package pl.sidor.ManageUniversity.integation_test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.data.TestCandidateData;
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

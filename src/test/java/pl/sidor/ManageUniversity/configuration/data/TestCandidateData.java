@@ -15,7 +15,7 @@ public class TestCandidateData {
                 .lastName("Sidor")
                 .adres(new Adres())
                 .email("karolsidor11@wp.pl")
-                .maturaResults(new MaturaResults())
+                .maturaResults(prepareResultMatura())
                 .studyDirection(StudyDirection.INFORMATYKA)
                 .phoneNumber(505050500)
                 .build();
@@ -26,6 +26,14 @@ public class TestCandidateData {
                 .name("Karol")
                 .lastName("Sidor")
                 .email("karolsidor11@wp.pl")
+                .build();
+    }
+
+    private  static  MaturaResults prepareResultMatura(){
+        return  MaturaResults.builder()
+                .languageResult(100D)
+                .mathResult(90D)
+                .polishResult(100D)
                 .build();
     }
 }

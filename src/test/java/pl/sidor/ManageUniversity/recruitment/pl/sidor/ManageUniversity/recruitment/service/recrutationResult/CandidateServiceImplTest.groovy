@@ -1,21 +1,28 @@
-package recruitment
+package pl.sidor.ManageUniversity.recruitment.service.recrutationResult
 
 import configuration.data.TestCandidateData
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.recruitment.model.Candidate
 import pl.sidor.ManageUniversity.recruitment.repository.CandidateRepo
+import pl.sidor.ManageUniversity.recruitment.repository.RecrutationResultRepo
 import pl.sidor.ManageUniversity.recruitment.service.candidate.CandidateService
 import pl.sidor.ManageUniversity.recruitment.service.candidate.CandidateServiceImpl
+import pl.sidor.ManageUniversity.recruitment.service.recrutation.RecrutationService
+import pl.sidor.ManageUniversity.recruitment.service.recrutationResult.RecrutationResultService
 import spock.lang.Specification
 
 class CandidateServiceImplTest extends Specification {
 
     private CandidateRepo candidateRepo
     private CandidateService candidateService
+    private  RecrutationService recrutationService
+    private  RecrutationResultRepo resultService
 
     void setup() {
         candidateRepo = Mock(CandidateRepo.class)
-        candidateService = new CandidateServiceImpl(candidateRepo)
+        recrutationService=Mock(RecrutationService.class)
+        resultService=Mock(RecrutationResultRepo.class)
+        candidateService = new CandidateServiceImpl(candidateRepo,recrutationService, resultService)
     }
 
     def "should find Candidate by ID"() {
