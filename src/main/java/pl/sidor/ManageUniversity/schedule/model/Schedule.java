@@ -40,5 +40,7 @@ public class Schedule  implements Serializable{
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id")
     )
+    @ElementCollection
+    @CollectionTable
     private List<Subject> subjects ;
 }

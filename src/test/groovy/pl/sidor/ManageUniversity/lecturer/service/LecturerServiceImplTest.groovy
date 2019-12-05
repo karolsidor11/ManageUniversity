@@ -243,4 +243,13 @@ class LecturerServiceImplTest extends Specification {
         exception.message == "Wystąpił nieoczekiwany błąd systemu. Nie znaleziono rozkładu dla podanych parametrów :  Jan Nowak 12"
 
     }
+
+    def"test"(){
+        when:
+        lecturerService.update(new Lecturer())
+        
+        then:
+        1*lecturerRepo.save(_)
+
+    }
 }

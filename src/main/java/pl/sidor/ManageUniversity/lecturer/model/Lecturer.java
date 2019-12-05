@@ -52,5 +52,4 @@ public class Lecturer  implements Serializable{
     @OneToMany
     @Column(name = "SubjectID")
     private List<Subject> subject;
-
 }

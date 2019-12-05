@@ -21,7 +21,7 @@ public class SubjectController {
     private SubjectService subjectService;
     private LecturerRepo lecturerRepo;
 
-    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Subject> createSubject(@RequestBody Subject subject) throws Throwable {
 
         return new ResponseEntity<>(subjectService.save(subject), HttpStatus.CREATED);
@@ -45,7 +45,6 @@ public class SubjectController {
     public ResponseEntity<Subject> findByLecturer(@PathVariable Long id){
 
         Optional<Lecturer> byId = lecturerRepo.findById(id);
-
         Subject byLecturer = subjectService.findByLecturer(byId.get());
 
         return  new ResponseEntity<>(byLecturer, HttpStatus.OK);

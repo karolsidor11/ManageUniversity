@@ -68,7 +68,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         of(findByDay(schedule.getDayOfWeek())).ifPresent(getUpdateSchedule(schedule, builder));
         Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
 
-        return scheduleRepo.save(build);
+        return scheduleRepo.save(schedule);
     }
 
     @Override

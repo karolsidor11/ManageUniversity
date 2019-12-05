@@ -17,6 +17,8 @@ public class TestSubjectData {
                 .lecturer(Collections.singletonList(lecturer)).build();
     }
     public static Subject prepareSubject() {
+
+
         return Subject.builder()
                 .id(1L)
                 .name("Java")

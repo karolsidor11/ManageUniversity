@@ -16,7 +16,7 @@ public class RecruitmentController {
 
     private CandidateService candidateService;
 
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Candidate> createCandidate(@RequestBody Candidate candidate) throws UniversityException {
         candidateService.create(candidate);
 
@@ -30,9 +30,9 @@ public class RecruitmentController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity deleteCandidate(@PathVariable Long id) throws Throwable {
+    public ResponseEntity<Candidate> deleteCandidate(@PathVariable Long id) throws Throwable {
 
         candidateService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -12,6 +12,9 @@ import pl.sidor.ManageUniversity.recruitment.repository.RecrutationResultRepo;
 import pl.sidor.ManageUniversity.recruitment.service.recrutation.RecrutationService;
 
 import java.util.Objects;
+import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 @AllArgsConstructor
 @Transactional
@@ -23,7 +26,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Candidate create(Candidate candidate) throws UniversityException {
-        if (Objects.isNull(candidate)) {
+        if (isNull(candidate)) {
             throw ExceptionFactory.objectIsEmpty("!!!");
         }
 
@@ -39,7 +42,7 @@ public class CandidateServiceImpl implements CandidateService {
     public Candidate findByID(Long id) throws Throwable {
 
         return candidateRepo.findById(id).orElseThrow(ExceptionFactory.incorrectCandidateID(id));
-    }
+}
 
     @Override
     public void delete(Long id) throws Throwable {

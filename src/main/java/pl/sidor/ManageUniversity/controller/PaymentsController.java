@@ -24,7 +24,6 @@ public class PaymentsController {
 
     @GetMapping(value = "/check", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentForStudy> checkPayments(@RequestBody CandidateDto candidateDto) throws Throwable {
-
         assert  candidateDto!=null;
         PaymentForStudy paymentForStudy = paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName());
 

@@ -48,7 +48,7 @@ public class ScheduleController {
     }
 
     @DeleteMapping(value = "/deleteBy/{day}")
-    public ResponseEntity deleteByDay(@PathVariable Days day) throws Throwable {
+    public ResponseEntity<Schedule> deleteByDay(@PathVariable Days day) throws Throwable {
 
         scheduleService.deleteByDay(day);
 
@@ -69,6 +69,5 @@ public class ScheduleController {
         HttpStatus httpStatus = schedule.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND;
 
         return new ResponseEntity<>(schedule.get(), httpStatus);
-
     }
 }

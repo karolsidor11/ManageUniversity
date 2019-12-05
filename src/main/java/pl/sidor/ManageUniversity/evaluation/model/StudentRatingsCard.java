@@ -1,7 +1,6 @@
 package pl.sidor.ManageUniversity.evaluation.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import pl.sidor.ManageUniversity.student.model.Student;
 
 import javax.persistence.*;
@@ -10,6 +9,8 @@ import java.util.List;
 
 @Entity
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class StudentRatingsCard implements Serializable {
 
@@ -37,5 +38,4 @@ public class StudentRatingsCard implements Serializable {
             joinColumns = @JoinColumn(name = "StudentCard_ID"),
             inverseJoinColumns = @JoinColumn(name = "StudentRating_ID"))
     private List<RatingSet> ratingSetList;
-
 }

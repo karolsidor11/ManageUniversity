@@ -1,16 +1,14 @@
 package pl.sidor.ManageUniversity.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
-import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
-import pl.sidor.ManageUniversity.dto.LecturerDTO;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
@@ -29,7 +27,7 @@ public class LecturerController {
         return new ResponseEntity<>(lecturerServiceImpl.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> create(@RequestBody Lecturer lecturer) throws Throwable {
 
         return new ResponseEntity<>(lecturerServiceImpl.create(lecturer), HttpStatus.OK);
@@ -43,7 +41,7 @@ public class LecturerController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Lecturer> updateLecturer(@RequestBody Lecturer lecturer) throws Throwable {
 
         lecturerServiceImpl.update(lecturer);
@@ -63,6 +61,5 @@ public class LecturerController {
     public ResponseEntity<LecturerDTO> findLecturerDTO(@PathVariable Long id) throws UniversityException {
         LecturerDTO lecturerDTO = lecturerServiceImpl.findLecturerDTO(id);
         return new ResponseEntity<>(lecturerDTO, HttpStatus.OK);
-
     }
 }
