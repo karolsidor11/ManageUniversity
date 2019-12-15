@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface SubjectService {
 
-    Subject getById(Long id) throws Throwable;
+    Subject getById(final Long id) throws Throwable;
 
-    Subject save(Subject subject) throws Throwable;
+    Subject save(final Subject subject) throws Throwable;
 
-    void delete(Long id) throws Throwable;
+    void delete(final Long id) throws Throwable;
 
-    Optional<Subject> findByLecturer(Long id, String name, String lastName);
+    Optional<Subject> findByLecturer(final Long id, final String name, final String lastName) throws Throwable;
 
-    Subject findByLecturer(Lecturer lecturer);
+    Subject findByLecturer(final Lecturer lecturer) throws Throwable;
 }

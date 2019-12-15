@@ -1,6 +1,9 @@
 package pl.sidor.ManageUniversity.evaluation.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.sidor.ManageUniversity.student.model.Student;
 
 import javax.persistence.*;
@@ -8,10 +11,10 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class StudentRatingsCard implements Serializable {
 
     private static final long serialVersionUID = -356863025903339985L;

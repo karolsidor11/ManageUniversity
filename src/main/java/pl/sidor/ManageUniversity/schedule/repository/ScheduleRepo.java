@@ -12,15 +12,15 @@ import java.util.Optional;
 @Repository
 public interface ScheduleRepo extends CrudRepository<Schedule, Long> {
 
-    void deleteByDayOfWeek(Days day);
+    void deleteByDayOfWeek(final Days day);
 
-    Optional<Schedule> findByDayOfWeek(Days day);
+    Optional<Schedule> findByDayOfWeek(final Days day);
 
-    List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber);
+    List<Schedule> findByStudentGroupAndWeekNumber(final Double studentGroup, final Integer weekNumber);
 
-    Schedule findByStudentGroup(Double group);
+    Schedule findByStudentGroup(final Double group);
 
-    List<Schedule> findBySubjects(Subject subject);
+    List<Schedule> findBySubjects(final Subject subject);
 
-    Optional<Schedule> findByDayOfWeekAndWeekNumber(Days dayOfWeek, Integer weekNumber );
+    Optional<Schedule> findByDayOfWeekAndWeekNumber(final Days dayOfWeek, final Integer weekNumber);
 }

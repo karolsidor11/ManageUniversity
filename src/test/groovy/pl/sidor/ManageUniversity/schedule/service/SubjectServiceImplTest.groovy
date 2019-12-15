@@ -12,34 +12,18 @@ import java.time.LocalTime
 
 class SubjectServiceImplTest extends Specification {
 
-    private SubjectRepo subjectRepo
-    private SubjectService service
-    private SubjectValidator subjectValidator
-    private LecturerRepo lecturerRepo
+    private SubjectRepo subjectRepo = Mock(SubjectRepo.class)
+    private LecturerRepo lecturerRepo = Mock(LecturerRepo.class)
+    private SubjectValidator subjectValidator = Mock(SubjectValidator.class)
 
-    void setup() {
-        subjectRepo = Mock(SubjectRepo.class)
-        lecturerRepo=Mock(LecturerRepo.class)
-        subjectValidator = Mock(SubjectValidator.class)
-        service = new SubjectServiceImpl(subjectRepo, subjectValidator,lecturerRepo)
-    }
+    private SubjectServiceImpl service = [subjectRepo, subjectValidator, lecturerRepo]
 
     def "should  find subject by id"() {
-
         given:
-        Subject subject = Subject.builder()
-                .id(1)
-                .name("Polski")
-                .lecturer(Arrays.asList(Lecturer.builder()
-                .id(1)
-                .name("Karol")
-                .lastName("Sidor")
-                .build()))
-                .build()
-
-        subjectRepo.findById(1) >> Optional.of(subject)
+        Subject subject = getSubject()
 
         when:
+        subjectRepo.findById(1) >> Optional.of(subject)
         Subject actualSubejct = service.getById(1)
 
         then:
@@ -47,14 +31,12 @@ class SubjectServiceImplTest extends Specification {
         actualSubejct == subject
     }
 
-
     def "should throw Exception"() {
-
         given:
         Long id = 999
-        subjectRepo.findById(id) >> Optional.empty()
 
         when:
+        subjectRepo.findById(id) >> Optional.empty()
         service.getById(id)
 
         then:
@@ -63,27 +45,12 @@ class SubjectServiceImplTest extends Specification {
     }
 
     def "should save Subject"() {
-
         given:
-        LocalTime start = LocalTime.of(12, 00)
-        LocalTime end = LocalTime.of(13, 00)
-        Subject subject = Subject.builder()
-                .id(1)
-                .name("Polski")
-                .lecturer(Arrays.asList(Lecturer.builder()
-                .id(1)
-                .name("Karol")
-                .lastName("Sidor")
-                .build()))
-                .endTime(start)
-                .endTime(end)
-                .build()
-
-        subjectValidator.test(subject) >> true
-        subjectRepo.save(subject) >> subject
+        Subject subject = getSubject()
 
         when:
-
+        subjectValidator.test(subject) >> true
+        subjectRepo.save(subject) >> subject
         Subject actualSubject = service.save(subject)
 
         then:
@@ -92,44 +59,53 @@ class SubjectServiceImplTest extends Specification {
     }
 
     def "should  throw save Subject"() {
-
         given:
-        LocalTime start = LocalTime.of(12, 00)
-        LocalTime end = LocalTime.of(13, 00)
-        Subject subject = Subject.builder()
-                .id(1)
-                .name("Polski")
-                .lecturer(Arrays.asList(Lecturer.builder()
-                .id(1)
-                .name("Karol")
-                .lastName("Sidor")
-                .build()))
-                .endTime(start)
-                .endTime(end)
-                .build()
-
-        subjectValidator.test(subject) >> false
+        Subject subject = getAllSubject()
 
         when:
-
+        subjectValidator.test(subject) >> false
         service.save(subject)
 
         then:
-        UniversityException exception = thrown()
-        exception.message == "W_BAZIE_ISTNIEJE_PRZEDMIOT_W_CZASIE:" + end.toString()
+        thrown(UniversityException.class)
     }
 
     def "should delete subject by ID"() {
         given:
-        long id = 1
-        subjectRepo.findById(id) >> Optional.of(Subject.builder().id(id).build())
-        subjectRepo.deleteById(id)
+        Long id = 1
 
         when:
+        subjectRepo.findById(id) >> Optional.of(getSubject())
+        subjectRepo.deleteById(id)
         service.delete(id)
 
         then:
-        1*subjectRepo.deleteById(id)
+        2 * subjectRepo.deleteById(id)
+    }
 
+    private static Subject getSubject() {
+        Subject.builder()
+                .id(1)
+                .name("Polski")
+                .lecturer(Arrays.asList(Lecturer.builder()
+                        .id(1)
+                        .name("Karol")
+                        .lastName("Sidor")
+                        .build()))
+                .build()
+    }
+
+    private static Subject getAllSubject() {
+        Subject.builder()
+                .id(1)
+                .name("Polski")
+                .lecturer(Arrays.asList(Lecturer.builder()
+                        .id(1)
+                        .name("Karol")
+                        .lastName("Sidor")
+                        .build()))
+                .endTime(LocalTime.of(12, 00))
+                .endTime(LocalTime.of(13, 00))
+                .build()
     }
 }

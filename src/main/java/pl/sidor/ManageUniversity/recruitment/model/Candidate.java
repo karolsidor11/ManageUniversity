@@ -14,11 +14,11 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
+@Data
+@Builder
 @Table(name = "Candidate")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 public class Candidate implements Serializable {
 
     private static final long serialVersionUID = -1867325787669515921L;

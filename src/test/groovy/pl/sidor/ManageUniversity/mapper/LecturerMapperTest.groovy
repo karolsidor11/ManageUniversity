@@ -6,21 +6,9 @@ import spock.lang.Specification
 
 class LecturerMapperTest extends Specification {
 
-    private LecturerMapper lecturerMapper
-
-    void setup() {
-        lecturerMapper = new LecturerMapper()
-    }
-
     def "test should convert Lecturer"() {
         given:
-        Lecturer actualLecturer = Lecturer.builder()
-                .id(1L)
-                .name("Jan")
-                .lastName("Nowak")
-                .email("jan@wp.pl")
-                .phoneNumber(500500500)
-                .build()
+        Lecturer actualLecturer = getLecturer()
 
         when:
         LecturerDTO lecturerDTO = LecturerMapper.mapTo(actualLecturer)
@@ -29,5 +17,15 @@ class LecturerMapperTest extends Specification {
         lecturerDTO != null
         lecturerDTO.name == "Jan"
         lecturerDTO.lastName == "Nowak"
+    }
+
+    private static Lecturer getLecturer() {
+        Lecturer.builder()
+                .id(1L)
+                .name("Jan")
+                .lastName("Nowak")
+                .email("jan@wp.pl")
+                .phoneNumber(500500500)
+                .build()
     }
 }

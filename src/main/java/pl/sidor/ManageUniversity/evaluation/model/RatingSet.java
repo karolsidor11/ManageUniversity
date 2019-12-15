@@ -8,7 +8,6 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -33,7 +32,5 @@ public class RatingSet implements Serializable {
     private Subject subject;
 
     @Column(name = "Rating")
-    @NotNull
     private double rating;
-
 }

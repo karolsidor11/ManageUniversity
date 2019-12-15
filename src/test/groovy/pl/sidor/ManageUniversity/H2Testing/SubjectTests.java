@@ -10,7 +10,7 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.service.SubjectService;
 
 import static org.junit.Assert.assertEquals;
-import static configuration.data.TestSubjectData.prepareSubject;
+import static pl.sidor.ManageUniversity.utils.TestSubjectData.prepareSubject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

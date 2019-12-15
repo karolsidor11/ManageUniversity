@@ -18,21 +18,18 @@ public class RecrutationResultBuilder implements BiFunction<Double, Candidate, R
     private final RecrutationResultRepo resultService;
 
     @Override
-    public RecrutationResult apply(Double aDouble, Candidate candidate){
-
-
-        double process = 0;
+    public RecrutationResult apply( final Double maturaScore,  final Candidate candidate){
+        Double process = null;
         try {
             process = recrutationService.process(candidate.getMaturaResults());
-        } catch (UniversityException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         RecrutationResult recrutationResult = prepareRecrutationResult(candidate, process);
-        resultService.save(recrutationResult);
-        return null;
+        return resultService.save(recrutationResult);
     }
 
-    private RecrutationResult prepareRecrutationResult(Candidate candidate, double result) {
+    private RecrutationResult prepareRecrutationResult( final Candidate candidate, final Double result) {
         return RecrutationResult.builder()
                 .name(candidate.getName())
                 .lastName(candidate.getLastName())
@@ -40,8 +37,7 @@ public class RecrutationResultBuilder implements BiFunction<Double, Candidate, R
                 .build();
     }
 
-    private AcceptedInCollage evaluateResult(double result) {
-
+    private AcceptedInCollage evaluateResult(final Double result) {
         if (result < 320) {
             return AcceptedInCollage.REJECTED;
         }

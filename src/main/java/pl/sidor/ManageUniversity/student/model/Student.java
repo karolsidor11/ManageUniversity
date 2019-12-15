@@ -11,15 +11,14 @@ import pl.sidor.ManageUniversity.model.Adres;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 8573582585029283903L;

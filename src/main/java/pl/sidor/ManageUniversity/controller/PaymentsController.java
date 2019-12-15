@@ -15,18 +15,16 @@ import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentService;
 @RequestMapping(value = "payments")
 public class PaymentsController {
 
-    private PaymentService paymentService;
+    private final PaymentService paymentService;
 
-    @PostMapping(value = "/pay", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentForStudy> makePayment(@RequestBody PaymentForStudy payment) throws UniversityException {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PaymentForStudy> makePayment(@RequestBody PaymentForStudy payment) throws Throwable {
         return new ResponseEntity<>(paymentService.pay(payment), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/check", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaymentForStudy> checkPayments(@RequestBody CandidateDto candidateDto) throws Throwable {
-        assert  candidateDto!=null;
         PaymentForStudy paymentForStudy = paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName());
-
         return new ResponseEntity<>(paymentForStudy, HttpStatus.OK);
     }
 }

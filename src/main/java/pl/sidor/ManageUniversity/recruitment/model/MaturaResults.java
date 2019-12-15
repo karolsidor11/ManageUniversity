@@ -4,14 +4,16 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
-@Embeddable
-@Getter
-@Setter
+@Data
 @Builder
+@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-public class MaturaResults {
+public class MaturaResults  implements Serializable {
+
+    private static final long serialVersionUID = -5933059697057372893L;
 
     @Column(name = "Polski")
     private Double polishResult;

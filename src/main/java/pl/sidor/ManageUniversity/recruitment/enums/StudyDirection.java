@@ -3,8 +3,8 @@ package pl.sidor.ManageUniversity.recruitment.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public enum StudyDirection {
 
     INFORMATYKA("Informatyka"),
@@ -17,5 +17,4 @@ public enum StudyDirection {
     TRANSPORT("Transport");
 
     private final String studyDirection;
-
 }

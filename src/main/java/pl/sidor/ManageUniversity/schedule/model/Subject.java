@@ -11,10 +11,10 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Subject implements Serializable {
 
     private static final long serialVersionUID = -5195553206423356155L;
@@ -30,8 +30,7 @@ public class Subject implements Serializable {
     @OneToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "schedule_2_subject",
             joinColumns = @JoinColumn(name = "subject_id"),
-            inverseJoinColumns = @JoinColumn(name = "lecturer_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "lecturer_id"))
     @NotNull(message = "Lista wykładowców nie może być null.")
     private List<Lecturer> lecturer;
 

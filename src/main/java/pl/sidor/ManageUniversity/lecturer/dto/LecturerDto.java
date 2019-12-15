@@ -1,14 +1,14 @@
 package pl.sidor.ManageUniversity.lecturer.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
-@EqualsAndHashCode
 public class LecturerDto {
 
-    private String email;
-    private int phoneNumber;
+    private final String email;
+    private final int phoneNumber;
 }

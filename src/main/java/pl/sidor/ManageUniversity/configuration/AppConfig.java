@@ -7,10 +7,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo;
 import pl.sidor.ManageUniversity.evaluation.repository.StudentCardRepo;
-import pl.sidor.ManageUniversity.evaluation.service.RatingSetService;
-import pl.sidor.ManageUniversity.evaluation.service.RatingSetServiceImpl;
-import pl.sidor.ManageUniversity.evaluation.service.StudentRatingsCardService;
-import pl.sidor.ManageUniversity.evaluation.service.StudentRatingsCardServiceImpl;
+import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetService;
+import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetServiceImpl;
+import pl.sidor.ManageUniversity.evaluation.ratingcard.StudentRatingsCardService;
+import pl.sidor.ManageUniversity.evaluation.ratingcard.StudentRatingsCardServiceImpl;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
@@ -37,6 +37,7 @@ import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
+
 import javax.persistence.EntityManager;
 
 @Configuration
@@ -65,8 +66,8 @@ public class AppConfig {
     }
 
     @Bean
-    public LecturerService lecturerService(LecturerRepo lecturerRepo, CheckLecturer checkLecturer, SubjectRepo subjectRepo, ScheduleRepo scheduleRepo) {
-        return new LecturerServiceImpl(lecturerRepo, checkLecturer, subjectRepo, scheduleRepo);
+    public LecturerService lecturerService(LecturerRepo lecturerRepo, SubjectRepo subjectRepo, ScheduleRepo scheduleRepo) {
+        return new LecturerServiceImpl(lecturerRepo, subjectRepo, scheduleRepo);
     }
 
     @Bean
@@ -100,18 +101,17 @@ public class AppConfig {
     }
 
     @Bean
-    public CandidateService candidateService(CandidateRepo candidateRepo,
-                                             RecrutationService recrutationService, RecrutationResultRepo recrutationResultRepo) {
+    public CandidateService candidateService(CandidateRepo candidateRepo, RecrutationService recrutationService, RecrutationResultRepo recrutationResultRepo) {
         return new CandidateServiceImpl(candidateRepo, recrutationService, recrutationResultRepo);
     }
 
     @Bean
-    public PaymentService paymentService(PaymentRepo paymentRepo, EntityManager entityManager){
-        return  new PaymentServiceImpl(entityManager, paymentRepo);
+    public PaymentService paymentService(PaymentRepo paymentRepo, EntityManager entityManager) {
+        return new PaymentServiceImpl(entityManager, paymentRepo);
     }
 
     @Bean
-    public RecrutationResultService recrutationResultService(RecrutationResultRepo recrutationResultRepo){
-        return  new RecrutationResultServiceImpl(recrutationResultRepo);
+    public RecrutationResultService recrutationResultService(RecrutationResultRepo recrutationResultRepo) {
+        return new RecrutationResultServiceImpl(recrutationResultRepo);
     }
 }

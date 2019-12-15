@@ -9,13 +9,16 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
-@Embeddable
 @Data
+@Builder
+@Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Adres {
+public class Adres implements Serializable {
+
+    private static final long serialVersionUID = -1939151550153570370L;
 
     @Column(name = "City")
     @NotNull(message = "Nazwa miasta nie może być null.")

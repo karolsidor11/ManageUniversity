@@ -3,21 +3,19 @@ package pl.sidor.ManageUniversity.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Builder
+@AllArgsConstructor
 public class CandidateDto {
 
     @NotNull
-    private String name;
+    private final String name;
     @NotNull
-    private String lastName;
+    private final String lastName;
     @NotNull
-    private String email;
+    private final String email;
 }

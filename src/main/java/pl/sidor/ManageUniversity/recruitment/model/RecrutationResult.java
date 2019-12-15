@@ -5,14 +5,16 @@ import pl.sidor.ManageUniversity.recruitment.enums.AcceptedInCollage;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
+@Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
-public class RecrutationResult {
+public class RecrutationResult  implements Serializable {
+
+    private static final long serialVersionUID = -7845884831837673827L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

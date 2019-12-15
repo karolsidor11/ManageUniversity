@@ -15,7 +15,7 @@ public class RecrutationResultServiceImpl implements RecrutationResultService {
     private RecrutationResultRepo recrutationResultRepo;
 
     @Override
-    public RecrutationResult checkRecrutationResult(String name, String lastName) throws Throwable {
+    public RecrutationResult checkRecrutationResult(final String name, final String lastName) throws Throwable {
         return ofNullable(recrutationResultRepo.findByNameAndLastName(name, lastName))
                 .orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
     }

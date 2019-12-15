@@ -10,9 +10,9 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class Schedule  implements Serializable{
 
     private static final long serialVersionUID = -5710572541401522890L;
@@ -33,14 +33,9 @@ public class Schedule  implements Serializable{
     @Size(min = 1, max = 52)
     private Integer weekNumber;
 
-    @OneToMany(cascade = {
-            CascadeType.MERGE
-    })
+    @OneToMany(cascade = {CascadeType.MERGE})
     @JoinTable(name = "schedule_2_subject",
             joinColumns = @JoinColumn(name = "schedule_id"),
-            inverseJoinColumns = @JoinColumn(name = "subject_id")
-    )
-    @ElementCollection
-    @CollectionTable
+            inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects ;
 }

@@ -3,7 +3,6 @@ package pl.sidor.ManageUniversity.recruitment.service.payments;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.recruitment.model.Candidate;
 import pl.sidor.ManageUniversity.recruitment.model.Candidate_;
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy;
@@ -15,11 +14,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Objects;
 import java.util.Optional;
 
-@AllArgsConstructor
 @Transactional
+@AllArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     @PersistenceContext
@@ -27,29 +25,24 @@ public class PaymentServiceImpl implements PaymentService {
     private PaymentRepo paymentRepo;
 
     @Override
-    public PaymentForStudy pay(PaymentForStudy paymentForStudy) throws UniversityException {
-        if (Objects.isNull(paymentForStudy)) {
-            throw ExceptionFactory.objectIsEmpty("PaymentForStudy.");
-        }
+    public PaymentForStudy pay(final PaymentForStudy paymentForStudy) throws Throwable {
+        PaymentForStudy paymentForStudy1 = Optional.ofNullable(paymentForStudy)
+                .orElseThrow(ExceptionFactory.objectIsEmpty("PaymentForStudy."));
 
-        Candidate candidateToPayment = findCandidateToPayment(paymentForStudy);
+        Candidate candidateToPayment = findCandidateToPayment(paymentForStudy1);
         candidateToPayment.setPay(true);
-
         entityManager.merge(candidateToPayment);
 
-        return paymentRepo.save(paymentForStudy);
+        return paymentRepo.save(paymentForStudy1);
     }
 
     @Override
-    public PaymentForStudy checkPayments(String name, String lastName) throws Throwable {
-
+    public PaymentForStudy checkPayments(final String name,  final String lastName) throws Throwable {
         Optional<PaymentForStudy> byNameAndLastName = paymentRepo.findByNameAndLastName(name, lastName);
-
         return byNameAndLastName.orElseThrow(ExceptionFactory.objectIsEmpty("Brak płatności"));
     }
 
-    private Candidate findCandidateToPayment(PaymentForStudy candidate) {
-
+    public Candidate findCandidateToPayment(final PaymentForStudy candidate) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Candidate> query = criteriaBuilder.createQuery(Candidate.class);
         Root<Candidate> root = query.from(Candidate.class);
@@ -59,6 +52,6 @@ public class PaymentServiceImpl implements PaymentService {
 
         query.where(namePredicate, lastNamePredicate);
 
-        return entityManager.createQuery(query).getResultList().get(0);
+        return entityManager.createQuery(query).getResultList().stream().findFirst().orElseThrow();
     }
 }

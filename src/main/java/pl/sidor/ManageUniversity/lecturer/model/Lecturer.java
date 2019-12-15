@@ -15,10 +15,10 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Lecturer  implements Serializable{
+public class Lecturer implements Serializable {
 
     private static final long serialVersionUID = 2807717549783551827L;
 

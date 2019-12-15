@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult;
 
 @Repository
-public interface RecrutationResultRepo extends CrudRepository<RecrutationResult , Long> {
+public interface RecrutationResultRepo extends CrudRepository<RecrutationResult, Long> {
 
-    RecrutationResult findByNameAndLastName(String name, String lastName);
+    RecrutationResult findByNameAndLastName(final String name, final String lastName);
 }

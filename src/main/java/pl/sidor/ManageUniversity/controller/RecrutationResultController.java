@@ -15,7 +15,7 @@ import pl.sidor.ManageUniversity.recruitment.service.recrutationResult.Recrutati
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "recrutationResult")
+@RequestMapping(value = "recrutationResults")
 public class RecrutationResultController {
 
     private final RecrutationResultService recrutationResultService;
@@ -24,7 +24,6 @@ public class RecrutationResultController {
     public ResponseEntity<RecrutationResult> checkRecrutationResult(@RequestBody CandidateDto candidateDto) throws Throwable {
         RecrutationResult recrutationResult = recrutationResultService
                 .checkRecrutationResult(candidateDto.getName(), candidateDto.getLastName());
-
         return new ResponseEntity<>(recrutationResult, HttpStatus.OK);
     }
 }

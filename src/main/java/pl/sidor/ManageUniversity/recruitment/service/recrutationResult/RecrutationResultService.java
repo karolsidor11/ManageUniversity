@@ -4,5 +4,5 @@ import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult;
 
 public interface RecrutationResultService {
 
-    RecrutationResult checkRecrutationResult(String name, String lastName) throws Throwable;
+    RecrutationResult checkRecrutationResult(final String name, final String lastName) throws Throwable;
 }

@@ -5,11 +5,8 @@ import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import java.io.Serializable;
-import java.time.DayOfWeek;
-import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

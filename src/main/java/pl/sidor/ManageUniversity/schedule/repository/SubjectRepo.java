@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface SubjectRepo extends CrudRepository<Subject, Long> {
 
-    Optional<Subject> findByStartTimeAndEndTime(LocalTime start, LocalTime end);
+    Optional<Subject> findByStartTimeAndEndTime(final LocalTime start, final LocalTime end);
 
-    Optional<Subject> findByLecturer(Lecturer lecturer);
+    Optional<Subject> findByLecturer(final Lecturer lecturer);
 }

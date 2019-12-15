@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface LecturerRepo extends CrudRepository<Lecturer, Long> {
 
-    List<Lecturer> findByEmail(String email);
+    List<Lecturer> findByEmail(final String email);
 
-    Optional<Lecturer> findByNameAndLastName(String name, String lastName);
+    Optional<Lecturer> findByNameAndLastName(final String name, final String lastName);
 }

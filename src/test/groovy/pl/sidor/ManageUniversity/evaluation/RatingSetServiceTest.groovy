@@ -1,29 +1,23 @@
 package pl.sidor.ManageUniversity.evaluation
 
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet
+import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetServiceImpl
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo
-import pl.sidor.ManageUniversity.evaluation.service.RatingSetServiceImpl
 import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import spock.lang.Specification
 
 class RatingSetServiceTest extends Specification {
 
-    private RatingRepo ratingRepo
-    private RatingSetServiceImpl service
-
-    void setup() {
-        ratingRepo = Mock(RatingRepo.class)
-        service = new RatingSetServiceImpl(ratingRepo)
-    }
+    private RatingRepo ratingRepo = Mock(RatingRepo.class)
+    private RatingSetServiceImpl service = [ratingRepo]
 
     def "should find by ID"() {
-
         given:
         Long id = 1
-        ratingRepo.findById(id) >> Optional.of(RatingSet.builder().id(1).build())
 
         when:
+        ratingRepo.findById(id) >> Optional.of(getRatingSet())
         def result = service.findById(id)
 
         then:
@@ -32,13 +26,11 @@ class RatingSetServiceTest extends Specification {
     }
 
     def "should throw exception when find by ID"() {
-
         given:
         Long id = 999
 
-        ratingRepo.findById(id) >> Optional.empty()
-
         when:
+        ratingRepo.findById(id) >> Optional.empty()
         service.findById(id)
 
         then:
@@ -46,17 +38,16 @@ class RatingSetServiceTest extends Specification {
     }
 
     def "should delete by ID"() {
-
         given:
         Long id = 1
-        ratingRepo.findById(id) >> Optional.of(RatingSet.builder().id(id).build())
-        ratingRepo.deleteById(id)
 
         when:
+        ratingRepo.findById(id) >> Optional.of(getRatingSet())
+        ratingRepo.deleteById(id)
         def result = service.delete(id)
 
         then:
-        result == true
+        result
     }
 
     def "should throw exception when delete by ID"() {
@@ -75,15 +66,10 @@ class RatingSetServiceTest extends Specification {
 
     def " should create RatingSet"() {
         given:
-        RatingSet ratingSet = RatingSet.builder()
-                .id(1)
-                .subject(Subject.builder().id(1).build())
-                .build()
-
-        ratingRepo.save(ratingSet) >> ratingSet
+        RatingSet ratingSet = getRatingSet()
 
         when:
-
+        ratingRepo.save(ratingSet) >> ratingSet
         def result = service.create(ratingSet)
 
         then:
@@ -93,41 +79,44 @@ class RatingSetServiceTest extends Specification {
     }
 
     def "should throw exception when RatingSet is Empty"() {
-
         given:
-
         RatingSet ratingSet = null
-        ratingRepo.save(ratingSet) >> ratingSet
-
         when:
-         service.create(ratingSet)
+        ratingRepo.save(ratingSet) >> ratingSet
+        service.create(ratingSet)
 
         then:
         thrown(UniversityException)
     }
 
-    def"should update RatingSet"(){
+    def "should update RatingSet"() {
         given:
-
-        RatingSet actual=RatingSet.builder()
-                .id(1)
-                .subject(Subject.builder()
-                    .name("Matematyka")
-                    .build())
-                .build()
-        RatingSet update=RatingSet.builder().id(1)
-                .subject(Subject.builder()
-                    .name("Chemia")
-                    .build())
-                .build()
-
-        ratingRepo.findById(1)>>Optional.of(actual)
-        ratingRepo.save(update)>>update
+        RatingSet actual = getRatingSet()
+        RatingSet update = getModifyRatingSet()
 
         when:
-       def result= service.update(update)
+        ratingRepo.findById(1) >> Optional.of(actual)
+        ratingRepo.save(update) >> update
+        def result = service.update(update)
 
-         then:
-         result==update
+        then:
+        result == update
+    }
+
+    private static RatingSet getModifyRatingSet() {
+        RatingSet.builder().id(1)
+                .subject(Subject.builder()
+                        .name("Chemia")
+                        .build())
+                .build()
+    }
+
+    private static RatingSet getRatingSet() {
+        RatingSet.builder()
+                .id(1)
+                .subject(Subject.builder()
+                        .name("Matematyka")
+                        .build())
+                .build()
     }
 }
