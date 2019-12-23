@@ -20,11 +20,9 @@ public class RecrutationResult  implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "Name")
     @NotNull(message = "Imię kandydata na studia nie  może być puste.")
     private String name;
 
-    @Column(name = "LastName")
     @NotNull(message = "Nazwisko kandydata na sudia nie może być puste.")
     private String lastName;
 

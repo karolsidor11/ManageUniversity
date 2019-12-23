@@ -17,5 +17,5 @@ public class FindScheduleRequest {
     @NotNull
     private String lastName;
     @NotNull
-    private Integer weekNumber;
+    private int weekNumber;
 }

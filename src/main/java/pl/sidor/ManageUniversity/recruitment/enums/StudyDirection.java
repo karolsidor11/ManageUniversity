@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StudyDirection {
 
+
     INFORMATYKA("Informatyka"),
     MATEMATYKA("Matematyka"),
     ELEKTROTECHNIKA("Elektrotechnika"),

@@ -61,7 +61,7 @@ public class StudentRatingsCardServiceImpl implements StudentRatingsCardService 
         actual.setId(updateCard.getId());
         actual.setYear(updateCard.getYear());
         actual.setTerm(updateCard.getTerm());
-        actual.setGroup(updateCard.getGroup());
+        actual.setGroups(updateCard.getGroups());
         actual.setStudent(updateCard.getStudent());
 
         return actual;

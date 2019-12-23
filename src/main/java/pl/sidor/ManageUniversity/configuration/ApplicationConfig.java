@@ -41,7 +41,7 @@ import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 import javax.persistence.EntityManager;
 
 @Configuration
-public class AppConfig {
+public class ApplicationConfig {
 
     @Bean
     public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {

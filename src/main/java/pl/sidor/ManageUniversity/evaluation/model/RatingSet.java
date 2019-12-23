@@ -24,13 +24,12 @@ public class RatingSet implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "lecturer_id")
+    @JoinColumn()
     private Lecturer lecturer;
 
     @OneToOne
-    @JoinColumn(name = "subject_id")
+    @JoinColumn()
     private Subject subject;
 
-    @Column(name = "Rating")
     private double rating;
 }

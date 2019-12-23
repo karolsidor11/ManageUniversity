@@ -12,7 +12,7 @@ public interface StudentRepo extends CrudRepository<Student, Long> {
 
     List<Student> findByEmail(final String email);
 
-    List<Student> findByPhoneNumber(final int phoneNumber);
+    List<Student> findByPhoneNumber(final Integer phoneNumber);
 
     Optional<Student> findByNameAndLastName(final String name, final String lastName);
 

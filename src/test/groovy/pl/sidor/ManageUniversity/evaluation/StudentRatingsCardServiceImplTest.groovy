@@ -27,7 +27,7 @@ class StudentRatingsCardServiceImplTest extends Specification {
         then:
         studentRatingsCard != null
         studentRatingsCard.id == 1L
-        studentRatingsCard.group == 2.2
+        studentRatingsCard.groups == 2.2
     }
 
     def "should  throw University Exception"() {
@@ -132,7 +132,7 @@ class StudentRatingsCardServiceImplTest extends Specification {
 
         then:
         updateStudentRatingCard!=null
-        updateStudentRatingCard.group==3.2
+        updateStudentRatingCard.groups==3.2
     }
 
     private static Student getStudentByNameAndLastName() {
@@ -143,7 +143,7 @@ class StudentRatingsCardServiceImplTest extends Specification {
         return StudentRatingsCard.builder()
                 .id(1L)
                 .student(TestStudentData.prepareStudent())
-                .group(2.2)
+                .groups(2.2)
                 .ratingSetList(Collections.emptyList())
                 .build()
     }
@@ -152,7 +152,7 @@ class StudentRatingsCardServiceImplTest extends Specification {
         return StudentRatingsCard.builder()
                 .id(1L)
                 .student(TestStudentData.prepareStudent())
-                .group(3.2)
+                .groups(3.2)
                 .ratingSetList(Collections.emptyList())
                 .build()
     }

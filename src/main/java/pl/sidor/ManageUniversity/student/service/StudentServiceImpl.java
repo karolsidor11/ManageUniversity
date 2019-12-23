@@ -91,10 +91,11 @@ public class StudentServiceImpl implements StudentService {
             throw ExceptionFactory.objectIsEmpty("!!!");
         }
 
-        for (Schedule schedule : byStudentGroupAndWeekNumber) {
+        byStudentGroupAndWeekNumber.forEach((schedule)->{
             ScheduleDTO scheduleDTO = ScheduleMapper.mapTo(schedule);
             scheduleDTOS.add(scheduleDTO);
-        }
+        });
+
         return scheduleDTOS;
     }
 

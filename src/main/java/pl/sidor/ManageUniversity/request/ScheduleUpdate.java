@@ -13,6 +13,6 @@ import java.io.Serializable;
 public class ScheduleUpdate  implements Serializable{
 
     private Days dayOfWeek;
-    private Integer weekNumber;
+    private int weekNumber;
     private Subject subjects;
 }

@@ -26,7 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule create(final Schedule schedule) throws Throwable {
-        return ofNullable(schedule).filter(schedule1 -> scheduleValidator.test(schedule.getDayOfWeek()))
+        return ofNullable(schedule).filter(schedule1 -> !scheduleValidator.test(schedule.getDayOfWeek()))
                 .map(schedule1 -> scheduleRepo.save(schedule))
                 .orElseThrow(ExceptionFactory.incorectScheduleDay("!!!"));
     }
@@ -53,12 +53,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Schedule updateSchedule(final Schedule schedule) throws Throwable {
-        Schedule.ScheduleBuilder builder = Schedule.builder();
-        of(findByDay(schedule.getDayOfWeek())).ifPresent(getUpdateSchedule(schedule, builder));
-        Schedule build = builder.dayOfWeek(schedule.getDayOfWeek()).build();
+    public Schedule updateSchedule(Schedule schedule) throws Throwable {
+        Schedule schedule1 = ofNullable(findByDay(schedule.getDayOfWeek()))
+                .orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
+        Schedule updateSchedule = getUpdateSchedule(schedule, schedule1);
 
-        return scheduleRepo.save(build);
+        return scheduleRepo.save(updateSchedule);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         List<Subject> subjects = schedule.getSubjects();
         Subject subject1 = schedule.getSubjects().stream()
-                .filter(subject -> subject.getId().equals(scheduleUpdate.getSubjects().getId())).findFirst()
-                .orElseThrow(ExceptionFactory.objectIsEmpty("Brak przedmiotu o podanym ID."));
+                .filter(subject -> subject.getName().equals(scheduleUpdate.getSubjects().getName())).findFirst()
+                .orElseThrow(ExceptionFactory.objectIsEmpty("Brak przedmiotu o podanej nazwie."));
 
         subjects.remove(subject1);
         schedule.setSubjects(singletonList(scheduleUpdate.getSubjects()));
@@ -83,7 +83,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return schedule;
     }
 
-    private Consumer<Schedule> getUpdateSchedule(final Schedule schedule, final Schedule.ScheduleBuilder builder) {
-        return schedule1 -> builder.id(schedule.getId()).subjects(schedule.getSubjects());
+    private Schedule getUpdateSchedule( Schedule schedule, Schedule builder) {
+        builder.setDayOfWeek(schedule.getDayOfWeek());
+        builder.setSubjects(schedule.getSubjects());
+        builder.setWeekNumber(schedule.getWeekNumber());
+        builder.setStudentGroup(schedule.getStudentGroup());
+        return builder;
     }
 }

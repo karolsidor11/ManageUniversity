@@ -25,7 +25,7 @@ class SubjectMapperTest extends Specification {
                 .id(1L)
                 .name("Polski")
                 .roomNumber(22)
-                .lecturer(Collections.emptyList())
+                .lecturer(null)
                 .build()
     }
 }

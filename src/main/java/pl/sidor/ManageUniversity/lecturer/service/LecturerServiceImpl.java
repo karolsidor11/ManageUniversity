@@ -69,8 +69,7 @@ public class LecturerServiceImpl implements LecturerService {
         List<Schedule> bySubjects = scheduleRepo.findBySubjects(subject.orElseThrow(ExceptionFactory.objectIsEmpty("!!!")));
 
         Optional<List<Schedule>> collect = of(bySubjects.stream()
-                .filter(schedule -> nonNull(schedule.getWeekNumber()))
-                .filter(schedule -> schedule.getWeekNumber().equals(request.getWeekNumber()))
+                .filter(schedule -> schedule.getWeekNumber()==(request.getWeekNumber()))
                 .collect(Collectors.toList()));
 
         return collect.orElseThrow(ExceptionFactory.nieoczekianyBladSystemu

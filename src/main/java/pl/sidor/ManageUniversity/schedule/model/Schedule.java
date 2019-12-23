@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Data
 @Builder
@@ -21,19 +23,16 @@ public class Schedule  implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "DayOfWeek")
     @Enumerated(EnumType.STRING)
     @NotNull(message = "Dzień tygodnia nie może być null.")
     private Days dayOfWeek;
 
-    @Column(name = "StudentGroup")
-    private Double studentGroup;
+    @NotNull(message = "Grupa  studencka nie może być null.")
+    private double studentGroup;
 
-    @Column(name = "WeekNumber")
-    @Size(min = 1, max = 52)
-    private Integer weekNumber;
+    private int weekNumber;
 
-    @OneToMany(cascade = {CascadeType.MERGE})
+    @OneToMany(cascade= PERSIST)
     @JoinTable(name = "schedule_2_subject",
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))

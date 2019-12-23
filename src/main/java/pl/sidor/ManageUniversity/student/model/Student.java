@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
 import pl.sidor.ManageUniversity.model.Adres;
 
@@ -27,20 +26,15 @@ public class Student implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "Name")
     @NotNull(message = "Imie nie może być null.")
     private String name;
 
-    @Column(name = "LastName")
     @NotNull(message = "Nazwisko nie może być null.")
     private String lastName;
 
-    @Column(name = "Date_of_birth")
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date date;
+    private Date dateOfBirth;
 
-    @Column(name = "Email")
     @Email(message = "Nieprawidłowy adres email.")
     private String email;
 
@@ -48,17 +42,16 @@ public class Student implements Serializable {
     @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "PhoneNumber")
+    @NotNull(message = "Numer telefonu nie może być null.")
     private Integer phoneNumber;
 
-    @Column(name = "isStudent")
-    @NotNull(message = "Czy Student nie może być null.")
+    @NotNull(message = "Student nie może być null.")
     private boolean isStudent;
 
-    @Column(name = "StudentGroup")
+    @NotNull(message = "Grupa studencka nie może być null.")
     private Double studentGroup;
 
     @OneToOne
-    @JoinColumn(name = "ratings_id")
+    @JoinColumn()
     private StudentRatingsCard studentRatingsCard;
 }

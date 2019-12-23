@@ -38,7 +38,7 @@ public class RecrutationResultBuilder implements BiFunction<Double, Candidate, R
     }
 
     private AcceptedInCollage evaluateResult(final Double result) {
-        if (result < 320) {
+        if (result < 820) {
             return AcceptedInCollage.REJECTED;
         }
         return AcceptedInCollage.ACCEPTED;

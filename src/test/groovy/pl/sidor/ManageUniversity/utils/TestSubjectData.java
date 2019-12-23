@@ -14,7 +14,8 @@ public class TestSubjectData {
                 .id(1L)
                 .name("Java")
                 .roomNumber(22)
-                .lecturer(Collections.singletonList(lecturer)).build();
+                .lecturer((lecturer))
+                .build();
     }
     public static Subject prepareSubject() {
 
@@ -25,7 +26,7 @@ public class TestSubjectData {
                 .roomNumber(22)
                 .startTime(LocalTime.of(12,12))
                 .endTime(LocalTime.of(15,11))
-                .lecturer(new ArrayList<>())
+                .lecturer(null)
                 .build();
     }
 }
