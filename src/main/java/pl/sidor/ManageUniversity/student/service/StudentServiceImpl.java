@@ -15,8 +15,8 @@ import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
-import static java.util.Objects.isNull;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 
@@ -40,11 +40,9 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public Student create(final Student student) throws Throwable {
-        if (isNull(student)) {
-            throw ExceptionFactory.objectIsEmpty("!!!");
-        }
-        checkStudentInDatabase(student);
-        return studentRepo.save(student);
+        return ofNullable(student)
+                .map(createStudent())
+                .orElseThrow(()->ExceptionFactory.objectIsEmpty("!!!"));
     }
 
     @Override
@@ -52,7 +50,6 @@ public class StudentServiceImpl implements StudentService {
         Student actualStudent = ofNullable(findById(student.getId()))
                 .map(studentOld -> buildStudnet(studentOld, student))
                 .orElseThrow(() -> ExceptionFactory.incorrectStudentID(student.getId()));
-
         studentRepo.save(actualStudent);
     }
 
@@ -99,7 +96,22 @@ public class StudentServiceImpl implements StudentService {
         return scheduleDTOS;
     }
 
-    private void checkStudentInDatabase(final Student student) throws UniversityException {
+    private Function<Student, Student> createStudent() {
+        return newStudent -> {
+            checkStudent(newStudent);
+            return studentRepo.save(newStudent);
+        };
+    }
+
+    private void checkStudent(Student student1) {
+        try {
+            checkStudentInDatabaseByEmailAndPhoneNumber(student1);
+        } catch (UniversityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void checkStudentInDatabaseByEmailAndPhoneNumber(final Student student) throws UniversityException {
         if (checkUniqeStudentPredicate.test(student)) {
             throw ExceptionFactory.studentInDatabase(student.getEmail());
         }
