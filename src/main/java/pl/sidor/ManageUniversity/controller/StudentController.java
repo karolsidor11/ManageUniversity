@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.student.model.Student;
+import pl.sidor.ManageUniversity.student.response.StudentResponse;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 
 @RestController
@@ -16,24 +17,24 @@ public class StudentController {
     private final StudentService studentServiceImpl;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> findStudentByID(@PathVariable final Long id) throws Throwable {
-        return new ResponseEntity<>(studentServiceImpl.findById(id), HttpStatus.OK);
+    public ResponseEntity<StudentResponse> findStudentByID(@PathVariable final Long id) {
+        StudentResponse studentResponse = studentServiceImpl.findById(id);
+        return new ResponseEntity<>(studentResponse, HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) throws Throwable {
+    public ResponseEntity<StudentResponse> createStudent(@RequestBody Student student) throws Throwable {
         return new ResponseEntity<>(studentServiceImpl.create(student), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable final Long id) throws Throwable {
-        studentServiceImpl.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<StudentResponse> deleteStudent(@PathVariable final Long id) throws Throwable {
+        return new ResponseEntity<>(studentServiceImpl.delete(id), HttpStatus.OK);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Student> updateStudent(@RequestBody Student student) throws Throwable {
-        studentServiceImpl.update(student);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<StudentResponse> updateStudent(@RequestBody Student student) throws Throwable {
+        StudentResponse updateStudent = studentServiceImpl.update(student);
+        return new ResponseEntity<>(updateStudent, HttpStatus.OK);
     }
 }

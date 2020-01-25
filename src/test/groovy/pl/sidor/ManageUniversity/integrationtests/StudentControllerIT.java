@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import pl.sidor.ManageUniversity.exception.MessageException;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static pl.sidor.ManageUniversity.exception.MessageException.W_BAZIE_BRAK_STUDENTA;
 import static pl.sidor.ManageUniversity.utils.TestScheduleData.prepareSchedule;
 import static pl.sidor.ManageUniversity.utils.TestStudentData.*;
 
@@ -62,7 +64,7 @@ public class StudentControllerIT {
         // expect
         mockMvc.perform(get("/students/1", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.student.id", is(1)))
                 .andReturn();
     }
 
@@ -76,7 +78,8 @@ public class StudentControllerIT {
         // expect
         mockMvc.perform(get("/students/{id}", studentID))
                 .andDo(print())
-                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.description",
+                        is("W bazie nie istnieje STUDENT o podanym id.:9830984")))
                 .andReturn();
     }
 
@@ -92,10 +95,10 @@ public class StudentControllerIT {
          mockMvc.perform(post("/students")
                 .content(objectMapper.writeValueAsString(student))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andDo(print()).andExpect(jsonPath("$.id", is(1)))
-                .andExpect(jsonPath("$.name", is("Karol")))
-                .andExpect(jsonPath("$.lastName", is("Sidor")))
-                .andExpect(jsonPath("$.email", is("karolsidor11@wp.pl")))
+                .andDo(print()).andExpect(jsonPath("$.student.id", is(1)))
+                .andExpect(jsonPath("$.student.name", is("Karol")))
+                .andExpect(jsonPath("$.student.lastName", is("Sidor")))
+                .andExpect(jsonPath("$.student.email", is("karolsidor11@wp.pl")))
                 .andReturn();
     }
 
@@ -136,7 +139,8 @@ public class StudentControllerIT {
 
         // expect
         mockMvc.perform(delete("/students/{id}", studentId))
-                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error.description",
+                        is("W bazie nie istnieje STUDENT o podanym id.:9999")))
                 .andReturn();
     }
 

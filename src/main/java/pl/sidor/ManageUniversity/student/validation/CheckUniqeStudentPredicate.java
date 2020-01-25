@@ -6,8 +6,6 @@ import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 
 import java.util.function.Predicate;
 
-import static java.util.Optional.ofNullable;
-
 @AllArgsConstructor
 public class CheckUniqeStudentPredicate implements Predicate<Student> {
 
@@ -15,14 +13,14 @@ public class CheckUniqeStudentPredicate implements Predicate<Student> {
 
     @Override
     public boolean test(final Student student) {
-        return (emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber()));
+        return !(emialIsUniqe(student.getEmail()) && phoneNumberIsUniqe(student.getPhoneNumber()));
     }
 
     private boolean emialIsUniqe(final String email) {
-        return ofNullable(studentRepo.findByEmail(email)).isEmpty();
+        return studentRepo.findByEmail(email).isEmpty();
     }
 
     private boolean phoneNumberIsUniqe(final int phoneNumber) {
-        return ofNullable(studentRepo.findByPhoneNumber(phoneNumber)).isEmpty();
+        return studentRepo.findByPhoneNumber(phoneNumber).isEmpty();
     }
 }
