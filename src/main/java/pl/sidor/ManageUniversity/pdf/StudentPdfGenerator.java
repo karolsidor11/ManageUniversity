@@ -17,9 +17,35 @@ public class StudentPdfGenerator {
         Document document = new Document();
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         if (Objects.isNull(student)) {
-            return checkStudent(document, arrayOutputStream);
+            return prepareEmptyPdf(document, arrayOutputStream);
         }
+        prepareDocument(student, document, arrayOutputStream);
+        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
+    }
 
+    private ByteArrayInputStream prepareEmptyPdf(Document document, ByteArrayOutputStream arrayOutputStream) {
+        try {
+            PdfWriter.getInstance(document, arrayOutputStream);
+            document.open();
+            Paragraph elements = getParagraphMessage();
+            document.add(elements);
+            document.close();
+        } catch (DocumentException ex) {
+            ex.printStackTrace();
+        }
+        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
+    }
+
+    private Paragraph getParagraphMessage() {
+        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+        Paragraph paragraph1 = new Paragraph();
+        paragraph1.add("Nie znaleziono studenta o podanym identyfikatorze.");
+        paragraph1.setAlignment(Element.ALIGN_CENTER);
+        paragraph1.setFont(font);
+        return paragraph1;
+    }
+
+    private void prepareDocument(Student student, Document document, ByteArrayOutputStream arrayOutputStream) {
         try {
             PdfWriter.getInstance(document, arrayOutputStream);
             document.open();
@@ -27,24 +53,9 @@ public class StudentPdfGenerator {
             document.add(new Paragraph(" "));
             document.add(getTable(student));
             document.close();
-        } catch (DocumentException ignored) {
-            ignored.printStackTrace();
-        }
-        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
-    }
-
-    private ByteArrayInputStream checkStudent(Document document, ByteArrayOutputStream arrayOutputStream) {
-        try {
-            PdfWriter.getInstance(document, arrayOutputStream);
-            document.open();
-            Paragraph elements = validateStudent();
-            document.add(elements);
-            document.close();
         } catch (DocumentException ex) {
             ex.printStackTrace();
         }
-
-        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
     }
 
     private Paragraph getHeader(Student student) {
@@ -84,14 +95,5 @@ public class StudentPdfGenerator {
         table.addCell(student.getPhoneNumber().toString());
         table.addCell("Grupa studencka");
         table.addCell(student.getStudentGroup().toString());
-    }
-
-    private Paragraph validateStudent() {
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Paragraph paragraph1 = new Paragraph();
-        paragraph1.add("Nie znaleziono studenta o podanym identyfikatorze.");
-        paragraph1.setAlignment(Element.ALIGN_CENTER);
-        paragraph1.setFont(font);
-        return paragraph1;
     }
 }

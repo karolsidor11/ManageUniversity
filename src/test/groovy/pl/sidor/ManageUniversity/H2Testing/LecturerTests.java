@@ -51,7 +51,7 @@ public class LecturerTests {
                 .build();
         //  when
         lecturerService.create(lecturer);
-        Lecturer byId = lecturerService.findById(1L);
+        Lecturer byId = lecturerService.findById(1L).getLecturer();
 
         // then
         assertEquals(byId.getName(), "Jan");
@@ -71,7 +71,7 @@ public class LecturerTests {
                 .phoneNumber(909090909)
                 .build());
         //  when
-        Lecturer byId = lecturerService.findById(2L);
+        Lecturer byId = lecturerService.findById(2L).getLecturer();
 
         // then
         assertEquals(byId.getName(), "Karol");
@@ -91,7 +91,7 @@ public class LecturerTests {
                 .adres(new Adres())
                 .build());
 
-        Lecturer byId = lecturerService.findById(2L);
+        Lecturer byId = lecturerService.findById(2L).getLecturer();
         lecturerService.delete(byId.getId());
     }
 }

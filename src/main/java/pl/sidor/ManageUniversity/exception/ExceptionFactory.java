@@ -17,7 +17,7 @@ public final class ExceptionFactory {
     public static  UniversityException incorrectStudentID(Long details){
         return  new UniversityException(MessageException.W_BAZIE_BRAK_STUDENTA.message+":"+details);
     }
-    public static  UniversityException incorrectLecturerID(String details){
+    public static  UniversityException incorrectLecturerID(Long details){
         return  new UniversityException(MessageException.W_BAZIE_BRAK_WYKLADOWCA.message+":"+details);
     }
 
