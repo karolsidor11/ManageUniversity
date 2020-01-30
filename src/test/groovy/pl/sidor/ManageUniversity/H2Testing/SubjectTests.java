@@ -27,7 +27,7 @@ public class SubjectTests {
         Subject subject = prepareSubject();
 
         // when
-        Subject save = subjectService.save(subject);
+        Subject save = subjectService.save(subject).getSubject();
 
         // then
         assertEquals(save.getName(),"Java" );
@@ -41,9 +41,9 @@ public class SubjectTests {
         Subject subject = prepareSubject();
 
         // when
-        Subject save = subjectService.save(subject);
+        Subject save = subjectService.save(subject).getSubject();
 
-        Subject byId = subjectService.getById(save.getId());
+        Subject byId = subjectService.getById(save.getId()).getSubject();
 
         // then
         assertEquals(byId.getName(),"Java" );
@@ -55,7 +55,7 @@ public class SubjectTests {
     public void should_delete_subject() throws Throwable {
 
         // when
-        Subject save = subjectService.save(prepareSubject());
+        Subject save = subjectService.save(prepareSubject()).getSubject();
 
        subjectService.delete(save.getId());
 

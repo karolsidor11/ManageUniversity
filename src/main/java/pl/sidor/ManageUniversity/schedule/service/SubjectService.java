@@ -2,18 +2,17 @@ package pl.sidor.ManageUniversity.schedule.service;
 
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
-
-import java.util.Optional;
+import pl.sidor.ManageUniversity.schedule.response.SubjectResponse;
 
 public interface SubjectService {
 
-    Subject getById(final Long id) throws Throwable;
+    SubjectResponse getById(final Long id);
 
-    Subject save(final Subject subject) throws Throwable;
+    SubjectResponse save(final Subject subject);
 
-    void delete(final Long id) throws Throwable;
+    SubjectResponse delete(final Long id);
 
-    Optional<Subject> findByLecturer(final Long id, final String name, final String lastName) throws Throwable;
+    SubjectResponse findByLecturer(final Long id) ;
 
-    Subject findByLecturer(final Lecturer lecturer) throws Throwable;
+    SubjectResponse findByLecturer(final Lecturer lecturer);
 }

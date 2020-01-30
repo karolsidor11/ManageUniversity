@@ -12,6 +12,9 @@ import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.pdf.LecturerPdfGenerator;
 import pl.sidor.ManageUniversity.pdf.StudentPdfGenerator;
+import pl.sidor.ManageUniversity.pdf.SubjectPdfGenerator;
+import pl.sidor.ManageUniversity.schedule.response.SubjectResponse;
+import pl.sidor.ManageUniversity.schedule.service.SubjectService;
 import pl.sidor.ManageUniversity.student.response.StudentResponse;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 
@@ -19,30 +22,35 @@ import java.io.ByteArrayInputStream;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value= "reports")
+@RequestMapping(value = "reports")
 public class ReportsController {
 
     private final StudentService studentService;
     private final LecturerService lecturerService;
+    private final SubjectService subjectService;
     private final StudentPdfGenerator studentPdfGenerator;
     private final LecturerPdfGenerator lecturerPdfGenerator;
+    private final SubjectPdfGenerator subjectPdfGenerator;
 
     @GetMapping(value = "/student/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> getStudent(@PathVariable Long id)  {
+    public ResponseEntity<InputStreamResource> getStudent(@PathVariable Long id) {
         StudentResponse byId = studentService.findById(id);
         ByteArrayInputStream stream = studentPdfGenerator.studentReport(byId.getStudent());
-        return  ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(stream));
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(stream));
     }
 
     @GetMapping(value = "/lecturer/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<InputStreamResource> lecturerReport(@PathVariable Long id) {
         LecturerResponse lecturerResponse = lecturerService.findById(id);
         ByteArrayInputStream stream = lecturerPdfGenerator.lecturerReport(lecturerResponse.getLecturer());
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(stream));
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(stream));
+    }
+
+    @GetMapping(value = "/subject/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> subjectReport(@PathVariable Long id) {
+        SubjectResponse subjectServiceById = subjectService.getById(id);
+        ByteArrayInputStream stream = subjectPdfGenerator.subjectReport(subjectServiceById.getSubject());
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(stream));
     }
 }
 

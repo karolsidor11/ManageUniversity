@@ -1,14 +1,15 @@
 package pl.sidor.ManageUniversity.schedule.service
 
-import pl.sidor.ManageUniversity.exception.UniversityException
+
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
+import pl.sidor.ManageUniversity.schedule.response.SubjectResponse
+import pl.sidor.ManageUniversity.schedule.utils.SubejctUtils
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator
 import spock.lang.Specification
 
-import java.time.LocalTime
 
 class SubjectServiceImplTest extends Specification {
 
@@ -20,11 +21,11 @@ class SubjectServiceImplTest extends Specification {
 
     def "should  find subject by id"() {
         given:
-        Subject subject = getSubject()
+        Subject subject = SubejctUtils.getSubject()
 
         when:
         subjectRepo.findById(1) >> Optional.of(subject)
-        Subject actualSubejct = service.getById(1)
+        Subject actualSubejct = service.getById(1).getSubject()
 
         then:
         actualSubejct != null
@@ -37,21 +38,20 @@ class SubjectServiceImplTest extends Specification {
 
         when:
         subjectRepo.findById(id) >> Optional.empty()
-        service.getById(id)
+        SubjectResponse subjectResponse = service.getById(id)
 
         then:
-        UniversityException exception = thrown()
-        exception.message == "W_BAZIE_BRAK_PRZEDMIOTU:" + id
+        subjectResponse.error != null
     }
 
     def "should save Subject"() {
         given:
-        Subject subject = getSubject()
+        Subject subject = SubejctUtils.getSubject()
 
         when:
         subjectValidator.test(subject) >> true
         subjectRepo.save(subject) >> subject
-        Subject actualSubject = service.save(subject)
+        Subject actualSubject = service.save(subject).getSubject()
 
         then:
         actualSubject != null
@@ -60,14 +60,14 @@ class SubjectServiceImplTest extends Specification {
 
     def "should  throw save Subject"() {
         given:
-        Subject subject = getAllSubject()
+        Subject subject = SubejctUtils.getAllSubject()
 
         when:
         subjectValidator.test(subject) >> false
-        service.save(subject)
+        SubjectResponse subjectResponse = service.save(subject)
 
         then:
-        thrown(UniversityException.class)
+        subjectResponse.error != null
     }
 
     def "should delete subject by ID"() {
@@ -75,37 +75,11 @@ class SubjectServiceImplTest extends Specification {
         Long id = 1
 
         when:
-        subjectRepo.findById(id) >> Optional.of(getSubject())
+        subjectRepo.findById(id) >> Optional.of(SubejctUtils.getSubject())
         subjectRepo.deleteById(id)
         service.delete(id)
 
         then:
         2 * subjectRepo.deleteById(id)
-    }
-
-    private static Subject getSubject() {
-        Subject.builder()
-                .id(1)
-                .name("Polski")
-                .lecturer(Arrays.asList(Lecturer.builder()
-                        .id(1)
-                        .name("Karol")
-                        .lastName("Sidor")
-                        .build()))
-                .build()
-    }
-
-    private static Subject getAllSubject() {
-        Subject.builder()
-                .id(1)
-                .name("Polski")
-                .lecturer(Arrays.asList(Lecturer.builder()
-                        .id(1)
-                        .name("Karol")
-                        .lastName("Sidor")
-                        .build()))
-                .endTime(LocalTime.of(12, 00))
-                .endTime(LocalTime.of(13, 00))
-                .build()
     }
 }
