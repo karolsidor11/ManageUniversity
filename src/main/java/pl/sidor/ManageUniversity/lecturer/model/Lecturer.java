@@ -1,9 +1,6 @@
 package pl.sidor.ManageUniversity.lecturer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
@@ -12,10 +9,12 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Lecturer implements Serializable {
@@ -47,4 +46,17 @@ public class Lecturer implements Serializable {
 
     @OneToOne()
     private Subject subject;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Lecturer lecturer = (Lecturer) o;
+        return Objects.equals(name, lecturer.name) && Objects.equals(lastName, lecturer.lastName) && Objects.equals(email, lecturer.email) && Objects.equals(adres, lecturer.adres) && Objects.equals(phoneNumber, lecturer.phoneNumber) && Objects.equals(grade, lecturer.grade) && Objects.equals(subject, lecturer.subject);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lastName, email, adres, phoneNumber, grade, subject);
+    }
 }

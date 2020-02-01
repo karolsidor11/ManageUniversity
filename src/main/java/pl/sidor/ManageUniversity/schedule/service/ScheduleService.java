@@ -3,24 +3,25 @@ package pl.sidor.ManageUniversity.schedule.service;
 import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
+import pl.sidor.ManageUniversity.schedule.response.ScheduleResponse;
 
 import java.util.List;
 
 public interface ScheduleService {
 
-    Schedule create(final Schedule schedule) throws Throwable;
+    ScheduleResponse create(final Schedule schedule);
 
-    Schedule getScheduleById(final Long id) throws Throwable;
+    ScheduleResponse getScheduleById(final Long id);
 
-    Schedule findByDay(final Days day) throws Throwable;
+    ScheduleResponse findByDay(final Days day) ;
 
-    boolean deleteByID(final Long id) throws Throwable;
+    ScheduleResponse deleteByID(final Long id);
 
-    void deleteByDay(final Days day) throws Throwable;
+    ScheduleResponse deleteByDay(final Days day);
 
-    Schedule updateSchedule(final Schedule schedule) throws Throwable;
+    ScheduleResponse updateSchedule(final Schedule schedule);
 
     List<Schedule> findByStudentGroupAndWeekNumber(final Double studentGroup, final Integer weekNumber);
 
-    Schedule modifySchedule(final ScheduleUpdate scheduleUpdate) throws Throwable;
+    ScheduleResponse modifySchedule(final ScheduleUpdate scheduleUpdate);
 }

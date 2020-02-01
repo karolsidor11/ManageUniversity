@@ -7,6 +7,7 @@ import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import java.util.function.Predicate;
 
 import static java.util.Optional.ofNullable;
+import static org.springframework.data.mapping.Alias.of;
 
 @AllArgsConstructor
 public class ScheduleValidator implements Predicate<Days> {
@@ -15,6 +16,6 @@ public class ScheduleValidator implements Predicate<Days> {
 
     @Override
     public boolean test(final Days days) {
-        return ofNullable(scheduleRepo.findByDayOfWeek(days)).isEmpty();
+        return scheduleRepo.findByDayOfWeek(days).isPresent();
     }
 }

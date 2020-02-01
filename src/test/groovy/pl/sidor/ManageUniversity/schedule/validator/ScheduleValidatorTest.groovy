@@ -15,24 +15,25 @@ class ScheduleValidatorTest extends Specification {
     def "should return #expectResult when #dane"() {
         given:
         Days days = Days.Poniedzialek
-        scheduleRepo.findByDayOfWeek(days) >> Optional.of(getSchedule(days))
+        scheduleRepo.findByDayOfWeek(Days.Poniedzialek) >> getSchedule(days)
+        scheduleRepo.findByDayOfWeek(_ as Days) >> Optional.empty()
 
         expect:
-        expectResult == scheduleValidator.test(dane)
+        isScheduleInDatabase == scheduleValidator.test(dane)
 
         where:
-        dane              || expectResult
-        Days.Wtorek       || true
-        Days.Poniedzialek || false
-        Days.Sroda        || true
-        Days.Czwartek     || true
-        Days.Piatek       || true
+        dane              || isScheduleInDatabase
+        Days.Wtorek       || false
+        Days.Poniedzialek || true
+        Days.Sroda        || false
+        Days.Czwartek     || false
+        Days.Piatek       || false
     }
 
-    private static Schedule getSchedule(Days days) {
-        return Schedule.builder()
+    private static Optional<Schedule> getSchedule(Days days) {
+        return Optional.of(Schedule.builder()
                 .id(1)
                 .dayOfWeek(days)
-                .build()
+                .build())
     }
 }

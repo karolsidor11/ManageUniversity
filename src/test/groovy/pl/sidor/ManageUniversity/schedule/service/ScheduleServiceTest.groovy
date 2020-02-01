@@ -1,15 +1,13 @@
 package pl.sidor.ManageUniversity.schedule.service
 
-import pl.sidor.ManageUniversity.exception.UniversityException
+
 import pl.sidor.ManageUniversity.request.ScheduleUpdate
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
-import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
+import pl.sidor.ManageUniversity.schedule.utils.ScheduleUtils
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator
 import spock.lang.Specification
-
-import java.time.LocalTime
 
 class ScheduleServiceTest extends Specification {
 
@@ -19,33 +17,32 @@ class ScheduleServiceTest extends Specification {
 
     def "should  delete Schedule by ID"() {
         given:
-        Schedule schedule = prepareSchedule()
+        Schedule schedule = ScheduleUtils.prepareSchedule()
         scheduleRepo.findById(schedule.id) >> Optional.of(schedule)
 
         when:
         def result = scheduleService.deleteByID(schedule.id)
 
         then:
-        result
+        result.error == null
     }
 
     def "should throw Exception when try delete Schedule by ID"() {
         given:
-        Schedule schedule = prepareSchedule()
+        Schedule schedule = ScheduleUtils.prepareSchedule()
         scheduleRepo.findById(schedule.id) >> Optional.empty()
 
         when:
-        scheduleService.deleteByID(schedule.id)
+        def result = scheduleService.deleteByID(schedule.id)
 
         then:
-        UniversityException exception = thrown()
-        exception.message == "W_BAZIE_BRAK_PLANU:" + schedule.id
+        result.error != null
     }
 
     def "should  delete schedule by day"() {
         given:
         Days days = Days.Poniedzialek
-        scheduleRepo.findByDayOfWeek(days) >> Optional.of(prepareSchedule())
+        scheduleRepo.findByDayOfWeek(days) >> Optional.of(ScheduleUtils.prepareSchedule())
         scheduleRepo.deleteByDayOfWeek(days)
 
         when:
@@ -62,16 +59,15 @@ class ScheduleServiceTest extends Specification {
         scheduleRepo.deleteByDayOfWeek(days)
 
         when:
-        scheduleService.deleteByDay(days)
+        def result = scheduleService.deleteByDay(days)
 
         then:
-        UniversityException exception = thrown()
-        exception.message == "W_BAZIE_BRAK_PLANU_O_PODANYM_DNIU:" + days.toString()
+        result.error != null
     }
 
     def "should find schedule by ID"() {
         given:
-        Schedule schedule = prepareSchedule()
+        Schedule schedule = ScheduleUtils.prepareSchedule()
         scheduleRepo.findById(schedule.id) >> Optional.of(schedule)
 
         when:
@@ -79,31 +75,31 @@ class ScheduleServiceTest extends Specification {
 
         then:
         actualSchedule != null
-        actualSchedule == schedule
+        actualSchedule.schedule == schedule
     }
 
 
     def "should throw when Schedule id is incorrect"() {
         given:
-        Schedule schedule = prepareSchedule()
+        Schedule schedule = ScheduleUtils.prepareSchedule()
         scheduleRepo.findById(schedule.id) >> Optional.empty()
 
         when:
-        scheduleService.getScheduleById(schedule.id)
+        def result = scheduleService.getScheduleById(schedule.id)
 
         then:
-        thrown(UniversityException.class)
+        result.error != null
     }
 
     def "test should modify Schedule"() {
         given:
-        ScheduleUpdate scheduleUpdate = prepareModifyRequest()
+        ScheduleUpdate scheduleUpdate = ScheduleUtils.prepareModifyRequest()
 
-        scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber) >> Optional.of(prepareSchedule())
-        scheduleRepo.save(Schedule.builder().build()) >> Optional.of(prepareSchedule())
+        scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber) >> Optional.of(ScheduleUtils.prepareSchedule())
+        scheduleRepo.save(Schedule.builder().build()) >> Optional.of(ScheduleUtils.prepareSchedule())
 
         when:
-        Schedule schedule = scheduleService.modifySchedule(scheduleUpdate)
+        Schedule schedule = scheduleService.modifySchedule(scheduleUpdate).schedule
 
         then:
         schedule != null
@@ -111,43 +107,15 @@ class ScheduleServiceTest extends Specification {
 
     def "test  should  throw exception during modify Schedule"() {
         given:
-        ScheduleUpdate scheduleUpdate = prepareModifyRequest()
+        ScheduleUpdate scheduleUpdate = ScheduleUtils.prepareModifyRequest()
         scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.dayOfWeek, scheduleUpdate.weekNumber) >> Optional.empty()
 
         when:
-        scheduleService.modifySchedule(scheduleUpdate)
+        def result = scheduleService.modifySchedule(scheduleUpdate)
 
         then:
-        thrown(UniversityException.class)
+        result.error != null
     }
 
-    private static ScheduleUpdate prepareModifyRequest() {
-        ScheduleUpdate.builder()
-                .dayOfWeek(Days.Poniedzialek)
-                .weekNumber(12)
-                .subjects(prepareSubject())
-                .build()
-    }
 
-    private static Subject prepareSubject() {
-        return Subject.builder()
-                .id(1L)
-                .name("Polski")
-                .roomNumber(21)
-                .startTime(LocalTime.now())
-                .endTime(LocalTime.of(12, 20))
-                .build()
-    }
-
-    private static Schedule prepareSchedule() {
-        List<Subject> subjectList = new ArrayList<>()
-        subjectList.add(prepareSubject())
-
-        return Schedule.builder()
-                .id(1l)
-                .dayOfWeek(Days.Poniedzialek)
-                .weekNumber(12)
-                .subjects(subjectList)
-                .build()
-    }
 }
