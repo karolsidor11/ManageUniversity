@@ -1,28 +1,24 @@
 package pl.sidor.ManageUniversity.header;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import pl.sidor.ManageUniversity.enums.ApplicationDetails;
 import pl.sidor.ManageUniversity.utils.DateUtils;
 
-
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class Header {
 
-    private String applicationName;
-    private String applicationVersion;
-    private String referenceDateTime;
+    private final String applicationName = ApplicationDetails.NAME.getDescription();
+    private final String applicationVersion = ApplicationDetails.VERSION.getDescription();
+    private final String referenceDateTime = DateUtils.formatDateNow();
+    private static Header header = null;
 
-    public static Header getHeader() {
-        Header header = new Header();
-        header.setApplicationName(ApplicationDetails.NAME.getDescription());
-        header.setApplicationVersion(ApplicationDetails.VERSION.getDescription());
-        header.setReferenceDateTime(DateUtils.formatDateNow());
+    public static Header getInstance() {
+        if (header == null) {
+            header = new Header();
+            header.getApplicationVersion();
+            header.getApplicationVersion();
+            header.getReferenceDateTime();
+        }
         return header;
     }
 }

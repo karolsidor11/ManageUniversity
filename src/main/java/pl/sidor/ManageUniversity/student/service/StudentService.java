@@ -1,12 +1,7 @@
 package pl.sidor.ManageUniversity.student.service;
 
-import pl.sidor.ManageUniversity.dto.ScheduleDTO;
-import pl.sidor.ManageUniversity.request.FindScheduleRequest;
-import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.response.StudentResponse;
-
-import java.util.List;
 
 public interface StudentService {
 
@@ -20,8 +15,5 @@ public interface StudentService {
 
     StudentResponse delete(final Long id);
 
-    List<Schedule> findScheduleForStudent(final FindScheduleRequest request) throws Throwable;
-
-    List<ScheduleDTO> findSchedule(final FindScheduleRequest request) throws Throwable;
 }
 

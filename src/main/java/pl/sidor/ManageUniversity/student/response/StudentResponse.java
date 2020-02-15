@@ -1,15 +1,17 @@
 package pl.sidor.ManageUniversity.student.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import pl.sidor.ManageUniversity.exception.Error;
 import pl.sidor.ManageUniversity.header.Header;
 import pl.sidor.ManageUniversity.student.model.Student;
 
+import java.util.Optional;
 
-@Getter
-@Setter
+
 @Builder
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
 public class StudentResponse {
 
@@ -17,17 +19,15 @@ public class StudentResponse {
     private Student student;
     private Error error;
 
-    public static StudentResponse prepareStudentResponse(Student student) {
-        StudentResponse studentResponse = new StudentResponse();
-        studentResponse.setHeader(Header.getHeader());
-        studentResponse.setStudent(student);
-        return studentResponse;
+    public static StudentResponse prepareStudentResponse(Optional<Student> student, Error error) {
+        return student.isPresent() ? buildSuccessResponse(student) : buildErrorResponse(error);
     }
 
-    public static StudentResponse prepareStudentResponse(Error errors) {
-        StudentResponse studentResponse = new StudentResponse();
-        studentResponse.setHeader(Header.getHeader());
-        studentResponse.setError(errors);
-        return studentResponse;
+    private static StudentResponse buildErrorResponse(Error error) {
+        return StudentResponse.builder().header(Header.getInstance()).error(error).build();
+    }
+
+    private static StudentResponse buildSuccessResponse(Optional<Student> student) {
+        return StudentResponse.builder().header(Header.getInstance()).student(student.get()).build();
     }
 }
