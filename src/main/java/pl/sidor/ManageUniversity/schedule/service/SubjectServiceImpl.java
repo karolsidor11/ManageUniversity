@@ -46,7 +46,7 @@ public class SubjectServiceImpl implements SubjectService {
         SubjectResponse byId = getById(id);
         if (Objects.isNull(byId.getError())) {
             subjectRepo.deleteById(id);
-            return SubjectResponse.builder().header(Header.getHeader()).build();
+            return SubjectResponse.builder().header(Header.getInstance()).build();
         }
         return ResponseException.brakPrzedmiotu(id);
     }

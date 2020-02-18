@@ -66,8 +66,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public LecturerService lecturerService(LecturerRepo lecturerRepo, SubjectRepo subjectRepo, ScheduleRepo scheduleRepo) {
-        return new LecturerServiceImpl(lecturerRepo, subjectRepo, scheduleRepo);
+    public LecturerService lecturerService(LecturerRepo lecturerRepo) {
+        return new LecturerServiceImpl(lecturerRepo);
     }
 
     @Bean

@@ -2,10 +2,6 @@ package pl.sidor.ManageUniversity.lecturer.service;
 
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse;
-import pl.sidor.ManageUniversity.request.FindScheduleRequest;
-import pl.sidor.ManageUniversity.schedule.model.Schedule;
-
-import java.util.List;
 
 public interface LecturerService {
 
@@ -18,7 +14,4 @@ public interface LecturerService {
     LecturerResponse update(final Lecturer lecturer);
 
     LecturerResponse delete(final Long id);
-
-    List<Schedule> findScheduleForLecturer(final FindScheduleRequest request) throws Throwable;
-
 }

@@ -18,14 +18,14 @@ public class ScheduleResponse {
 
     public static ScheduleResponse prepareScheduleResponse(Schedule schedule){
         ScheduleResponse scheduleResponse= new ScheduleResponse();
-        scheduleResponse.setHeader(Header.getHeader());
+        scheduleResponse.setHeader(Header.getInstance());
         scheduleResponse.setSchedule(schedule);
         return scheduleResponse;
     }
 
     public static ScheduleResponse prepareScheduleResponse(Error error){
         ScheduleResponse scheduleResponse= new ScheduleResponse();
-        scheduleResponse.setHeader(Header.getHeader());
+        scheduleResponse.setHeader(Header.getInstance());
         scheduleResponse.setError(error);
         return scheduleResponse;
     }

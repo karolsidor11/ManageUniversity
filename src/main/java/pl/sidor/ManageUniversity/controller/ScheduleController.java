@@ -12,7 +12,6 @@ import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.response.ScheduleResponse;
 import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
-import pl.sidor.ManageUniversity.student.service.StudentService;
 
 import java.util.List;
 
@@ -24,7 +23,6 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final LecturerService lecturerServiceImpl;
-    private final StudentService studentServiceImpl;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponse> getScheduleByID(@PathVariable final Long id) {
@@ -63,13 +61,13 @@ public class ScheduleController {
 
     @GetMapping(value = "/lecturer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Schedule>> findScheduleForLecturer(@RequestBody FindScheduleRequest request) throws Throwable {
-        List<Schedule> scheduleForLecturer = lecturerServiceImpl.findScheduleForLecturer(request);
+        List<Schedule> scheduleForLecturer = scheduleService.findScheduleForLecturer(request);
         return new ResponseEntity<>(scheduleForLecturer, HttpStatus.OK);
     }
 
     @GetMapping(value = "/student", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Schedule>> findScheduleForStudent(@RequestBody FindScheduleRequest request) throws Throwable {
-        List<Schedule> scheduleForStudent = studentServiceImpl.findScheduleForStudent(request);
+        List<Schedule> scheduleForStudent = scheduleService.findScheduleForStudent(request);
         return new ResponseEntity<>(scheduleForStudent, HttpStatus.OK);
     }
 }

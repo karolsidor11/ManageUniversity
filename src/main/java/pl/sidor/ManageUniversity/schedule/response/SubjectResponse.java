@@ -18,14 +18,14 @@ public class SubjectResponse {
 
     public static SubjectResponse prepareSubjectResponse(Subject subject) {
         SubjectResponse subjectResponse = new SubjectResponse();
-        subjectResponse.setHeader(Header.getHeader());
+        subjectResponse.setHeader(Header.getInstance());
         subjectResponse.setSubject(subject);
         return subjectResponse;
     }
 
     public static SubjectResponse prepareSubjectResponse(Error errors) {
         SubjectResponse subjectResponse = new SubjectResponse();
-        subjectResponse.setHeader(Header.getHeader());
+        subjectResponse.setHeader(Header.getInstance());
         subjectResponse.setError(errors);
         return subjectResponse;
     }

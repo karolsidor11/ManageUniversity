@@ -1,5 +1,7 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
+import pl.sidor.ManageUniversity.dto.ScheduleDTO;
+import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
@@ -21,7 +23,13 @@ public interface ScheduleService {
 
     ScheduleResponse updateSchedule(final Schedule schedule);
 
+    ScheduleResponse modifySchedule(final ScheduleUpdate scheduleUpdate);
+
+    List<ScheduleDTO> findSchedule(final FindScheduleRequest request) throws Throwable;
+
     List<Schedule> findByStudentGroupAndWeekNumber(final Double studentGroup, final Integer weekNumber);
 
-    ScheduleResponse modifySchedule(final ScheduleUpdate scheduleUpdate);
+    List<Schedule> findScheduleForLecturer(final FindScheduleRequest request) throws Throwable;
+
+    List<Schedule> findScheduleForStudent(final FindScheduleRequest request) throws Throwable;
 }

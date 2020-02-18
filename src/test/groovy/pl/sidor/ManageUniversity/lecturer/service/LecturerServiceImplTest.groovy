@@ -1,23 +1,15 @@
 package pl.sidor.ManageUniversity.lecturer.service
 
-
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse
 import pl.sidor.ManageUniversity.lecturer.utils.LecturerUtils
-import pl.sidor.ManageUniversity.schedule.model.Schedule
-import pl.sidor.ManageUniversity.schedule.model.Subject
-import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
-import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
 import spock.lang.Specification
 
 class LecturerServiceImplTest extends Specification {
 
     private LecturerRepo lecturerRepo = Mock(LecturerRepo.class)
-    private SubjectRepo subjectRepo = Mock(SubjectRepo.class)
-    private ScheduleRepo scheduleRepo = Mock(ScheduleRepo.class)
-
-    private LecturerServiceImpl lecturerService = [lecturerRepo, subjectRepo, scheduleRepo]
+    private LecturerServiceImpl lecturerService = [lecturerRepo]
 
     def "should find lecturer by Id"() {
         given:
@@ -103,33 +95,17 @@ class LecturerServiceImplTest extends Specification {
 
         when:
         lecturerRepo.findById(1) >> Optional.ofNullable(lecturer)
-        Lecturer actualLectruer = lecturerService.findById(1).getLecturer()
+        lecturerRepo.save(_ as Lecturer)>>lecturer
+        Lecturer actualLecturer = lecturerService.findById(1).getLecturer()
 
-        actualLectruer.setName("Marek")
-        actualLectruer.setLastName("Nowak")
-        actualLectruer.setEmail("nowak12@wp.pl")
+        actualLecturer.setName("Marek")
+        actualLecturer.setLastName("Nowak")
+        actualLecturer.setEmail("nowak12@wp.pl")
 
-        lecturerService.update(actualLectruer)
-
-        then:
-        actualLectruer.name == "Marek"
-        actualLectruer.lastName == "Nowak"
-    }
-
-    def "test should find schedule for Lecturer"() {
-        given:
-        Lecturer lecturer = LecturerUtils.getLecturer()
-        Subject subject = LecturerUtils.getSubject()
-        Schedule schedule = LecturerUtils.getSchedule()
-
-        when:
-        lecturerRepo.findByNameAndLastName("Jan", "Nowak") >> Optional.of(lecturer)
-        subjectRepo.findByLecturer(lecturer) >> Optional.of(subject)
-        scheduleRepo.findBySubjects(subject) >> Arrays.asList(schedule)
-        List<Schedule> actualList = lecturerService.findScheduleForLecturer(LecturerUtils.getRequest())
+        lecturerService.update(actualLecturer)
 
         then:
-        actualList != null
-        actualList.get(0).weekNumber == 12
+        actualLecturer.name == "Marek"
+        actualLecturer.lastName == "Nowak"
     }
 }

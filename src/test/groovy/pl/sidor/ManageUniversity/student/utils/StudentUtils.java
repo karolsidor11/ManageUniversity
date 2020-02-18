@@ -31,6 +31,9 @@ public class StudentUtils {
                 .id(1L)
                 .name("Jan")
                 .lastName("Nowak")
+                .email("nowak@wp.pl")
+                .phoneNumber(500600300)
+                .isStudent(true)
                 .build();
     }
 

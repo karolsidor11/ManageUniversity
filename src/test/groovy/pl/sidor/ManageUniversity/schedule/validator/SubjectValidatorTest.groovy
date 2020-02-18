@@ -16,7 +16,7 @@ class SubjectValidatorTest extends Specification {
         Subject subject = getSubject()
 
         when:
-        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Optional.empty()
+        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Collections.emptyList()
         boolean result = subjectValidator.test(subject)
 
         then:
@@ -28,7 +28,7 @@ class SubjectValidatorTest extends Specification {
         Subject subject = getSubject()
 
         when:
-        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Optional.of(subject)
+        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Arrays.asList(subject)
         boolean result = subjectValidator.test(subject)
 
         then:

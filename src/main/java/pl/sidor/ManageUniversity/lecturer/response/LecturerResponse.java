@@ -5,8 +5,9 @@ import pl.sidor.ManageUniversity.exception.Error;
 import pl.sidor.ManageUniversity.header.Header;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 
+import java.util.Optional;
+
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,17 +17,15 @@ public class LecturerResponse {
     private Lecturer lecturer;
     private Error error;
 
-    public static LecturerResponse prepareLecturerResponse(Lecturer lecturer) {
-        LecturerResponse lecturerResponse = new LecturerResponse();
-        lecturerResponse.setHeader(Header.getHeader());
-        lecturerResponse.setLecturer(lecturer);
-        return lecturerResponse;
+    public static LecturerResponse prepareLecturerResponse(Optional<Lecturer> lecturer, Error errors) {
+        return lecturer.isPresent() ? buildSuccessResponse(lecturer):buildErrorResponse(errors);
     }
 
-    public static LecturerResponse prepareLecturerResponse(Error errors) {
-        LecturerResponse lecturerResponse = new LecturerResponse();
-        lecturerResponse.setHeader(Header.getHeader());
-        lecturerResponse.setError(errors);
-        return lecturerResponse;
+    private static LecturerResponse buildSuccessResponse(Optional<Lecturer> lecturer) {
+        return LecturerResponse.builder().header(Header.getInstance()).lecturer(lecturer.get()).build();
+    }
+
+    private static LecturerResponse buildErrorResponse(Error errors) {
+        return LecturerResponse.builder().header(Header.getInstance()).error(errors).build();
     }
 }
