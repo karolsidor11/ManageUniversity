@@ -1,7 +1,6 @@
 package pl.sidor.ManageUniversity.schedule.service
 
 
-import pl.sidor.ManageUniversity.lecturer.model.Lecturer
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
@@ -63,7 +62,8 @@ class SubjectServiceImplTest extends Specification {
         Subject subject = SubejctUtils.getAllSubject()
 
         when:
-        subjectValidator.test(subject) >> false
+        subjectRepo.findByStartTimeAndEndTime(_, _) >> false
+        subjectRepo.save(_) >> subject
         SubjectResponse subjectResponse = service.save(subject)
 
         then:

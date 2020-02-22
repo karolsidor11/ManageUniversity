@@ -12,6 +12,8 @@ public class SubejctUtils {
                 .id(1L)
                 .name("Polski")
                 .lecturer(getLecturer())
+                .startTime(LocalTime.of(13, 00))
+                .endTime(LocalTime.of(15, 00))
                 .build();
     }
 
