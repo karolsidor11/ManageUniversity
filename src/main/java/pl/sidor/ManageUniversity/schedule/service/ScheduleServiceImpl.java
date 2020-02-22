@@ -43,65 +43,61 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleValidator scheduleValidator;
 
     @Override
-    public ScheduleResponse create(final Schedule schedule)  {
+    public ScheduleResponse create(final Schedule schedule) {
         boolean isScheduleExists = scheduleValidator.test(schedule.getDayOfWeek());
-        if(isScheduleExists){
-            return ResponseException.istniejeRozklad();
+        if (isScheduleExists) {
+            return ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.pustyObiekt());
         }
         Schedule savedSchedule = scheduleRepo.save(schedule);
-        return ScheduleResponse.prepareScheduleResponse(savedSchedule);
+        return ScheduleResponse.prepareResponse(Optional.of(savedSchedule), ResponseException.pustyObiekt());
     }
 
     @Override
-    public ScheduleResponse getScheduleById(final Long id)  {
+    public ScheduleResponse getScheduleById(final Long id) {
         Optional<Schedule> scheduleByID = scheduleRepo.findById(id);
-        if(scheduleByID.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (scheduleByID.isEmpty()) {
+            return ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
         }
-        return ScheduleResponse.prepareScheduleResponse(scheduleByID.get());
+        return ScheduleResponse.prepareResponse(scheduleByID, ResponseException.pustyObiekt());
     }
 
     @Override
-    public ScheduleResponse findByDay(final Days day)  {
+    public ScheduleResponse findByDay(final Days day) {
         Optional<Schedule> byDayOfWeek = scheduleRepo.findByDayOfWeek(day);
-        if(byDayOfWeek.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (byDayOfWeek.isEmpty()) {
+            return  ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
         }
-        return ScheduleResponse.prepareScheduleResponse(byDayOfWeek.get());
+        return ScheduleResponse.prepareResponse(byDayOfWeek, ResponseException.pustyObiekt());
     }
 
     @Override
-    public ScheduleResponse deleteByID(final Long id){
+    public ScheduleResponse deleteByID(final Long id) {
         ScheduleResponse scheduleById = getScheduleById(id);
-        if(Objects.nonNull(scheduleById.getError())){
-            return scheduleById;
+        if (Objects.nonNull(scheduleById.getError())) {
+            return ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.pustyObiekt());
         }
-         scheduleRepo.deleteById(id);
-        return ScheduleResponse.builder()
-                .header(Header.getInstance())
-                .build();
+        scheduleRepo.deleteById(id);
+        return ScheduleResponse.builder().header(Header.getInstance()).build();
     }
 
     @Override
-    public ScheduleResponse deleteByDay(final Days day)  {
+    public ScheduleResponse deleteByDay(final Days day) {
         Optional<Schedule> byDayOfWeek = scheduleRepo.findByDayOfWeek(day);
-        if(byDayOfWeek.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (byDayOfWeek.isEmpty()) {
+            return ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.pustyObiekt());
         }
         scheduleRepo.deleteByDayOfWeek(day);
-        return ScheduleResponse.builder()
-                .header(Header.getInstance())
-                .build();
+        return ScheduleResponse.builder().header(Header.getInstance()).build();
     }
 
     @Override
     public ScheduleResponse updateSchedule(Schedule schedule) {
         Optional<Schedule> byDayOfWeek = scheduleRepo.findByDayOfWeek(schedule.getDayOfWeek());
-        if(byDayOfWeek.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (byDayOfWeek.isEmpty()) {
+            return ScheduleResponse.prepareResponse(byDayOfWeek, ResponseException.brakRozkladu());
         }
         Schedule updateSchedule = getUpdateSchedule(schedule, byDayOfWeek.get());
-        return ScheduleResponse.prepareScheduleResponse(updateSchedule);
+        return ScheduleResponse.prepareResponse(Optional.of(updateSchedule), ResponseException.pustyObiekt());
     }
 
     @Override
@@ -112,21 +108,21 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponse modifySchedule(final ScheduleUpdate scheduleUpdate) {
         Optional<Schedule> optionalSchedule = validateSchedule(scheduleUpdate);
-        if(optionalSchedule.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (optionalSchedule.isEmpty()) {
+            return  ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
         }
         Schedule schedule = optionalSchedule.get();
         Optional<Subject> subject = modifySubject(schedule, scheduleUpdate);
 
-        if(subject.isEmpty()){
-            return ResponseException.brakRozkladu();
+        if (subject.isEmpty()) {
+            return  ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
         }
 
         schedule.getSubjects().remove(subject.get());
         schedule.setSubjects(newArrayList(singletonList(scheduleUpdate.getSubjects())));
         scheduleRepo.save(schedule);
 
-        return ScheduleResponse.prepareScheduleResponse(schedule);
+        return ScheduleResponse.prepareResponse(Optional.of(schedule), ResponseException.pustyObiekt());
     }
 
     @Override
@@ -168,19 +164,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         return schedules;
     }
 
-    private Optional<Schedule> validateSchedule(ScheduleUpdate scheduleUpdate){
+    private Optional<Schedule> validateSchedule(ScheduleUpdate scheduleUpdate) {
         Days days = ofNullable(scheduleUpdate.getDayOfWeek()).orElseGet(() -> null);
         Integer weekNumber = of(scheduleUpdate.getWeekNumber()).orElseGet(() -> null);
         return scheduleRepo.findByDayOfWeekAndWeekNumber(days, weekNumber);
     }
 
-    private Optional <Subject> modifySubject(Schedule schedule, ScheduleUpdate scheduleUpdate){
-        if(schedule.getSubjects().isEmpty()){
+    private Optional<Subject> modifySubject(Schedule schedule, ScheduleUpdate scheduleUpdate) {
+        if (schedule.getSubjects().isEmpty()) {
             return Optional.empty();
         }
-        return schedule.getSubjects().stream()
-                .filter(subject -> subject.getName().equals(scheduleUpdate.getSubjects().getName()))
-                .findFirst();
+        return schedule.getSubjects().stream().filter(subject -> subject.getName().equals(scheduleUpdate.getSubjects().getName())).findFirst();
     }
 
     private Schedule getUpdateSchedule(Schedule schedule, Schedule builder) {

@@ -3,6 +3,7 @@ package pl.sidor.ManageUniversity.schedule.validator
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
+import pl.sidor.ManageUniversity.schedule.utils.ScheduleUtils
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -15,7 +16,7 @@ class ScheduleValidatorTest extends Specification {
     def "should return #expectResult when #dane"() {
         given:
         Days days = Days.Poniedzialek
-        scheduleRepo.findByDayOfWeek(Days.Poniedzialek) >> getSchedule(days)
+        scheduleRepo.findByDayOfWeek(Days.Poniedzialek) >> ScheduleUtils.getSchedule(days)
         scheduleRepo.findByDayOfWeek(_ as Days) >> Optional.empty()
 
         expect:
@@ -30,10 +31,5 @@ class ScheduleValidatorTest extends Specification {
         Days.Piatek       || false
     }
 
-    private static Optional<Schedule> getSchedule(Days days) {
-        return Optional.of(Schedule.builder()
-                .id(1)
-                .dayOfWeek(days)
-                .build())
-    }
+
 }

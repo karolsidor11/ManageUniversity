@@ -8,6 +8,7 @@ import pl.sidor.ManageUniversity.schedule.model.Subject;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ScheduleUtils {
 
@@ -38,5 +39,12 @@ public class ScheduleUtils {
                 .weekNumber(12)
                 .subjects(subjectList)
                 .build();
+    }
+
+    public static Optional<Schedule> getSchedule(Days days) {
+        return Optional.of(Schedule.builder()
+                .id(1L)
+                .dayOfWeek(days)
+                .build());
     }
 }

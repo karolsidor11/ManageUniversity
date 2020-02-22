@@ -2,7 +2,6 @@ package pl.sidor.ManageUniversity.exception;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import pl.sidor.ManageUniversity.schedule.response.ScheduleResponse;
 import pl.sidor.ManageUniversity.student.model.Student;
 
 @Slf4j
@@ -49,13 +48,13 @@ public class ResponseException {
                 ExceptionFactory.objectIsEmpty("Brak  przedmiotów  dla wykładowcy.").getMessage());
     }
 
-    public static ScheduleResponse brakRozkladu(){
-        return ScheduleResponse.prepareScheduleResponse(Error.createError(MessageException.OBJECT_IS_EMPTY,
-                ExceptionFactory.objectIsEmpty("Brak rozkładu").getMessage()));
+    public static Error brakRozkladu(){
+        return Error.createError(MessageException.OBJECT_IS_EMPTY,
+                ExceptionFactory.objectIsEmpty("Brak rozkładu").getMessage());
     }
 
-    public static ScheduleResponse istniejeRozklad(){
-        return ScheduleResponse.prepareScheduleResponse(Error.createError(MessageException.OBJECT_IS_EMPTY,
-                ExceptionFactory.objectIsEmpty("W bazie  istnieje rozkład.").getMessage()));
+    public static Error istniejeRozklad(){
+        return Error.createError(MessageException.OBJECT_IS_EMPTY,
+                ExceptionFactory.objectIsEmpty("W bazie  istnieje rozkład.").getMessage());
     }
 }

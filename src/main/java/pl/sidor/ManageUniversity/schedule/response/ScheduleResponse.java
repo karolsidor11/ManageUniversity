@@ -5,6 +5,8 @@ import pl.sidor.ManageUniversity.exception.Error;
 import pl.sidor.ManageUniversity.header.Header;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @Builder
@@ -16,17 +18,15 @@ public class ScheduleResponse {
     private Schedule schedule;
     private Error error;
 
-    public static ScheduleResponse prepareScheduleResponse(Schedule schedule){
-        ScheduleResponse scheduleResponse= new ScheduleResponse();
-        scheduleResponse.setHeader(Header.getInstance());
-        scheduleResponse.setSchedule(schedule);
-        return scheduleResponse;
+    public static ScheduleResponse prepareResponse(Optional<Schedule> schedule, Error error) {
+        return schedule.isPresent() ? buildSuccessResponse(schedule.get()) : buildErrorResponse(error);
     }
 
-    public static ScheduleResponse prepareScheduleResponse(Error error){
-        ScheduleResponse scheduleResponse= new ScheduleResponse();
-        scheduleResponse.setHeader(Header.getInstance());
-        scheduleResponse.setError(error);
-        return scheduleResponse;
+    private static ScheduleResponse buildSuccessResponse(Schedule schedule) {
+        return ScheduleResponse.builder().header(Header.getInstance()).schedule(schedule).build();
+    }
+
+    private static ScheduleResponse buildErrorResponse(Error error) {
+        return ScheduleResponse.builder().header(Header.getInstance()).error(error).build();
     }
 }
