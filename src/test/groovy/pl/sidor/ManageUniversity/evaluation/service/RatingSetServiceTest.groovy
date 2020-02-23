@@ -1,10 +1,9 @@
-package pl.sidor.ManageUniversity.evaluation
+package pl.sidor.ManageUniversity.evaluation.service
 
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet
 import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetServiceImpl
 import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo
-import pl.sidor.ManageUniversity.exception.UniversityException
-import pl.sidor.ManageUniversity.schedule.model.Subject
+import pl.sidor.ManageUniversity.evaluation.utils.RatingSetUtils
 import spock.lang.Specification
 
 class RatingSetServiceTest extends Specification {
@@ -17,12 +16,12 @@ class RatingSetServiceTest extends Specification {
         Long id = 1
 
         when:
-        ratingRepo.findById(id) >> Optional.of(getRatingSet())
+        ratingRepo.findById(id) >> Optional.of(RatingSetUtils.getRatingSet())
         def result = service.findById(id)
 
         then:
         result != null
-        result.id == 1
+        result.ratingSet.id == 1
     }
 
     def "should throw exception when find by ID"() {
@@ -31,10 +30,10 @@ class RatingSetServiceTest extends Specification {
 
         when:
         ratingRepo.findById(id) >> Optional.empty()
-        service.findById(id)
+        def result = service.findById(id)
 
         then:
-        thrown(UniversityException)
+        result.error != null
     }
 
     def "should delete by ID"() {
@@ -42,7 +41,7 @@ class RatingSetServiceTest extends Specification {
         Long id = 1
 
         when:
-        ratingRepo.findById(id) >> Optional.of(getRatingSet())
+        ratingRepo.findById(id) >> Optional.of(RatingSetUtils.getRatingSet())
         ratingRepo.deleteById(id)
         def result = service.delete(id)
 
@@ -57,16 +56,15 @@ class RatingSetServiceTest extends Specification {
         ratingRepo.deleteById(id)
 
         when:
-        service.delete(id)
+        def result = service.delete(id)
 
         then:
-        UniversityException exception = thrown()
-        exception.message == "W_BAZIE_BRAK_ZESTAW_OCEN:" + id
+        result.error != null
     }
 
     def " should create RatingSet"() {
         given:
-        RatingSet ratingSet = getRatingSet()
+        RatingSet ratingSet = RatingSetUtils.getRatingSet()
 
         when:
         ratingRepo.save(ratingSet) >> ratingSet
@@ -74,8 +72,8 @@ class RatingSetServiceTest extends Specification {
 
         then:
         result != null
-        result.id == ratingSet.id
-        result == ratingSet
+        result.ratingSet.id == ratingSet.id
+        result.ratingSet.equals(ratingSet)
     }
 
     def "should throw exception when RatingSet is Empty"() {
@@ -83,16 +81,16 @@ class RatingSetServiceTest extends Specification {
         RatingSet ratingSet = null
         when:
         ratingRepo.save(ratingSet) >> ratingSet
-        service.create(ratingSet)
+        def result = service.create(ratingSet)
 
         then:
-        thrown(UniversityException)
+        result.error != null
     }
 
     def "should update RatingSet"() {
         given:
-        RatingSet actual = getRatingSet()
-        RatingSet update = getModifyRatingSet()
+        RatingSet actual = RatingSetUtils.getRatingSet()
+        RatingSet update = RatingSetUtils.getModifyRatingSet()
 
         when:
         ratingRepo.findById(1) >> Optional.of(actual)
@@ -100,23 +98,6 @@ class RatingSetServiceTest extends Specification {
         def result = service.update(update)
 
         then:
-        result == update
-    }
-
-    private static RatingSet getModifyRatingSet() {
-        RatingSet.builder().id(1)
-                .subject(Subject.builder()
-                        .name("Chemia")
-                        .build())
-                .build()
-    }
-
-    private static RatingSet getRatingSet() {
-        RatingSet.builder()
-                .id(1)
-                .subject(Subject.builder()
-                        .name("Matematyka")
-                        .build())
-                .build()
+        result.ratingSet == update
     }
 }
