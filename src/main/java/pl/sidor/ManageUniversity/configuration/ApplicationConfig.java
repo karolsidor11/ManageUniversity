@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo;
-import pl.sidor.ManageUniversity.evaluation.repository.StudentCardRepo;
-import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetService;
-import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetServiceImpl;
 import pl.sidor.ManageUniversity.evaluation.ratingcard.StudentRatingsCardService;
 import pl.sidor.ManageUniversity.evaluation.ratingcard.StudentRatingsCardServiceImpl;
+import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetService;
+import pl.sidor.ManageUniversity.evaluation.ratingset.RatingSetServiceImpl;
+import pl.sidor.ManageUniversity.evaluation.repository.RatingRepo;
+import pl.sidor.ManageUniversity.evaluation.repository.StudentCardRepo;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerServiceImpl;
@@ -61,13 +61,13 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public StudentService studentService(StudentRepo studentRepo, CheckUniqeStudentPredicate checkUniqeStudentPredicate, ScheduleRepo scheduleRepo) {
-        return new StudentServiceImpl(studentRepo, checkUniqeStudentPredicate, scheduleRepo);
+    public StudentService studentService(StudentRepo studentRepo, CheckUniqeStudentPredicate checkUniqeStudentPredicate) {
+        return new StudentServiceImpl(studentRepo, checkUniqeStudentPredicate);
     }
 
     @Bean
-    public LecturerService lecturerService(LecturerRepo lecturerRepo, SubjectRepo subjectRepo, ScheduleRepo scheduleRepo) {
-        return new LecturerServiceImpl(lecturerRepo, subjectRepo, scheduleRepo);
+    public LecturerService lecturerService(LecturerRepo lecturerRepo) {
+        return new LecturerServiceImpl(lecturerRepo);
     }
 
     @Bean
@@ -96,8 +96,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public ScheduleService scheduleService(ScheduleRepo scheduleRepo, ScheduleValidator scheduleValidator) {
-        return new ScheduleServiceImpl(scheduleRepo, scheduleValidator);
+    public ScheduleService scheduleService(ScheduleRepo scheduleRepo, StudentService studentService, LecturerRepo lecturerRepo, SubjectRepo subjectRepo, ScheduleValidator scheduleValidator) {
+        return new ScheduleServiceImpl(scheduleRepo, lecturerRepo, subjectRepo, studentService, scheduleValidator);
     }
 
     @Bean

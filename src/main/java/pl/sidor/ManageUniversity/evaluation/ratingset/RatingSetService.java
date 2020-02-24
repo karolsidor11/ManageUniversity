@@ -1,14 +1,15 @@
 package pl.sidor.ManageUniversity.evaluation.ratingset;
 
 import pl.sidor.ManageUniversity.evaluation.model.RatingSet;
+import pl.sidor.ManageUniversity.evaluation.response.RatingSetResponse;
 
 public interface RatingSetService {
 
-    RatingSet findById(final Long id) throws Throwable;
+    RatingSetResponse findById(final Long id);
 
-    RatingSet create(final RatingSet ratingSet) throws Throwable;
+    RatingSetResponse create(final RatingSet ratingSet);
 
-    RatingSet update(final RatingSet ratingSet) throws Throwable;
+    RatingSetResponse update(final RatingSet ratingSet);
 
-    boolean delete(final Long id) throws Throwable;
+    RatingSetResponse delete(final Long id);
 }

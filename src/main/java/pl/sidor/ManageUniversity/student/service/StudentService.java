@@ -1,26 +1,19 @@
 package pl.sidor.ManageUniversity.student.service;
 
-import pl.sidor.ManageUniversity.dto.ScheduleDTO;
-import pl.sidor.ManageUniversity.request.FindScheduleRequest;
-import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.student.model.Student;
-
-import java.util.List;
+import pl.sidor.ManageUniversity.student.response.StudentResponse;
 
 public interface StudentService {
 
-    Student findById(final Long id) throws Throwable;
+    StudentResponse findById(final Long id);
 
-    Student findByNameAndLastName(final String name, final String lastName) throws Throwable;
+    StudentResponse findByNameAndLastName(final String name, final String lastName);
 
-    Student create(final Student student) throws Throwable;
+    StudentResponse create(final Student student);
 
-    void update(final Student student) throws Throwable;
+    StudentResponse update(final Student student);
 
-    void delete(final Long id) throws Throwable;
+    StudentResponse delete(final Long id);
 
-    List<Schedule> findScheduleForStudent(final FindScheduleRequest request) throws Throwable;
-
-    List<ScheduleDTO> findSchedule(final FindScheduleRequest request) throws Throwable;
 }
 

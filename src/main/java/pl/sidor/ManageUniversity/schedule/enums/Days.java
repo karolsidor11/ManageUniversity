@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum Days {
     Poniedzialek ("Poniedziałek"),
     Wtorek("Wtorek"),
-    Sroda("Środa"),
+    Sroda("Sroda"),
     Czwartek("Czwartek"),
     Piatek("Piątek");
 

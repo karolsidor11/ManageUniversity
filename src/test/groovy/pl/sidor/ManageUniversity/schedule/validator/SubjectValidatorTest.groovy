@@ -2,6 +2,7 @@ package pl.sidor.ManageUniversity.schedule.validator
 
 import pl.sidor.ManageUniversity.schedule.model.Subject
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
+import pl.sidor.ManageUniversity.schedule.utils.SubejctUtils
 import spock.lang.Specification
 
 import java.time.LocalTime
@@ -13,10 +14,10 @@ class SubjectValidatorTest extends Specification {
 
     def "should true if timeStart is good"() {
         given:
-        Subject subject = getSubject()
+        Subject subject = SubejctUtils.getSubject()
 
         when:
-        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Optional.empty()
+        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Collections.emptyList()
         boolean result = subjectValidator.test(subject)
 
         then:
@@ -25,22 +26,13 @@ class SubjectValidatorTest extends Specification {
 
     def "should false when timeStart is bad"() {
         given:
-        Subject subject = getSubject()
+        Subject subject = SubejctUtils.getSubject()
 
         when:
-        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Optional.of(subject)
+        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> Arrays.asList(subject)
         boolean result = subjectValidator.test(subject)
 
         then:
         !result
-    }
-
-    private static Subject getSubject() {
-        return Subject.builder()
-                .id(1)
-                .name("Polski")
-                .startTime(LocalTime.of(13, 00))
-                .endTime(LocalTime.of(15, 00))
-                .build()
     }
 }

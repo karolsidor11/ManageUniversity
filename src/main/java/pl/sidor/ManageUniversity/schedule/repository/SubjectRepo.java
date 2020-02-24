@@ -6,12 +6,13 @@ import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface SubjectRepo extends CrudRepository<Subject, Long> {
 
-    Optional<Subject> findByStartTimeAndEndTime(final LocalTime start, final LocalTime end);
+    List<Subject> findByStartTimeAndEndTime(final LocalTime start, final LocalTime end);
 
     Optional<Subject> findByLecturer(final Lecturer lecturer);
 }

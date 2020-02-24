@@ -4,15 +4,16 @@ import lombok.*;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import static javax.persistence.CascadeType.*;
 
 @Entity
-@Data
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Schedule  implements Serializable{
@@ -32,9 +33,22 @@ public class Schedule  implements Serializable{
 
     private int weekNumber;
 
-    @OneToMany(cascade= PERSIST)
+    @OneToMany(cascade= ALL)
     @JoinTable(name = "schedule_2_subject",
             joinColumns = @JoinColumn(name = "schedule_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private List<Subject> subjects ;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Schedule schedule = (Schedule) o;
+        return Double.compare(schedule.studentGroup, studentGroup) == 0 && weekNumber == schedule.weekNumber && dayOfWeek == schedule.dayOfWeek && Objects.equals(subjects, schedule.subjects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dayOfWeek, studentGroup, weekNumber, subjects);
+    }
 }

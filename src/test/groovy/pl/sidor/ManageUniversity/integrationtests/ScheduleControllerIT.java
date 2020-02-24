@@ -2,6 +2,7 @@ package pl.sidor.ManageUniversity.integrationtests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class ScheduleControllerIT {
         // when:
         mockMvc.perform(get("/schedules/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dayOfWeek", Matchers.is("Poniedzialek")))
+                .andExpect(jsonPath("$.schedule.dayOfWeek", Matchers.is("Poniedzialek")))
                 .andReturn();
 
         //then:
@@ -70,7 +71,7 @@ public class ScheduleControllerIT {
         //when:
          mockMvc.perform(get("/schedules/day/Poniedzialek"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.dayOfWeek", Matchers.is("Poniedzialek")))
+                .andExpect(jsonPath("$.schedule.dayOfWeek", Matchers.is("Poniedzialek")))
                 .andReturn();
     }
 
@@ -80,14 +81,14 @@ public class ScheduleControllerIT {
         //given:
         Schedule schedule = prepareSchedule();
 
-        when(scheduleValidator.test(Days.Poniedzialek)).thenReturn(true);
+        when(scheduleValidator.test(Days.Poniedzialek)).thenReturn(false);
         when(scheduleRepo.save(schedule)).thenReturn(schedule);
 
         // when:
         mockMvc.perform(post("/schedules").content(objectMapper.writeValueAsString(schedule))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated()).andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.dayOfWeek", Matchers.is("Poniedzialek")))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.schedule.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.schedule.dayOfWeek", Matchers.is("Poniedzialek")))
                 .andReturn();
     }
 
@@ -141,11 +142,12 @@ public class ScheduleControllerIT {
         //when:
         mockMvc.perform(put("/schedules").content(objectMapper.writeValueAsString(updateSchedule))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated()).andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.dayOfWeek", Matchers.is("Poniedzialek")))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.schedule.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.schedule.dayOfWeek", Matchers.is("Poniedzialek")))
                 .andReturn();
     }
 
+    @Ignore
     @Test
     public void test_should_modify_schedule() throws Exception {
 
@@ -173,7 +175,7 @@ public class ScheduleControllerIT {
         //  expect
         mockMvc.perform(patch("/schedules").content(objectMapper.writeValueAsString(scheduleUpdate))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isAccepted())
                 .andReturn();
     }
 }

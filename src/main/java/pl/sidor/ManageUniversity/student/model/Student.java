@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -54,4 +55,17 @@ public class Student implements Serializable {
     @OneToOne
     @JoinColumn()
     private StudentRatingsCard studentRatingsCard;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student student = (Student) o;
+        return isStudent == student.isStudent && Objects.equals(name, student.name) && Objects.equals(lastName, student.lastName) && Objects.equals(dateOfBirth, student.dateOfBirth) && Objects.equals(email, student.email) && Objects.equals(adres, student.adres) && Objects.equals(phoneNumber, student.phoneNumber) && Objects.equals(studentGroup, student.studentGroup) && Objects.equals(studentRatingsCard, student.studentRatingsCard);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lastName, dateOfBirth, email, adres, phoneNumber, isStudent, studentGroup, studentRatingsCard);
+    }
 }

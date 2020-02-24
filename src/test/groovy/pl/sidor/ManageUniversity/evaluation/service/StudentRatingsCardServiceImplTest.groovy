@@ -1,12 +1,10 @@
-package pl.sidor.ManageUniversity.evaluation
+package pl.sidor.ManageUniversity.evaluation.service
 
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard
 import pl.sidor.ManageUniversity.evaluation.ratingcard.StudentRatingsCardServiceImpl
 import pl.sidor.ManageUniversity.evaluation.repository.StudentCardRepo
-import pl.sidor.ManageUniversity.exception.UniversityException
-import pl.sidor.ManageUniversity.student.model.Student
+import pl.sidor.ManageUniversity.evaluation.utils.StudentRatingsCardUtils
 import pl.sidor.ManageUniversity.student.repository.StudentRepo
-import pl.sidor.ManageUniversity.utils.TestStudentData
 import spock.lang.Specification
 
 class StudentRatingsCardServiceImplTest extends Specification {
@@ -21,13 +19,13 @@ class StudentRatingsCardServiceImplTest extends Specification {
         Long id = 1L
 
         when:
-        studentCardRepo.findById(id) >> Optional.of(getStudentRatingCard())
-        StudentRatingsCard studentRatingsCard = service.findByID(id)
+        studentCardRepo.findById(id) >> Optional.of(StudentRatingsCardUtils.getStudentRatingCard())
+        def response = service.findByID(id)
 
         then:
-        studentRatingsCard != null
-        studentRatingsCard.id == 1L
-        studentRatingsCard.groups == 2.2
+        response != null
+        response.ratingSet.id == 1L
+        response.ratingSet.groups == 2.2
     }
 
     def "should  throw University Exception"() {
@@ -36,10 +34,10 @@ class StudentRatingsCardServiceImplTest extends Specification {
 
         when:
         studentCardRepo.findById(id) >> Optional.empty()
-        service.findByID(id)
+        def response = service.findByID(id)
 
         then:
-        thrown(UniversityException.class)
+        response.error != null
     }
 
     def "should delete StudentRatingCard by ID"() {
@@ -47,12 +45,13 @@ class StudentRatingsCardServiceImplTest extends Specification {
         Long id = 1L
 
         when:
-        studentCardRepo.findById(id) >> Optional.of(getStudentRatingCard())
+        studentCardRepo.findById(id) >> Optional.of(StudentRatingsCardUtils.getStudentRatingCard())
         studentCardRepo.deleteById(id) >> {}
-        service.deleteCard(id)
+        def response = service.deleteCard(id)
 
         then:
-        1 * studentCardRepo.deleteById(id)
+        response.error == null
+        noExceptionThrown()
     }
 
     def "should throw University Exception"() {
@@ -74,12 +73,12 @@ class StudentRatingsCardServiceImplTest extends Specification {
         String lastName = "Sidor"
 
         when:
-        studentRepo.findByNameAndLastName(name, lastName) >> Optional.of(getStudentByNameAndLastName())
-        studentCardRepo.findByStudent(getStudentByNameAndLastName().id) >> getStudentRatingCard()
-        StudentRatingsCard studentRatingsCard = service.findByStudent(name, lastName)
+        studentRepo.findByNameAndLastName(name, lastName) >> Optional.of(StudentRatingsCardUtils.getStudentByNameAndLastName())
+        studentCardRepo.findByStudent(StudentRatingsCardUtils.getStudentByNameAndLastName().id) >> Optional.of(StudentRatingsCardUtils.getStudentRatingCard())
+        def response = service.findByStudent(name, lastName)
 
         then:
-        studentRatingsCard != null
+        response.ratingSet != null
     }
 
     def "should throw University Exception if try find StudentRatingCard"() {
@@ -89,19 +88,19 @@ class StudentRatingsCardServiceImplTest extends Specification {
 
         when:
         studentRepo.findByNameAndLastName(name, lastName) >> Optional.empty()
-        service.findByStudent(name, lastName)
+        def response = service.findByStudent(name, lastName)
 
         then:
-        thrown(UniversityException.class)
+        response.ratingSet == null
     }
 
     def "should create StudentRatingCard"() {
         given:
-        StudentRatingsCard studentRatingsCard = getStudentRatingCard()
+        StudentRatingsCard studentRatingsCard = StudentRatingsCardUtils.getStudentRatingCard()
 
         when:
         studentCardRepo.save(studentRatingsCard) >> studentRatingsCard
-        StudentRatingsCard savedStudentRatingCard = service.createCard(studentRatingsCard)
+        StudentRatingsCard savedStudentRatingCard = service.createCard(studentRatingsCard).ratingSet
 
         then:
         savedStudentRatingCard != null
@@ -114,46 +113,24 @@ class StudentRatingsCardServiceImplTest extends Specification {
 
         when:
         studentRepo.findByNameAndLastName(_ as String, _ as String) >> Optional.empty()
-        service.createCard(studentRatingsCard)
+        def response = service.createCard(studentRatingsCard)
 
         then:
-        thrown(UniversityException.class)
+        response.error != null
     }
 
     def "should update StudentRatingCard"() {
         given:
-        StudentRatingsCard studentRatingsCard = getStudentRatingCard()
+        StudentRatingsCard studentRatingsCard = StudentRatingsCardUtils.getStudentRatingCard()
 
         when:
         studentCardRepo.findById(studentRatingsCard.getId()) >> Optional.of(studentRatingsCard)
-        studentCardRepo.save(_ as StudentRatingsCard) >>updateStudentRatingCard()
+        studentCardRepo.save(_ as StudentRatingsCard) >> StudentRatingsCardUtils.updateStudentRatingCard()
 
-        StudentRatingsCard updateStudentRatingCard = service.updateCard(studentRatingsCard)
+        StudentRatingsCard updateStudentRatingCard = service.updateCard(studentRatingsCard).ratingSet
 
         then:
-        updateStudentRatingCard!=null
-        updateStudentRatingCard.groups==3.2
-    }
-
-    private static Student getStudentByNameAndLastName() {
-        return TestStudentData.prepareStudent()
-    }
-
-    private static StudentRatingsCard getStudentRatingCard() {
-        return StudentRatingsCard.builder()
-                .id(1L)
-                .student(TestStudentData.prepareStudent())
-                .groups(2.2)
-                .ratingSetList(Collections.emptyList())
-                .build()
-    }
-
-    private static StudentRatingsCard updateStudentRatingCard() {
-        return StudentRatingsCard.builder()
-                .id(1L)
-                .student(TestStudentData.prepareStudent())
-                .groups(3.2)
-                .ratingSetList(Collections.emptyList())
-                .build()
+        updateStudentRatingCard != null
+        updateStudentRatingCard.groups == 3.2
     }
 }

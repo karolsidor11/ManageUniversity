@@ -1,17 +1,17 @@
 package pl.sidor.ManageUniversity.evaluation.ratingcard;
 
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
+import pl.sidor.ManageUniversity.evaluation.response.StudentRatingsCardResponse;
 
 public interface StudentRatingsCardService {
 
-    StudentRatingsCard findByID(final Long id) throws Throwable;
+    StudentRatingsCardResponse findByID(final Long id);
 
-    StudentRatingsCard findByStudent(final String name, final String lastName) throws Throwable;
+    StudentRatingsCardResponse findByStudent(final String name, final String lastName);
 
-    StudentRatingsCard createCard(final StudentRatingsCard studentRatingsCard) throws Throwable;
+    StudentRatingsCardResponse createCard(final StudentRatingsCard studentRatingsCard);
 
-    StudentRatingsCard updateCard(final StudentRatingsCard studentRatingsCard) throws Throwable;
+    StudentRatingsCardResponse updateCard(final StudentRatingsCard studentRatingsCard);
 
-    boolean deleteCard(final Long id);
-
+    StudentRatingsCardResponse deleteCard(final Long id);
 }

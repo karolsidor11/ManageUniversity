@@ -19,12 +19,8 @@ import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.lecturer.validation.CheckLecturer;
 import pl.sidor.ManageUniversity.mapper.LecturerMapper;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
-import pl.sidor.ManageUniversity.schedule.model.Schedule;
-import pl.sidor.ManageUniversity.schedule.model.Subject;
-import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.sidor.ManageUniversity.utils.TestLecturerData.prepareLecturer;
 import static pl.sidor.ManageUniversity.utils.TestLecturerData.updatelecturer;
-import static pl.sidor.ManageUniversity.utils.TestScheduleData.prepareSchedule;
 import static pl.sidor.ManageUniversity.utils.TestScheduleData.prepareScheduleRequest;
 import static pl.sidor.ManageUniversity.utils.TestSubjectData.prepareSubject;
 
@@ -49,9 +44,6 @@ public class LecturerControllerIT {
 
     @MockBean
     private SubjectRepo subjectRepo;
-
-    @MockBean
-    private ScheduleRepo scheduleRepo;
 
     @MockBean
     private CheckLecturer checkLecturer;
@@ -71,10 +63,10 @@ public class LecturerControllerIT {
         // expected
         mockMvc.perform(get("/lecturers/{id}", 1L))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Jan")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Kowalski")))
-                .andExpect(jsonPath("$.email", Matchers.is("kowalski@wp.pl")))
+                .andExpect(jsonPath("$.lecturer.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.lecturer.name", Matchers.is("Jan")))
+                .andExpect(jsonPath("$.lecturer.lastName", Matchers.is("Kowalski")))
+                .andExpect(jsonPath("$.lecturer.email", Matchers.is("kowalski@wp.pl")))
                 .andReturn();
     }
 
@@ -107,10 +99,10 @@ public class LecturerControllerIT {
          mockMvc.perform(post("/lecturers")
                 .content(objectMapper.writeValueAsString(lecturer))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Jan")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Kowalski")))
-                .andExpect(jsonPath("$.email", Matchers.is("kowalski@wp.pl")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.lecturer.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.lecturer.name", Matchers.is("Jan")))
+                .andExpect(jsonPath("$.lecturer.lastName", Matchers.is("Kowalski")))
+                .andExpect(jsonPath("$.lecturer.email", Matchers.is("kowalski@wp.pl")))
                  .andReturn();
     }
 
@@ -194,9 +186,9 @@ public class LecturerControllerIT {
         when(lecturerRepo.findById(lecturer.getId())).thenReturn(Optional.empty());
 
         //  expect
-        mockMvc.perform(post("/lecturers").content(objectMapper.writeValueAsString(updateLecturer))
+        mockMvc.perform(put("/lecturers").content(objectMapper.writeValueAsString(updateLecturer))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
                 .andReturn();
     }
 
@@ -211,10 +203,10 @@ public class LecturerControllerIT {
         // expected
         mockMvc.perform(get("/lecturers/lecturerDTO/{id}", prepareLecturer().getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", Matchers.is("Jan")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Kowalski")))
-                .andExpect(jsonPath("$.email", Matchers.is("kowalski@wp.pl")))
-                .andExpect(jsonPath("$.grade", Matchers.is("Doktor")))
+                .andExpect(jsonPath("$.lecturer.name", Matchers.is("Jan")))
+                .andExpect(jsonPath("$.lecturer.lastName", Matchers.is("Kowalski")))
+                .andExpect(jsonPath("$.lecturer.email", Matchers.is("kowalski@wp.pl")))
+                .andExpect(jsonPath("$.lecturer.grade", Matchers.is("Doktor")))
                 .andReturn();
     }
 
