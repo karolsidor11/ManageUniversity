@@ -1,65 +1,60 @@
 package pl.sidor.ManageUniversity.schedule.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ExceptionFactory;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
 
-@AllArgsConstructor
 @Transactional
+@AllArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
 
-    private SubjectRepo subjectRepo;
-    private SubjectValidator subjectValidator;
-    private LecturerRepo lecturerRepo;
+    private final SubjectRepo subjectRepo;
+    private final SubjectValidator subjectValidator;
+    private final LecturerRepo lecturerRepo;
 
     @Override
-    public Subject getById(Long id) throws Throwable {
+    public Subject getById(final Long id) throws Throwable {
         return subjectRepo.findById(id).orElseThrow(ExceptionFactory.incorrectSubjectID(String.valueOf(id)));
     }
 
     @Override
-    public Subject save(Subject subject) throws Throwable {
-
-        if(!subjectValidator.test(subject)|| Objects.isNull(subject)){
-            throw  ExceptionFactory.incorrectTime(subject.getEndTime().toString());
+    public Subject save(final Subject subject) throws Throwable {
+        if (!subjectValidator.test(subject)) {
+            throw ExceptionFactory.incorrectTime(subject.getEndTime().toString());
         }
 
-        return subjectRepo.save(subject);
-
+       return of(subjectRepo.save(subject)).orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
     }
 
     @Override
-    public void delete(Long id) throws Throwable {
-
-       of(getById(id)).ifPresent(subject -> subjectRepo.deleteById(id));
-
+    public void delete(final Long id) throws Throwable {
+        ofNullable(getById(id)).ifPresent(subject -> subjectRepo.deleteById(id));
     }
 
     @Override
-    public Optional<Subject> findByLecturer(Long id, String name, String lastName) {
+    public Optional<Subject> findByLecturer(final Long id, final String name, final String lastName) throws Throwable {
 
-        Long id1 = lecturerRepo.findByNameAndLastName(name, lastName).get().getId();
-        Optional<Lecturer> byId = lecturerRepo.findById(id1);
+        Optional<Lecturer> lecturer = ofNullable(lecturerRepo.findByNameAndLastName(name, lastName))
+                .orElseThrow(ExceptionFactory.objectIsEmpty("!!!"));
 
-        return subjectRepo.findByLecturer(byId.get());
+        Long lecturerId = lecturer.get().getId();
+        Optional<Lecturer> lecturerById = of(lecturerRepo.findById(lecturerId)).orElseThrow();
 
+        return ofNullable(subjectRepo.findByLecturer(lecturerById.get())).orElseThrow();
     }
 
     @Override
-    public Subject findByLecturer(Lecturer lecturer) {
-        return subjectRepo.findByLecturer(lecturer).get();
+    public Subject findByLecturer(final Lecturer lecturer) throws Throwable {
+        return ofNullable(subjectRepo.findByLecturer(lecturer)).orElseThrow(ExceptionFactory.objectIsEmpty("!!!")).get();
     }
 }

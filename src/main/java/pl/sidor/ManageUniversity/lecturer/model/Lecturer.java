@@ -15,10 +15,10 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Lecturer  implements Serializable{
+public class Lecturer implements Serializable {
 
     private static final long serialVersionUID = 2807717549783551827L;
 
@@ -26,15 +26,12 @@ public class Lecturer  implements Serializable{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "Name")
     @NotNull(message = "Imię nie może być null.")
     private String name;
 
-    @Column(name = "LastName")
     @NotNull(message = "Nazwisko nie może być null.")
     private String lastName;
 
-    @Column(name = "Email")
     @Email(message = "Nieprawidłowy adres eamail.")
     private String email;
 
@@ -42,15 +39,12 @@ public class Lecturer  implements Serializable{
     @NotNull(message = "Adres nie może być null.")
     private Adres adres;
 
-    @Column(name = "PhoneNumber")
-    private int phoneNumber;
+    @NotNull(message = "Numer telefonu nie może być null.")
+    private Integer phoneNumber;
 
-    @Column(name = "Degree")
     @NotNull(message = "Stopień naukowy nie może byc null.")
     private String grade;
 
-    @OneToMany
-    @Column(name = "SubjectID")
-    private List<Subject> subject;
-
+    @OneToOne()
+    private Subject subject;
 }

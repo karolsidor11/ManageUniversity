@@ -8,19 +8,19 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    Schedule create(Schedule schedule) throws Throwable;
+    Schedule create(final Schedule schedule) throws Throwable;
 
-    Schedule getScheduleById(Long id) throws Throwable;
+    Schedule getScheduleById(final Long id) throws Throwable;
 
-    Schedule findByDay(Days day) throws Throwable;
+    Schedule findByDay(final Days day) throws Throwable;
 
-    boolean deleteByID(Long id) throws Throwable;
+    boolean deleteByID(final Long id) throws Throwable;
 
-    void deleteByDay(Days day) throws Throwable;
+    void deleteByDay(final Days day) throws Throwable;
 
-    Schedule updateSchedule(Schedule schedule) throws Throwable;
+    Schedule updateSchedule(final Schedule schedule) throws Throwable;
 
-    List<Schedule> findByStudentGroupAndWeekNumber(Double studentGroup, Integer weekNumber);
+    List<Schedule> findByStudentGroupAndWeekNumber(final Double studentGroup, final Integer weekNumber);
 
-    Schedule modifySchedule(ScheduleUpdate scheduleUpdate) throws Throwable;
+    Schedule modifySchedule(final ScheduleUpdate scheduleUpdate) throws Throwable;
 }

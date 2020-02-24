@@ -16,7 +16,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<CustomErrorResponse> findById(Exception ex) {
 
         CustomErrorResponse customErrorResponse = new CustomErrorResponse();
-
         customErrorResponse.setLocalDateTime(LocalDateTime.now());
         customErrorResponse.setErrorMessage(ex.getMessage());
         customErrorResponse.setStatus(HttpStatus.NOT_FOUND.value());

@@ -9,18 +9,18 @@ import java.util.List;
 
 public interface StudentService {
 
-    Student findById(Long id) throws Throwable;
+    Student findById(final Long id) throws Throwable;
 
-    Student findByNameAndLastName(String name, String lastName) throws Throwable;
+    Student findByNameAndLastName(final String name, final String lastName) throws Throwable;
 
-    Student create(Student student) throws Throwable;
+    Student create(final Student student) throws Throwable;
 
-    void update(Student student) throws Throwable;
+    void update(final Student student) throws Throwable;
 
-    void delete(Long id) throws Throwable;
+    void delete(final Long id) throws Throwable;
 
-    List<Schedule> findScheduleForStudent(FindScheduleRequest request) throws Throwable;
+    List<Schedule> findScheduleForStudent(final FindScheduleRequest request) throws Throwable;
 
-    List<ScheduleDTO> findSchedule(FindScheduleRequest request) throws Throwable;
+    List<ScheduleDTO> findSchedule(final FindScheduleRequest request) throws Throwable;
 }
 

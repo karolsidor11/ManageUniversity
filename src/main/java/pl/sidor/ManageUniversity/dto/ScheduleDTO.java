@@ -1,15 +1,17 @@
 package pl.sidor.ManageUniversity.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class ScheduleDTO {
 
     private Days dayOfWeek;

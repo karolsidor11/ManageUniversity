@@ -10,10 +10,10 @@ import java.util.Optional;
 @Repository
 public interface StudentRepo extends CrudRepository<Student, Long> {
 
-    List<Student> findByEmail(String email);
+    List<Student> findByEmail(final String email);
 
-    List<Student> findByPhoneNumber(int phoneNumber);
+    List<Student> findByPhoneNumber(final Integer phoneNumber);
 
-    Optional<Student> findByNameAndLastName(String name, String lastName);
+    Optional<Student> findByNameAndLastName(final String name, final String lastName);
 
 }
