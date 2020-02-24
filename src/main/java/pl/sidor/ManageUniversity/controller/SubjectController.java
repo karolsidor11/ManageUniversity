@@ -33,6 +33,6 @@ public class SubjectController {
 
     @GetMapping(value = "/lecturer/{id}")
     public ResponseEntity<SubjectResponse> findByLecturer(@PathVariable final Long id) {
-        return new ResponseEntity<>(subjectService.findByLecturer(id), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(subjectService.findByLecturer(id), HttpStatus.OK);
     }
 }

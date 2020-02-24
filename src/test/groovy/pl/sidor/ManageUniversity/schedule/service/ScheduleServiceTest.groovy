@@ -1,19 +1,25 @@
 package pl.sidor.ManageUniversity.schedule.service
 
-
+import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo
 import pl.sidor.ManageUniversity.request.ScheduleUpdate
 import pl.sidor.ManageUniversity.schedule.enums.Days
 import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
+import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo
 import pl.sidor.ManageUniversity.schedule.utils.ScheduleUtils
 import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator
+import pl.sidor.ManageUniversity.student.service.StudentService
 import spock.lang.Specification
 
 class ScheduleServiceTest extends Specification {
 
     private ScheduleRepo scheduleRepo = Mock(ScheduleRepo.class)
     private ScheduleValidator scheduleValidator = Mock(ScheduleValidator.class)
-    private ScheduleServiceImpl scheduleService = [scheduleRepo, scheduleValidator]
+    private LecturerRepo lecturerRepo = Mock()
+    private SubjectRepo subjectRepo = Mock()
+    private StudentService studentService = Mock()
+
+    private ScheduleServiceImpl scheduleService = [scheduleRepo, lecturerRepo,  subjectRepo, studentService, scheduleValidator]
 
     def "should  delete Schedule by ID"() {
         given:
@@ -116,6 +122,4 @@ class ScheduleServiceTest extends Specification {
         then:
         result.error != null
     }
-
-
 }

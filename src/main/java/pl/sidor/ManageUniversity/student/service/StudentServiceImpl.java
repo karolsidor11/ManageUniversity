@@ -43,6 +43,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponse update(final Student student) {
         StudentResponse studentResponse = findById(student.getId());
+        if(studentResponse.getStudent()==null){
+            return StudentResponse.prepareStudentResponse(Optional.empty(), ResponseException.pustyObiekt());
+        }
         Optional<Student> newStudent = Optional.of(studentRepo.save(buildStudent(studentResponse.getStudent(), student)));
         return StudentResponse.prepareStudentResponse(newStudent, ResponseException.brakStudenta(student.getId()));
     }

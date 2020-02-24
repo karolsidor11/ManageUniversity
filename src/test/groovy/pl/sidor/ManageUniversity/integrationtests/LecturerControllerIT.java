@@ -186,7 +186,7 @@ public class LecturerControllerIT {
         when(lecturerRepo.findById(lecturer.getId())).thenReturn(Optional.empty());
 
         //  expect
-        mockMvc.perform(post("/lecturers").content(objectMapper.writeValueAsString(updateLecturer))
+        mockMvc.perform(put("/lecturers").content(objectMapper.writeValueAsString(updateLecturer))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();

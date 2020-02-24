@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
@@ -57,10 +58,9 @@ public class SubjectControllerIT {
         when(subjectRepo.findById(1L)).thenReturn(Optional.of(subject));
 
         // expected
-         mockMvc.perform(get("/subject/1"))
-                .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id",Matchers.is(1)))
-                .andReturn();
+      mockMvc.perform(get("/subject/1"))
+              .andExpect(status().isOk())
+              .andReturn();
     }
 
     @Test
@@ -107,7 +107,7 @@ public class SubjectControllerIT {
         // expected
 
         mockMvc.perform(delete("/subject/{id}", id))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isOk())
                 .andReturn();
     }
 

@@ -21,10 +21,7 @@ import pl.sidor.ManageUniversity.schedule.validator.ScheduleValidator;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.service.StudentService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.singletonList;
@@ -55,18 +52,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleResponse getScheduleById(final Long id) {
         Optional<Schedule> scheduleByID = scheduleRepo.findById(id);
-        if (scheduleByID.isEmpty()) {
-            return ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
-        }
         return ScheduleResponse.prepareResponse(scheduleByID, ResponseException.pustyObiekt());
     }
 
     @Override
     public ScheduleResponse findByDay(final Days day) {
         Optional<Schedule> byDayOfWeek = scheduleRepo.findByDayOfWeek(day);
-        if (byDayOfWeek.isEmpty()) {
-            return  ScheduleResponse.prepareResponse(Optional.empty(), ResponseException.brakRozkladu());
-        }
         return ScheduleResponse.prepareResponse(byDayOfWeek, ResponseException.pustyObiekt());
     }
 
@@ -119,7 +110,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         schedule.getSubjects().remove(subject.get());
-        schedule.setSubjects(newArrayList(singletonList(scheduleUpdate.getSubjects())));
+        schedule.setSubjects(newArrayList(Arrays.asList(scheduleUpdate.getSubjects())));
         scheduleRepo.save(schedule);
 
         return ScheduleResponse.prepareResponse(Optional.of(schedule), ResponseException.pustyObiekt());

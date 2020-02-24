@@ -175,7 +175,7 @@ public class StudentControllerIT {
         when(studentRepo.findById(student.getId())).thenReturn(Optional.empty());
 
         //  expect
-        mockMvc.perform(post("/students")
+        mockMvc.perform(put("/students")
                 .content(objectMapper.writeValueAsString(newStudent))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
