@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.sidor.ManageUniversity.dto.CandidateDto;
-import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult;
+import pl.sidor.ManageUniversity.recruitment.response.RecrutationResultResponse;
 import pl.sidor.ManageUniversity.recruitment.service.recrutationResult.RecrutationResultService;
 
 @RestController
@@ -21,9 +21,8 @@ public class RecrutationResultController {
     private final RecrutationResultService recrutationResultService;
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RecrutationResult> checkRecrutationResult(@RequestBody CandidateDto candidateDto) throws Throwable {
-        RecrutationResult recrutationResult = recrutationResultService
-                .checkRecrutationResult(candidateDto.getName(), candidateDto.getLastName());
-        return new ResponseEntity<>(recrutationResult, HttpStatus.OK);
+    public ResponseEntity<RecrutationResultResponse> checkRecrutationResult(@RequestBody CandidateDto candidateDto) {
+        RecrutationResultResponse recrutationResultResponse = recrutationResultService.checkRecrutationResult(candidateDto.getName(), candidateDto.getLastName());
+        return new ResponseEntity<>(recrutationResultResponse, HttpStatus.OK);
     }
 }

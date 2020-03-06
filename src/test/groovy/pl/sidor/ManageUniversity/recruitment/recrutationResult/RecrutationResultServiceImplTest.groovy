@@ -1,6 +1,5 @@
 package pl.sidor.ManageUniversity.recruitment.recrutationResult
 
-import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.recruitment.enums.AcceptedInCollage
 import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult
 import pl.sidor.ManageUniversity.recruitment.repository.RecrutationResultRepo
@@ -17,27 +16,23 @@ class RecrutationResultServiceImplTest extends Specification {
         def recrutation = getRecrutation()
 
         when:
-        recrutationResultRepo.findByNameAndLastName("Karol", "Sidor") >> recrutation
+        recrutationResultRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.of(recrutation)
         def result = resultService.checkRecrutationResult(recrutation.getName(), recrutation.getLastName())
 
         then:
         result != null
-        result.getName() == "Karol"
-        result.getLastName() == "Sidor"
-        result.getIsAccept() == AcceptedInCollage.ACCEPTED
+        result.getRecrutationResult().getName() == "Karol"
+        result.getRecrutationResult().getLastName() == "Sidor"
+        result.getRecrutationResult().getIsAccept() == AcceptedInCollage.ACCEPTED
     }
 
     def "should throw exception"() {
-
-        given:
-        RecrutationResult result = null
-
         when:
-        recrutationResultRepo.findByNameAndLastName("Karol", "Sidor") >> result
-        resultService.checkRecrutationResult("Karol", "Sidor")
+        recrutationResultRepo.findByNameAndLastName("Karol", "Sidor") >> Optional.empty()
+        def result = resultService.checkRecrutationResult("Karol", "Sidor")
 
         then:
-        thrown(UniversityException.class)
+        result.getError()!=null
     }
 
     private static RecrutationResult getRecrutation() {

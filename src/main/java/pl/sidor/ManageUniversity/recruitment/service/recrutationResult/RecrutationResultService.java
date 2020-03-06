@@ -1,8 +1,8 @@
 package pl.sidor.ManageUniversity.recruitment.service.recrutationResult;
 
-import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult;
+import pl.sidor.ManageUniversity.recruitment.response.RecrutationResultResponse;
 
 public interface RecrutationResultService {
 
-    RecrutationResult checkRecrutationResult(final String name, final String lastName) throws Throwable;
+    RecrutationResultResponse checkRecrutationResult(final String name, final String lastName);
 }
