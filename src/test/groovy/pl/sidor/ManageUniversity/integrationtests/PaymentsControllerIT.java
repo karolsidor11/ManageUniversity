@@ -79,10 +79,10 @@ public class PaymentsControllerIT {
         mockMvc.perform(MockMvcRequestBuilders.get("/payments")
                 .content(objectMapper.writeValueAsString(paymentForStudy))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.paymentForStudy.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.paymentForStudy.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.paymentForStudy.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.paymentForStudy.email", Matchers.is("karolsidor11@wp.pl")))
                 .andReturn();
     }
 
