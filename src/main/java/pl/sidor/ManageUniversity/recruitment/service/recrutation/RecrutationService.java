@@ -4,5 +4,5 @@ import pl.sidor.ManageUniversity.recruitment.model.MaturaResults;
 
 public interface RecrutationService {
 
-    Double process(final MaturaResults maturaResults) throws Throwable;
+    Double process(final MaturaResults maturaResults);
 }

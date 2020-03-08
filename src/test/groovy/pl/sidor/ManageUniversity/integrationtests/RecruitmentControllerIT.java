@@ -48,10 +48,10 @@ public class RecruitmentControllerIT {
         // expected
         mockMvc.perform(MockMvcRequestBuilders.get("/recruitments/{id}",candidate.getId()))
                 .andDo(print())
-                .andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(jsonPath("$.candidate.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.candidate.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.candidate.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.candidate.email", Matchers.is("karolsidor11@wp.pl")))
                 .andExpect(status().isOk());
     }
 
@@ -64,7 +64,7 @@ public class RecruitmentControllerIT {
         // expected
         mockMvc.perform(MockMvcRequestBuilders.get("/recruitments/{id}",99999L))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class RecruitmentControllerIT {
         // expected
         mockMvc.perform(MockMvcRequestBuilders.delete("/recruitments/{id}",id))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -107,9 +107,9 @@ public class RecruitmentControllerIT {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(jsonPath("$.candidate.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.candidate.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.candidate.email", Matchers.is("karolsidor11@wp.pl")))
                 .andReturn();
     }
 

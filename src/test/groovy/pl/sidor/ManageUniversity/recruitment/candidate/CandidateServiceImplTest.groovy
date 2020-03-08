@@ -1,6 +1,6 @@
 package pl.sidor.ManageUniversity.recruitment.candidate
 
-import pl.sidor.ManageUniversity.exception.UniversityException
+
 import pl.sidor.ManageUniversity.recruitment.model.Candidate
 import pl.sidor.ManageUniversity.recruitment.model.MaturaResults
 import pl.sidor.ManageUniversity.recruitment.repository.CandidateRepo
@@ -12,11 +12,11 @@ import spock.lang.Specification
 
 class CandidateServiceImplTest extends Specification {
 
-    private CandidateRepo candidateRepo =Mock(CandidateRepo.class)
-    private  RecrutationService recrutationService=Mock(RecrutationService.class)
-    private  RecrutationResultRepo resultService=Mock(RecrutationResultRepo.class)
+    private CandidateRepo candidateRepo = Mock(CandidateRepo.class)
+    private RecrutationService recrutationService = Mock(RecrutationService.class)
+    private RecrutationResultRepo resultService = Mock(RecrutationResultRepo.class)
 
-    private CandidateServiceImpl candidateService=[candidateRepo, recrutationService, resultService]
+    private CandidateServiceImpl candidateService = [candidateRepo, recrutationService, resultService]
 
     def "should find Candidate by ID"() {
         given:
@@ -28,9 +28,9 @@ class CandidateServiceImplTest extends Specification {
 
         then:
         candidate != null
-        candidate.name=="Karol"
-        candidate.lastName == "Sidor"
-        candidate.email == "karolsidor11@wp.pl"
+        candidate.getCandidate().name == "Karol"
+        candidate.getCandidate().lastName == "Sidor"
+        candidate.getCandidate().email == "karolsidor11@wp.pl"
     }
 
     def "should throw exception when id is incorrect"() {
@@ -39,11 +39,10 @@ class CandidateServiceImplTest extends Specification {
 
         when:
         candidateRepo.findById(id) >> Optional.empty()
-        candidateService.findByID(id)
+        def result = candidateService.findByID(id)
 
         then:
-        def exception = thrown(UniversityException)
-        exception.message == "W bazie  nie istnieje kandydat na studia o podanym identyfikatorze. -9"
+        result.error != null
     }
 
     def "should delete Candidate by ID"() {
@@ -64,11 +63,10 @@ class CandidateServiceImplTest extends Specification {
 
         when:
         candidateRepo.findById(id) >> Optional.empty()
-        candidateService.delete(id)
+        def result = candidateService.delete(id)
 
         then:
-        def exception = thrown(UniversityException.class)
-        exception.message == "W bazie  nie istnieje kandydat na studia o podanym identyfikatorze. 99999"
+        result.error != null
     }
 
     def "should  create Candidate"() {
@@ -77,14 +75,14 @@ class CandidateServiceImplTest extends Specification {
 
         when:
         candidateRepo.save(candidate) >> candidate
-        recrutationService.process(_ as MaturaResults)>>1000
+        recrutationService.process(_ as MaturaResults) >> 1000
         def firstCandidate = candidateService.create(candidate)
 
         then:
         firstCandidate != null
-        firstCandidate.name == "Karol"
-        firstCandidate.lastName == "Sidor"
-        firstCandidate.email == "karolsidor11@wp.pl"
+        firstCandidate.getCandidate().name == "Karol"
+        firstCandidate.getCandidate().lastName == "Sidor"
+        firstCandidate.getCandidate().email == "karolsidor11@wp.pl"
     }
 
     def "should throw exception when create Candidate"() {
@@ -92,10 +90,9 @@ class CandidateServiceImplTest extends Specification {
         Candidate candidate = null
 
         when:
-        candidateService.create(candidate)
+        def result = candidateService.create(candidate)
 
         then:
-        def exception= thrown(UniversityException.class)
-        exception.message == "Przekazywany obiekt jest pusty.:!!!"
+        result.error != null
     }
 }
