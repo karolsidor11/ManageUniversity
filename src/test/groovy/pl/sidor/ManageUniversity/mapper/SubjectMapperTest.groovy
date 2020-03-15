@@ -6,7 +6,6 @@ import spock.lang.Specification
 
 class SubjectMapperTest extends Specification {
 
-
     def "should convert to SubjectDto"() {
         given:
         Subject subject = getSubject()

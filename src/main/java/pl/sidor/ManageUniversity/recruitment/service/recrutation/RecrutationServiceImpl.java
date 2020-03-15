@@ -14,11 +14,10 @@ public class RecrutationServiceImpl implements RecrutationService {
 
     @Override
     public Double process(final MaturaResults maturaResults) {
-
         MaturaResults actuaMaturaResults = Optional.ofNullable(maturaResults).orElse(MaturaResults.getDefaultValues());
 
         Double polishResult = actuaMaturaResults.getPolishResult();
-        Double languageResult =actuaMaturaResults.getLanguageResult();
+        Double languageResult = actuaMaturaResults.getLanguageResult();
         Double mathResult = actuaMaturaResults.getMathResult();
 
         return (((polishResult * POLISH_INDEX) + (languageResult * LANGUAGE_INDEX) + (mathResult * MATH_INDEX)) / 3) * 100;

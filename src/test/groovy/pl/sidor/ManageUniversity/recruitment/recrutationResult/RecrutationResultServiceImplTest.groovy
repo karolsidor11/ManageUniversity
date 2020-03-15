@@ -9,6 +9,7 @@ import spock.lang.Specification
 class RecrutationResultServiceImplTest extends Specification {
 
     private RecrutationResultRepo recrutationResultRepo = Mock(RecrutationResultRepo.class)
+
     private RecrutationResultServiceImpl resultService = [recrutationResultRepo]
 
     def "should find recrutation result"() {

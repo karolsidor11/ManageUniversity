@@ -40,7 +40,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public void should_find_candidate_by_id() throws Exception {
-
         // given
         Candidate candidate = TestCandidateData.prepareCandidate();
         when(candidateRepo.findById(candidate.getId())).thenReturn(Optional.of(candidate));
@@ -57,7 +56,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public void should_throw_exception_find_candidate_by_id() throws Exception {
-
         // given
         when(candidateRepo.findById(9999L)).thenReturn(Optional.empty());
 
@@ -69,7 +67,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public  void should_delete_candidate() throws Exception {
-
         // given
         Long  id =1L;
         Candidate candidate = TestCandidateData.prepareCandidate();
@@ -83,7 +80,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public  void should_throw_exception_delete_candidate() throws Exception {
-
         // given
         Long  id =9999L;
         when(candidateRepo.findById(id)).thenReturn(Optional.empty());
@@ -96,7 +92,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public void  should_create_candidate() throws Exception {
-
         // given
         Candidate candidate = TestCandidateData.prepareCandidate();
         when(candidateRepo.save(candidate)).thenReturn(candidate);
@@ -115,7 +110,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public void  should_throw_exception_create_candidate() throws Exception {
-
         // given
         Candidate candidate = null;
 

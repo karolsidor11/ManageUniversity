@@ -14,6 +14,7 @@ class PaymentServiceImplTest extends Specification {
 
     private PaymentRepo paymentRepo = Mock(PaymentRepo.class)
     private EntityManager entityManager = Stub()
+
     private PaymentServiceImpl paymentService = [entityManager, paymentRepo]
 
     def "should pay for study"() {

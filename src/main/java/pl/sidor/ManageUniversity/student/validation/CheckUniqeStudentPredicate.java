@@ -1,12 +1,12 @@
 package pl.sidor.ManageUniversity.student.validation;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import pl.sidor.ManageUniversity.student.model.Student;
 import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 
 import java.util.function.Predicate;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CheckUniqeStudentPredicate implements Predicate<Student> {
 
     private final StudentRepo studentRepo;

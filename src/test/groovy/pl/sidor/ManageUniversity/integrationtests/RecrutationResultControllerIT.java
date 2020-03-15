@@ -39,7 +39,6 @@ public class RecrutationResultControllerIT {
 
     @Test
     public  void  should_check_recrutation_result() throws Exception {
-
         //given
         CandidateDto candidateDto = TestCandidateData.prepareCandidateDto();
         RecrutationResult recrutationResult = RecrutationResult.builder()
@@ -52,7 +51,6 @@ public class RecrutationResultControllerIT {
                 .thenReturn(Optional.of(recrutationResult));
 
         //expected
-
         mockMvc.perform(get("/recrutationResults")
                 .content(objectMapper.writeValueAsString(candidateDto))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
@@ -62,7 +60,6 @@ public class RecrutationResultControllerIT {
 
     @Test
     public  void  should_throw_exception() throws Exception {
-
         // given
         CandidateDto candidateDto =TestCandidateData.prepareCandidateDto();
         when(recrutationResultRepo.findByNameAndLastName("Jan", "Nowak")).thenReturn(null);

@@ -46,7 +46,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void should_find_schedule_by_id() throws Exception {
-
         //given:
         Schedule schedule = prepareSchedule();
         when(scheduleRepo.findById(1L)).thenReturn(Optional.of(schedule));
@@ -63,7 +62,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void should_find_schedule_by_day() throws Exception {
-
         //given:
         Schedule schedule = prepareSchedule();
         when(scheduleRepo.findByDayOfWeek(Days.Poniedzialek)).thenReturn(Optional.of(schedule));
@@ -77,7 +75,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void should_create_schedule() throws Exception {
-
         //given:
         Schedule schedule = prepareSchedule();
 
@@ -94,10 +91,8 @@ public class ScheduleControllerIT {
 
     @Test
     public void delete_schedule_by_id() throws Exception {
-
         //when:
         Long id = 1L;
-
         when(scheduleRepo.findById(id)).thenReturn(Optional.of(prepareSchedule()));
         doNothing().when(scheduleRepo).deleteById(id);
 
@@ -112,7 +107,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void delete_by_day() throws Exception {
-
         //given:
         Days day = Days.Poniedzialek;
 
@@ -131,7 +125,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void should_update_schedule() throws Exception {
-
         //given:
         Schedule schedule =prepareSchedule();
         Schedule updateSchedule = prepareScheduleUpdate();
@@ -150,7 +143,6 @@ public class ScheduleControllerIT {
     @Ignore
     @Test
     public void test_should_modify_schedule() throws Exception {
-
         //  given
         ScheduleUpdate scheduleUpdate = prepareScheduleUpdates();
 
@@ -167,7 +159,6 @@ public class ScheduleControllerIT {
 
     @Test
     public void test_should_throw_exception_modify_schedule() throws Exception {
-
         //  when
         ScheduleUpdate scheduleUpdate = prepareScheduleUpdates();
         when(scheduleRepo.findByDayOfWeekAndWeekNumber(scheduleUpdate.getDayOfWeek(), scheduleUpdate.getWeekNumber())).thenReturn(Optional.empty());

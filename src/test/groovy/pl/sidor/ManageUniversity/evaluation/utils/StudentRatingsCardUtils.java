@@ -8,11 +8,11 @@ import java.util.Collections;
 
 public class StudentRatingsCardUtils {
 
-    private static Student getStudentByNameAndLastName() {
+    public static Student getStudentByNameAndLastName() {
         return TestStudentData.prepareStudent();
     }
 
-    private static StudentRatingsCard getStudentRatingCard() {
+     public static StudentRatingsCard getStudentRatingCard() {
         return StudentRatingsCard.builder()
                 .id(1L)
                 .student(TestStudentData.prepareStudent())
@@ -21,7 +21,7 @@ public class StudentRatingsCardUtils {
                 .build();
     }
 
-    private static StudentRatingsCard updateStudentRatingCard() {
+     public static StudentRatingsCard updateStudentRatingCard() {
         return StudentRatingsCard.builder()
                 .id(1L)
                 .student(TestStudentData.prepareStudent())

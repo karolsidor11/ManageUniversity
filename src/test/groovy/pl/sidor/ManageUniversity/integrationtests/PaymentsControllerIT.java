@@ -39,7 +39,6 @@ public class PaymentsControllerIT {
     @Test
     @Ignore
     public  void  should_make_a_payments_for_study() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = TestPaymentForStudy.preparePaymentForStudy();
 
@@ -56,7 +55,6 @@ public class PaymentsControllerIT {
 
     @Test
     public  void  should_throw_exception_make_a_payments_for_study() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = null;
 
@@ -70,7 +68,6 @@ public class PaymentsControllerIT {
 
     @Test
     public void should_checkpayments() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = TestPaymentForStudy.preparePaymentForStudy();
         paymentRepo.save(paymentForStudy);
@@ -88,7 +85,6 @@ public class PaymentsControllerIT {
 
     @Test
     public void should_throw_checkpayments() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = null;
 

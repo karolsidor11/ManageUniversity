@@ -3,6 +3,7 @@ package pl.sidor.ManageUniversity.pdf;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.student.model.Student;
 
@@ -11,38 +12,20 @@ import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class StudentPdfGenerator {
+
+    private final PdfGenerator pdfGenerator;
 
     public ByteArrayInputStream studentReport(Student student) {
         Document document = new Document();
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         if (Objects.isNull(student)) {
-            return prepareEmptyPdf(document, arrayOutputStream);
+            return pdfGenerator.prepareEmptyPdf(document,arrayOutputStream,
+                    "Nie znaleziono studenta o podanym identyfikatorze.");
         }
         prepareDocument(student, document, arrayOutputStream);
         return new ByteArrayInputStream(arrayOutputStream.toByteArray());
-    }
-
-    private ByteArrayInputStream prepareEmptyPdf(Document document, ByteArrayOutputStream arrayOutputStream) {
-        try {
-            PdfWriter.getInstance(document, arrayOutputStream);
-            document.open();
-            Paragraph elements = getParagraphMessage();
-            document.add(elements);
-            document.close();
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        }
-        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
-    }
-
-    private Paragraph getParagraphMessage() {
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Paragraph paragraph1 = new Paragraph();
-        paragraph1.add("Nie znaleziono studenta o podanym identyfikatorze.");
-        paragraph1.setAlignment(Element.ALIGN_CENTER);
-        paragraph1.setFont(font);
-        return paragraph1;
     }
 
     private void prepareDocument(Student student, Document document, ByteArrayOutputStream arrayOutputStream) {

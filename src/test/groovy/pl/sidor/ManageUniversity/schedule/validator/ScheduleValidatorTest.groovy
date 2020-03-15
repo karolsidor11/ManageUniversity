@@ -30,6 +30,4 @@ class ScheduleValidatorTest extends Specification {
         Days.Czwartek     || false
         Days.Piatek       || false
     }
-
-
 }

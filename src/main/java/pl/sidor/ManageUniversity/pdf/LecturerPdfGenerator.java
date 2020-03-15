@@ -3,47 +3,31 @@ package pl.sidor.ManageUniversity.pdf;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import jdk.jfr.Registered;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
 import static java.util.Objects.isNull;
 
 @Component
+@RequiredArgsConstructor
 public class LecturerPdfGenerator {
+
+    private final PdfGenerator pdfGenerator;
 
     public ByteArrayInputStream lecturerReport(Lecturer lecturer) {
         Document document = new Document();
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         if (isNull(lecturer)) {
-            return prepereEmptyPdf(document, byteArrayOutputStream);
+            return pdfGenerator.prepareEmptyPdf(document, byteArrayOutputStream,
+                    "Nie znaleziono wykładowcy o podanym identyfikatorze.");
         }
         prepareDocument(lecturer, document, byteArrayOutputStream);
         return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-    }
-
-    private ByteArrayInputStream prepereEmptyPdf(Document document, ByteArrayOutputStream byteArrayOutputStream) {
-        try {
-            PdfWriter.getInstance(document, byteArrayOutputStream);
-            document.open();
-            Paragraph elements = getParagraphMessage();
-            document.add(elements);
-            document.close();
-
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        }
-        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
-    }
-
-    private Paragraph getParagraphMessage() {
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Paragraph paragraph1 = new Paragraph();
-        paragraph1.add("Nie znaleziono wykładowcy o podanym identyfikatorze.");
-        paragraph1.setAlignment(Element.ALIGN_CENTER);
-        paragraph1.setFont(font);
-        return paragraph1;
     }
 
     private void prepareDocument(Lecturer lecturer, Document document, ByteArrayOutputStream outputStream) {

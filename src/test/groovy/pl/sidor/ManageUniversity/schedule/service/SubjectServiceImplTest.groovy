@@ -9,6 +9,7 @@ import pl.sidor.ManageUniversity.schedule.utils.SubejctUtils
 import pl.sidor.ManageUniversity.schedule.validator.SubjectValidator
 import spock.lang.Specification
 
+import java.time.LocalTime
 
 class SubjectServiceImplTest extends Specification {
 
@@ -62,8 +63,8 @@ class SubjectServiceImplTest extends Specification {
         Subject subject = SubejctUtils.getAllSubject()
 
         when:
-        subjectRepo.findByStartTimeAndEndTime(_, _) >> false
-        subjectRepo.save(_) >> subject
+        subjectRepo.findByStartTimeAndEndTime(_ as LocalTime, _ as LocalTime) >> false
+        subjectRepo.save(_ as Subject) >> subject
         SubjectResponse subjectResponse = service.save(subject)
 
         then:

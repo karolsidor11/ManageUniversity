@@ -55,7 +55,6 @@ public class StudentControllerIT {
 
     @Test
     public void should_find_student_by_id() throws Exception {
-
         // given
         Student student = prepareStudent();
 
@@ -70,7 +69,6 @@ public class StudentControllerIT {
 
     @Test
     public  void test_should_throw_exception_when_incorrect_id() throws Exception {
-
         // given
         Long studentID=9830984L;
         when(studentRepo.findById(studentID)).thenReturn(Optional.empty());
@@ -85,7 +83,6 @@ public class StudentControllerIT {
 
     @Test
     public void should_save_student() throws Exception {
-
         // given
         Student student = prepareStudent();
         when(checkUniqeStudentPredicate.test(student)).thenReturn(false);
@@ -104,7 +101,6 @@ public class StudentControllerIT {
 
     @Test
     public void test_should_throw_exception_when_save_empty_student() throws Exception {
-
         // when
         when(checkUniqeStudentPredicate.test(null)).thenReturn(true);
 
@@ -118,7 +114,6 @@ public class StudentControllerIT {
 
     @Test
     public void should_delete_student() throws Exception {
-
         // given
         when(studentRepo.findById(1L)).thenReturn(Optional.of(Student.builder().id(1L).build()));
         doNothing().when(studentRepo).deleteById(1L);
@@ -133,7 +128,6 @@ public class StudentControllerIT {
 
     @Test
     public  void  test_should_throw_exception_delete_student() throws Exception {
-
         // given
         Long studentId=9999L;
 
@@ -146,7 +140,6 @@ public class StudentControllerIT {
 
     @Test
     public void should_update_student() throws Exception {
-
         // given
         Student student = prepareStudent();
         Student updateStudent = prepareUpdateStudent();
@@ -167,7 +160,6 @@ public class StudentControllerIT {
 
     @Test
     public void test_should_throw_exception_update_student() throws Exception {
-
         // given
         Student student=prepareStudent();
         Student newStudent= prepareUpdateStudent();
