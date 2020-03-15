@@ -18,8 +18,6 @@ public class TestSubjectData {
                 .build();
     }
     public static Subject prepareSubject() {
-
-
         return Subject.builder()
                 .id(1L)
                 .name("Java")

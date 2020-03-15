@@ -1,35 +1,32 @@
 package pl.sidor.ManageUniversity.recruitment.payments
 
 import pl.sidor.ManageUniversity.dto.CandidateDto
-import pl.sidor.ManageUniversity.exception.UniversityException
-import pl.sidor.ManageUniversity.recruitment.model.Candidate
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy
 import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo
 import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentServiceImpl
 import pl.sidor.ManageUniversity.utils.TestCandidateData
 import pl.sidor.ManageUniversity.utils.TestPaymentForStudy
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import javax.persistence.EntityManager
 
 class PaymentServiceImplTest extends Specification {
 
-    private PaymentRepo paymentRepo=Mock(PaymentRepo.class)
-    private EntityManager entityManager=Stub()
-    private PaymentServiceImpl paymentService=[entityManager,paymentRepo]
+    private PaymentRepo paymentRepo = Mock(PaymentRepo.class)
+    private EntityManager entityManager = Stub()
 
-    @Ignore
+    private PaymentServiceImpl paymentService = [entityManager, paymentRepo]
+
     def "should pay for study"() {
         given:
         PaymentForStudy payment = TestPaymentForStudy.preparePaymentForStudy()
-        Candidate candidate = TestCandidateData.prepareCandidate()
 
         when:
+        paymentRepo.save(_ as PaymentForStudy) >> payment
         def result = paymentService.pay(payment)
 
         then:
-        result != null
+        result.error == null
     }
 
     def "should throw exception when payment is null"() {
@@ -37,11 +34,10 @@ class PaymentServiceImplTest extends Specification {
         PaymentForStudy payment = null
 
         when:
-        paymentService.pay(payment)
+        def result = paymentService.pay(payment)
 
         then:
-        Exception exception = thrown(UniversityException.class)
-        exception.message == "Przekazywany obiekt jest pusty.:PaymentForStudy."
+        result.error != null
     }
 
     def "should  check payments"() {
@@ -55,9 +51,9 @@ class PaymentServiceImplTest extends Specification {
 
         then:
         result != null
-        result.getName() == "Karol"
-        result.getLastName() == "Sidor"
-        result.getEmail() == "karolsidor11@wp.pl"
+        result.getPaymentForStudy().getName() == "Karol"
+        result.getPaymentForStudy().getLastName() == "Sidor"
+        result.getPaymentForStudy().getEmail() == "karolsidor11@wp.pl"
     }
 
     def "should throw exception when payments is empty"() {
@@ -66,9 +62,9 @@ class PaymentServiceImplTest extends Specification {
 
         when:
         paymentRepo.findByNameAndLastName(candidateDto.getName(), candidateDto.getLastName()) >> Optional.empty()
-        paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName())
+        def result = paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName())
 
         then:
-        thrown(UniversityException.class)
+        result.error != null
     }
 }

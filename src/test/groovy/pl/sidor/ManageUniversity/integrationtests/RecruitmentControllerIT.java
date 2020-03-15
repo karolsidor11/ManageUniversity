@@ -40,7 +40,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public void should_find_candidate_by_id() throws Exception {
-
         // given
         Candidate candidate = TestCandidateData.prepareCandidate();
         when(candidateRepo.findById(candidate.getId())).thenReturn(Optional.of(candidate));
@@ -48,28 +47,26 @@ public class RecruitmentControllerIT {
         // expected
         mockMvc.perform(MockMvcRequestBuilders.get("/recruitments/{id}",candidate.getId()))
                 .andDo(print())
-                .andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(jsonPath("$.candidate.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.candidate.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.candidate.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.candidate.email", Matchers.is("karolsidor11@wp.pl")))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void should_throw_exception_find_candidate_by_id() throws Exception {
-
         // given
         when(candidateRepo.findById(9999L)).thenReturn(Optional.empty());
 
         // expected
         mockMvc.perform(MockMvcRequestBuilders.get("/recruitments/{id}",99999L))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test
     public  void should_delete_candidate() throws Exception {
-
         // given
         Long  id =1L;
         Candidate candidate = TestCandidateData.prepareCandidate();
@@ -83,7 +80,6 @@ public class RecruitmentControllerIT {
 
     @Test
     public  void should_throw_exception_delete_candidate() throws Exception {
-
         // given
         Long  id =9999L;
         when(candidateRepo.findById(id)).thenReturn(Optional.empty());
@@ -91,12 +87,11 @@ public class RecruitmentControllerIT {
         // expected
         mockMvc.perform(MockMvcRequestBuilders.delete("/recruitments/{id}",id))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk());
     }
 
     @Test
     public void  should_create_candidate() throws Exception {
-
         // given
         Candidate candidate = TestCandidateData.prepareCandidate();
         when(candidateRepo.save(candidate)).thenReturn(candidate);
@@ -107,15 +102,14 @@ public class RecruitmentControllerIT {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(jsonPath("$.candidate.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.candidate.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.candidate.email", Matchers.is("karolsidor11@wp.pl")))
                 .andReturn();
     }
 
     @Test
     public void  should_throw_exception_create_candidate() throws Exception {
-
         // given
         Candidate candidate = null;
 

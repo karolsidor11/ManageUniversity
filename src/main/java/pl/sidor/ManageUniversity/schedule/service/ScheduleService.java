@@ -15,7 +15,7 @@ public interface ScheduleService {
 
     ScheduleResponse getScheduleById(final Long id);
 
-    ScheduleResponse findByDay(final Days day) ;
+    ScheduleResponse findByDay(final Days day);
 
     ScheduleResponse deleteByID(final Long id);
 

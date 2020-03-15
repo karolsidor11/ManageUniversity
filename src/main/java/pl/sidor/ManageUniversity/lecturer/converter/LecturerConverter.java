@@ -12,16 +12,6 @@ public class LecturerConverter {
         return Objects.nonNull(lecturer) ? createLecturer(lecturer) : null;
     }
 
-    private static Lecturer createLecturer(Lecturer lecturer) {
-        LecturerDTO lecturerDTOS = LecturerMapper.mapTo(lecturer);
-        return Lecturer.builder()
-                .name(lecturerDTOS.getName())
-                .lastName(lecturerDTOS.getLastName())
-                .email(lecturerDTOS.getEmail())
-                .grade(lecturerDTOS.getGrade())
-                .build();
-    }
-
     public static Lecturer createLecturer(Lecturer actual, Lecturer updateLecturer) {
         actual.setId(updateLecturer.getId());
         actual.setName(updateLecturer.getName());
@@ -33,5 +23,15 @@ public class LecturerConverter {
         actual.setSubject(updateLecturer.getSubject());
 
         return updateLecturer;
+    }
+
+    private static Lecturer createLecturer(Lecturer lecturer) {
+        LecturerDTO lecturerDTOS = LecturerMapper.mapTo(lecturer);
+        return Lecturer.builder()
+                .name(lecturerDTOS.getName())
+                .lastName(lecturerDTOS.getLastName())
+                .email(lecturerDTOS.getEmail())
+                .grade(lecturerDTOS.getGrade())
+                .build();
     }
 }

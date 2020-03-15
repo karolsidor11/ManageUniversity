@@ -1,27 +1,27 @@
 package pl.sidor.ManageUniversity.controller;
 
-        import lombok.AllArgsConstructor;
-        import org.springframework.core.io.InputStreamResource;
-        import org.springframework.http.MediaType;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.web.bind.annotation.GetMapping;
-        import org.springframework.web.bind.annotation.PathVariable;
-        import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.RestController;
-        import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse;
-        import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
-        import pl.sidor.ManageUniversity.pdf.LecturerPdfGenerator;
-        import pl.sidor.ManageUniversity.pdf.SchedulePdfGenerator;
-        import pl.sidor.ManageUniversity.pdf.StudentPdfGenerator;
-        import pl.sidor.ManageUniversity.pdf.SubjectPdfGenerator;
-        import pl.sidor.ManageUniversity.schedule.response.ScheduleResponse;
-        import pl.sidor.ManageUniversity.schedule.response.SubjectResponse;
-        import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
-        import pl.sidor.ManageUniversity.schedule.service.SubjectService;
-        import pl.sidor.ManageUniversity.student.response.StudentResponse;
-        import pl.sidor.ManageUniversity.student.service.StudentService;
+import lombok.AllArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse;
+import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
+import pl.sidor.ManageUniversity.pdf.LecturerPdfGenerator;
+import pl.sidor.ManageUniversity.pdf.SchedulePdfGenerator;
+import pl.sidor.ManageUniversity.pdf.StudentPdfGenerator;
+import pl.sidor.ManageUniversity.pdf.SubjectPdfGenerator;
+import pl.sidor.ManageUniversity.schedule.response.ScheduleResponse;
+import pl.sidor.ManageUniversity.schedule.response.SubjectResponse;
+import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
+import pl.sidor.ManageUniversity.schedule.service.SubjectService;
+import pl.sidor.ManageUniversity.student.response.StudentResponse;
+import pl.sidor.ManageUniversity.student.service.StudentService;
 
-        import java.io.ByteArrayInputStream;
+import java.io.ByteArrayInputStream;
 
 @RestController
 @AllArgsConstructor
@@ -59,7 +59,7 @@ public class ReportsController {
     }
 
     @GetMapping(value = "/schedule/{id}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> scheduleReport(@PathVariable Long id){
+    public ResponseEntity<InputStreamResource> scheduleReport(@PathVariable Long id) {
         ScheduleResponse scheduleById = scheduleService.getScheduleById(id);
         ByteArrayInputStream stream = schedulePdfGenerator.studentReport(scheduleById.getSchedule());
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(stream));

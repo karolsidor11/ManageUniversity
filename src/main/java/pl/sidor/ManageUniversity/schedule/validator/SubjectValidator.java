@@ -1,13 +1,13 @@
 package pl.sidor.ManageUniversity.schedule.validator;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 import pl.sidor.ManageUniversity.schedule.repository.SubjectRepo;
 
 import java.util.function.Predicate;
 
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubjectValidator implements Predicate<Subject> {
 
     private final SubjectRepo subjectRepo;

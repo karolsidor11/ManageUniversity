@@ -39,7 +39,6 @@ public class PaymentsControllerIT {
     @Test
     @Ignore
     public  void  should_make_a_payments_for_study() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = TestPaymentForStudy.preparePaymentForStudy();
 
@@ -56,7 +55,6 @@ public class PaymentsControllerIT {
 
     @Test
     public  void  should_throw_exception_make_a_payments_for_study() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = null;
 
@@ -70,7 +68,6 @@ public class PaymentsControllerIT {
 
     @Test
     public void should_checkpayments() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = TestPaymentForStudy.preparePaymentForStudy();
         paymentRepo.save(paymentForStudy);
@@ -79,16 +76,15 @@ public class PaymentsControllerIT {
         mockMvc.perform(MockMvcRequestBuilders.get("/payments")
                 .content(objectMapper.writeValueAsString(paymentForStudy))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.id", Matchers.is(1)))
-                .andExpect(jsonPath("$.name", Matchers.is("Karol")))
-                .andExpect(jsonPath("$.lastName", Matchers.is("Sidor")))
-                .andExpect(jsonPath("$.email", Matchers.is("karolsidor11@wp.pl")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.paymentForStudy.id", Matchers.is(1)))
+                .andExpect(jsonPath("$.paymentForStudy.name", Matchers.is("Karol")))
+                .andExpect(jsonPath("$.paymentForStudy.lastName", Matchers.is("Sidor")))
+                .andExpect(jsonPath("$.paymentForStudy.email", Matchers.is("karolsidor11@wp.pl")))
                 .andReturn();
     }
 
     @Test
     public void should_throw_checkpayments() throws Exception {
-
         // given
         PaymentForStudy paymentForStudy = null;
 

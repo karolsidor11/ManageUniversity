@@ -14,6 +14,5 @@ public interface StudentService {
     StudentResponse update(final Student student);
 
     StudentResponse delete(final Long id);
-
 }
 

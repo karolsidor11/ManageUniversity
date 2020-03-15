@@ -52,7 +52,6 @@ public class SubjectControllerIT {
 
     @Test
     public void should_find_subject_by_id() throws Exception {
-
         // when
         Subject subject =prepareSubject(prepareLecturer());
         when(subjectRepo.findById(1L)).thenReturn(Optional.of(subject));
@@ -65,7 +64,6 @@ public class SubjectControllerIT {
 
     @Test
     public  void  should_throw_exception_when_find_by_id() throws Exception {
-
         // when
         Long id=999L;
 
@@ -75,7 +73,6 @@ public class SubjectControllerIT {
         mockMvc.perform(get("/schedule/{id}", id))
             .andExpect(status().isNotFound())
             .andReturn();
-
     }
 
     @Test
@@ -97,7 +94,6 @@ public class SubjectControllerIT {
 
     @Test
     public void  should_throw_exception_when_delete() throws Exception {
-
         // when
         Long id=1L;
 
@@ -113,7 +109,6 @@ public class SubjectControllerIT {
 
     @Test
     public void should_fin_by_lecturer() throws Exception {
-
         //  when
         Lecturer lecturer= prepareLecturer();
 
@@ -128,13 +123,11 @@ public class SubjectControllerIT {
 
     @Test
     public  void should_throw_exception_when_find_by_lecturer() throws Exception {
-
         //  when
         Lecturer lecturer= prepareLecturer();
 
         when(lecturerRepo.findById(lecturer.getId())).thenReturn(Optional.empty());
         when(subjectRepo.findByLecturer(lecturer)).thenReturn(Optional.of(prepareSubject(lecturer)));
-
 
         //  expeted
         mockMvc.perform(get("/schedule/lecturer/{id}", lecturer.getId()))
@@ -144,7 +137,6 @@ public class SubjectControllerIT {
 
     @Test
     public  void  should_create_subject() throws Exception {
-
         // when
         Subject subject = prepareSubject();
         when(subjectValidator.test(subject)).thenReturn(true);
@@ -161,13 +153,11 @@ public class SubjectControllerIT {
 
     @Test
     public  void  test_should_throw_excepton_when_save_subject() throws Exception {
-
         // when
         Subject subject = null;
         when(subjectRepo.save(subject)).thenReturn(subject);
 
         // expected
-
         mockMvc.perform(post("/subject")
                 .content(objectMapper.writeValueAsString(subject))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))

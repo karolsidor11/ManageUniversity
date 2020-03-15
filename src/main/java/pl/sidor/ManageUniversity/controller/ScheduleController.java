@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.request.FindScheduleRequest;
 import pl.sidor.ManageUniversity.request.ScheduleUpdate;
 import pl.sidor.ManageUniversity.schedule.enums.Days;
@@ -15,14 +14,12 @@ import pl.sidor.ManageUniversity.schedule.service.ScheduleService;
 
 import java.util.List;
 
-
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "schedules")
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
-    private final LecturerService lecturerServiceImpl;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ScheduleResponse> getScheduleByID(@PathVariable final Long id) {
@@ -35,7 +32,7 @@ public class ScheduleController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ScheduleResponse> create(@RequestBody Schedule schedule)  {
+    public ResponseEntity<ScheduleResponse> create(@RequestBody Schedule schedule) {
         return new ResponseEntity<>(scheduleService.create(schedule), HttpStatus.CREATED);
     }
 

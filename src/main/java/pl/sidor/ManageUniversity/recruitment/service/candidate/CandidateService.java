@@ -1,12 +1,13 @@
 package pl.sidor.ManageUniversity.recruitment.service.candidate;
 
 import pl.sidor.ManageUniversity.recruitment.model.Candidate;
+import pl.sidor.ManageUniversity.recruitment.response.RecruitmentResponse;
 
 public interface CandidateService {
 
-    Candidate create(final Candidate candidate) throws Throwable;
+    RecruitmentResponse create(final Candidate candidate);
 
-    Candidate findByID(final Long id) throws Throwable;
+    RecruitmentResponse findByID(final Long id);
 
-    void delete(final Long id) throws Throwable;
+    RecruitmentResponse delete(final Long id);
 }

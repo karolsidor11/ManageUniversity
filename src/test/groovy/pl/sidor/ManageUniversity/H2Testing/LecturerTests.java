@@ -1,6 +1,5 @@
 package pl.sidor.ManageUniversity.H2Testing;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
+import pl.sidor.ManageUniversity.lecturer.response.LecturerResponse;
 import pl.sidor.ManageUniversity.lecturer.service.LecturerService;
 import pl.sidor.ManageUniversity.model.Adres;
 
@@ -21,77 +21,48 @@ public class LecturerTests {
     @Autowired
     private LecturerService lecturerService;
 
-
-    @Before
-    public void setUp() throws Throwable {
-       lecturerService.create(Lecturer.builder()
-                .id(9L)
-                .name("Karol")
-                .lastName("Sidor")
-                .email("jan@wp.pl")
-                .grade("Doktor")
-                .adres(new Adres())
-                .phoneNumber(909090909)
-                .build());
-
-    }
-
     @Test
-    public  void should_add_lecturer() throws Throwable {
-
+    public  void should_add_lecturer(){
         //  given:
-        Lecturer lecturer= Lecturer.builder()
-                .id(1L)
-                .name("Jan")
-                .lastName("Nowak")
-                .email("jan11@wp.pl")
-                .grade("Doktor")
-                .adres(new Adres())
-                .phoneNumber(909090909)
-                .build();
+        Lecturer lecturer = getLecturer().getLecturer();
         //  when
         lecturerService.create(lecturer);
-        Lecturer byId = lecturerService.findById(1L).getLecturer();
+        Lecturer byId = lecturerService.findById(9L).getLecturer();
 
         // then
-        assertEquals(byId.getName(), "Jan");
-
+        assertEquals(byId.getName(), "Karol");
     }
 
     @Test
-    public void should_findLecturer_by_id() throws Throwable {
+    public void should_findLecturer_by_id() {
         // given
-        lecturerService.create(Lecturer.builder()
-                .id(2L)
-                .name("Karol")
-                .lastName("Sidor")
-                .email("janek@wp.pl")
-                .grade("Doktor")
-                .adres(new Adres())
-                .phoneNumber(909090909)
-                .build());
+        lecturerService.create(getLecturer().getLecturer());
         //  when
-        Lecturer byId = lecturerService.findById(2L).getLecturer();
+        Lecturer byId = lecturerService.findById(9L).getLecturer();
 
         // then
         assertEquals(byId.getName(), "Karol");
         assertEquals(byId.getLastName(), "Sidor");
-        assertEquals(byId.getEmail(), "janek@wp.pl");
+        assertEquals(byId.getEmail(), "karol@wp.pl");
     }
 
     @Test
-    public void should_delete_lecturer_by_id() throws Throwable {
+    public void should_delete_lecturer_by_id() {
+        lecturerService.create(getLecturer().getLecturer());
 
-        lecturerService.create(Lecturer.builder()
-                .id(2L)
-                .name("Marek")
-                .lastName("Nowak")
-                .email("nowakowski@wp.pl")
-                .grade("Profesor")
-                .adres(new Adres())
-                .build());
-
-        Lecturer byId = lecturerService.findById(2L).getLecturer();
+        Lecturer byId = lecturerService.findById(9L).getLecturer();
         lecturerService.delete(byId.getId());
+    }
+
+    private LecturerResponse getLecturer(){
+       return lecturerService.create(Lecturer.builder()
+                .id(9L)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("karol@wp.pl")
+                .grade("Doktor")
+                .adres(new Adres())
+                .phoneNumber(909090909)
+                .build());
     }
 }

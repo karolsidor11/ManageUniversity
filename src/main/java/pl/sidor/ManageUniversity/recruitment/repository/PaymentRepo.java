@@ -10,5 +10,4 @@ import java.util.Optional;
 public interface PaymentRepo extends CrudRepository<PaymentForStudy, Long> {
 
     Optional<PaymentForStudy> findByNameAndLastName(final String name, final String lastName);
-
 }

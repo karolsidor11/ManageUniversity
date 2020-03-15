@@ -3,6 +3,7 @@ package pl.sidor.ManageUniversity.pdf;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.schedule.model.Schedule;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
@@ -12,38 +13,20 @@ import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class SchedulePdfGenerator {
+
+    private final PdfGenerator pdfGenerator;
 
     public ByteArrayInputStream studentReport(Schedule schedule) {
         Document document = new Document();
         ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
         if (Objects.isNull(schedule)) {
-            return prepareEmptyPdf(document, arrayOutputStream);
+            return pdfGenerator.prepareEmptyPdf(document,arrayOutputStream,
+                    "Nie znaleziono rozkladu zajec o podanym identyfikatorze.");
         }
         prepareDocument(schedule, document, arrayOutputStream);
         return new ByteArrayInputStream(arrayOutputStream.toByteArray());
-    }
-
-    private ByteArrayInputStream prepareEmptyPdf(Document document, ByteArrayOutputStream arrayOutputStream) {
-        try {
-            PdfWriter.getInstance(document, arrayOutputStream);
-            document.open();
-            Paragraph elements = getParagraphMessage();
-            document.add(elements);
-            document.close();
-        } catch (DocumentException ex) {
-            ex.printStackTrace();
-        }
-        return new ByteArrayInputStream(arrayOutputStream.toByteArray());
-    }
-
-    private Paragraph getParagraphMessage() {
-        Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-        Paragraph paragraph1 = new Paragraph();
-        paragraph1.add("Nie znaleziono rozkladu zajec o podanym identyfikatorze.");
-        paragraph1.setAlignment(Element.ALIGN_CENTER);
-        paragraph1.setFont(font);
-        return paragraph1;
     }
 
     private void prepareDocument(Schedule schedule, Document document, ByteArrayOutputStream arrayOutputStream) {

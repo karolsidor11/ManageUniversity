@@ -17,6 +17,8 @@ import pl.sidor.ManageUniversity.recruitment.model.RecrutationResult;
 import pl.sidor.ManageUniversity.recruitment.repository.RecrutationResultRepo;
 import pl.sidor.ManageUniversity.utils.TestCandidateData;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +39,6 @@ public class RecrutationResultControllerIT {
 
     @Test
     public  void  should_check_recrutation_result() throws Exception {
-
         //given
         CandidateDto candidateDto = TestCandidateData.prepareCandidateDto();
         RecrutationResult recrutationResult = RecrutationResult.builder()
@@ -47,10 +48,9 @@ public class RecrutationResultControllerIT {
                 .build();
 
         when(recrutationResultRepo.findByNameAndLastName(candidateDto.getName(), candidateDto.getLastName()))
-                .thenReturn(recrutationResult);
+                .thenReturn(Optional.of(recrutationResult));
 
         //expected
-
         mockMvc.perform(get("/recrutationResults")
                 .content(objectMapper.writeValueAsString(candidateDto))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE))
@@ -60,7 +60,6 @@ public class RecrutationResultControllerIT {
 
     @Test
     public  void  should_throw_exception() throws Exception {
-
         // given
         CandidateDto candidateDto =TestCandidateData.prepareCandidateDto();
         when(recrutationResultRepo.findByNameAndLastName("Jan", "Nowak")).thenReturn(null);

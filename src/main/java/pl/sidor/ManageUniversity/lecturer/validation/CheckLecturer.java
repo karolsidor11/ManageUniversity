@@ -1,6 +1,6 @@
 package pl.sidor.ManageUniversity.lecturer.validation;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.lecturer.repository.LecturerRepo;
 
@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 
 import static java.util.Optional.ofNullable;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CheckLecturer implements Predicate<Lecturer> {
 
     private final LecturerRepo lecturerRepo;

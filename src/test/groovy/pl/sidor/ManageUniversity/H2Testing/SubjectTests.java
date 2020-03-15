@@ -21,8 +21,7 @@ public class SubjectTests {
     private SubjectService subjectService;
 
     @Test
-    public void should_save_subject() throws Throwable {
-
+    public void should_save_subject() {
         //  given
         Subject subject = prepareSubject();
 
@@ -35,14 +34,12 @@ public class SubjectTests {
     }
 
     @Test
-    public void should_find_subject() throws Throwable {
-
+    public void should_find_subject() {
         //  given
         Subject subject = prepareSubject();
 
         // when
         Subject save = subjectService.save(subject).getSubject();
-
         Subject byId = subjectService.getById(save.getId()).getSubject();
 
         // then
@@ -50,14 +47,11 @@ public class SubjectTests {
         assertEquals(byId.getRoomNumber(),22 );
     }
 
-
     @Test
-    public void should_delete_subject() throws Throwable {
-
+    public void should_delete_subject(){
         // when
         Subject save = subjectService.save(prepareSubject()).getSubject();
 
        subjectService.delete(save.getId());
-
     }
 }

@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.sidor.ManageUniversity.dto.CandidateDto;
-import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy;
+import pl.sidor.ManageUniversity.recruitment.response.PaymentResponse;
 import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentService;
 
 @RestController
@@ -18,13 +18,13 @@ public class PaymentsController {
     private final PaymentService paymentService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentForStudy> makePayment(@RequestBody PaymentForStudy payment) throws Throwable {
+    public ResponseEntity<PaymentResponse> makePayment(@RequestBody PaymentForStudy payment) {
         return new ResponseEntity<>(paymentService.pay(payment), HttpStatus.OK);
     }
 
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PaymentForStudy> checkPayments(@RequestBody CandidateDto candidateDto) throws Throwable {
-        PaymentForStudy paymentForStudy = paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName());
-        return new ResponseEntity<>(paymentForStudy, HttpStatus.OK);
+    public ResponseEntity<PaymentResponse> checkPayments(@RequestBody CandidateDto candidateDto) {
+        PaymentResponse paymentResponse = paymentService.checkPayments(candidateDto.getName(), candidateDto.getLastName());
+        return new ResponseEntity<>(paymentResponse, HttpStatus.OK);
     }
 }

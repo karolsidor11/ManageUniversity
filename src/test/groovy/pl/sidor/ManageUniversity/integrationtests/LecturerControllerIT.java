@@ -55,7 +55,6 @@ public class LecturerControllerIT {
 
     @Test
     public void should_find_lecturer_by_id() throws Exception {
-
         // given
         Lecturer lecturer = prepareLecturer();
         when(lecturerRepo.findById(1L)).thenReturn(Optional.of(lecturer));
@@ -72,7 +71,6 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_when_id_is_incorrect() throws Exception {
-
         // when
         Long id = 9999L;
 
@@ -87,7 +85,6 @@ public class LecturerControllerIT {
 
     @Test
     public void should_save_lecturer() throws Exception {
-
         // given
         Lecturer lecturer =prepareLecturer();
 
@@ -108,7 +105,6 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_when_lecturer_null() throws Exception {
-
         // given
         Lecturer lecturer = prepareLecturer();
 
@@ -124,7 +120,6 @@ public class LecturerControllerIT {
 
     @Test
     public void should_delete_lecturer() throws Exception {
-
         // given
         Long id = 1L;
 
@@ -142,7 +137,6 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_when_id_incorrect() throws Exception {
-
         // when
         Long id = 123212L;
 
@@ -158,7 +152,6 @@ public class LecturerControllerIT {
 
     @Test
     public void should_update_lecturer() throws Exception {
-
         // given
         Lecturer lecturer = prepareLecturer();
         Lecturer updateLecturer = updatelecturer();
@@ -178,7 +171,6 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_when_update_lecturer() throws Exception {
-
         //  given
         Lecturer lecturer = prepareLecturer();
         Lecturer updateLecturer = updatelecturer();
@@ -194,10 +186,7 @@ public class LecturerControllerIT {
 
     @Test
     public void testShouldFindLecturerDTO() throws Exception {
-
         // given
-        LecturerDTO lecturerDTO = LecturerMapper.mapTo(prepareLecturer());
-
         when(lecturerRepo.findById(prepareLecturer().getId())).thenReturn(Optional.of(prepareLecturer()));
 
         // expected
@@ -212,10 +201,8 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_when_lecturerDto_incorrect_id() throws Exception {
-
         // given
         Long id = 2324343L;
-
         when(lecturerRepo.findById(id)).thenReturn(Optional.empty());
 
         //  when
@@ -230,7 +217,6 @@ public class LecturerControllerIT {
 
     @Test
     public void testShouldThrowExceptionWhenSearchScheduleForLecturer() throws Exception {
-
         // given
         Lecturer lecturer = prepareLecturer();
         FindScheduleRequest request = prepareScheduleRequest(lecturer);
@@ -247,7 +233,6 @@ public class LecturerControllerIT {
 
     @Test
     public void test_should_throw_exception_if_lecturer_incorrect() throws Exception {
-
         // given
         FindScheduleRequest request = prepareScheduleRequest(prepareLecturer());
 

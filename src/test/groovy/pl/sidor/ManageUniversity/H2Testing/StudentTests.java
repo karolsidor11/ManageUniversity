@@ -1,6 +1,7 @@
 package pl.sidor.ManageUniversity.H2Testing;
 
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -11,8 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import pl.sidor.ManageUniversity.exception.UniversityException;
 import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.student.model.Student;
+import pl.sidor.ManageUniversity.student.repository.StudentRepo;
 import pl.sidor.ManageUniversity.student.service.StudentService;
-import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 
 import java.util.Optional;
 
@@ -27,51 +28,39 @@ public class StudentTests {
 
     @Autowired
     private StudentService studentRepo;
+    @Autowired
+    private StudentRepo repo;
 
     @Before
-    public void setUp()  {
-        studentRepo.create(Student.builder()
-                .id(1L)
-                .name("Karol")
-                .lastName("Sidor")
-                .email("test1@p.pl")
-                .adres(new Adres())
-                .phoneNumber(999222333)
-                .build());
+    public void setUp() {
+        studentRepo.create(getStudent());
+    }
+
+    @After
+    public void after() {
+        repo.deleteAll();
     }
 
     @Test
-    public void should_add_student()  {
-
+    public void should_add_student() {
         // when
-        studentRepo.create(Student.builder()
-                .id(2L)
-                .name("Jan")
-                .lastName("Nowak")
-                .email("test1@p.pl")
-                .adres(new Adres())
-                .phoneNumber(999222333)
-                .build());
-
-       Student byId = studentRepo.findByNameAndLastName("Jan","Nowak").getStudent();
+        studentRepo.create(getStudent());
+        Student byId = studentRepo.findByNameAndLastName("Karol", "Sidor").getStudent();
 
         // then
         assertNotNull(byId);
-        assertEquals("Jan", byId.getName());
-        assertEquals("Nowak", byId.getLastName());
-
+        assertEquals("Karol", byId.getName());
+        assertEquals("Sidor", byId.getLastName());
     }
 
     @Test(expected = UniversityException.class)
-    public void should_throw_add_student()  {
-
+    public void should_throw_add_student() {
         // when
         studentRepo.create(null);
     }
 
     @Test
-    public  void  find_student_by_ID()  {
-
+    public void find_student_by_ID() {
         //  when
         Optional<Student> byId = ofNullable(studentRepo.findByNameAndLastName("Karol", "Sidor").getStudent());
 
@@ -81,12 +70,14 @@ public class StudentTests {
         assertEquals("Sidor", byId.get().getLastName());
     }
 
-//    @Test(expected = UniversityException.class)
-//    public void test_should_delete_student() throws Throwable {
-//
-//        //  when
-//        studentRepo.delete(1L);
-//        Student byId = studentRepo.findById(1L);
-//
-//    }
+    private Student getStudent() {
+        return Student.builder()
+                .id(1L)
+                .name("Karol")
+                .lastName("Sidor")
+                .email("test1@p.pl")
+                .adres(new Adres())
+                .phoneNumber(999222333)
+                .build();
+    }
 }

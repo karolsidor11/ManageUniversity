@@ -1,6 +1,5 @@
 package pl.sidor.ManageUniversity.recruitment.recrutation
 
-import pl.sidor.ManageUniversity.exception.UniversityException
 import pl.sidor.ManageUniversity.recruitment.model.MaturaResults
 import pl.sidor.ManageUniversity.recruitment.service.recrutation.RecrutationServiceImpl
 import spock.lang.Specification
@@ -27,10 +26,10 @@ class RecrutationServiceImplTest extends Specification {
         MaturaResults maturaResults = null
 
         when:
-        service.process(maturaResults)
+        def result = service.process(maturaResults)
 
         then:
-        thrown(UniversityException.class)
+        result==0.0
     }
 
     private static MaturaResults getMaturaResults() {

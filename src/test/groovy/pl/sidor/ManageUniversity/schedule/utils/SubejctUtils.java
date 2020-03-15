@@ -12,8 +12,8 @@ public class SubejctUtils {
                 .id(1L)
                 .name("Polski")
                 .lecturer(getLecturer())
-                .startTime(LocalTime.of(13, 00))
-                .endTime(LocalTime.of(15, 00))
+                .startTime(LocalTime.of(13, 0))
+                .endTime(LocalTime.of(15, 0))
                 .build();
     }
 
@@ -22,8 +22,8 @@ public class SubejctUtils {
                 .id(1L)
                 .name("Polski")
                 .lecturer(getLecturer())
-                .endTime(LocalTime.of(12, 00))
-                .endTime(LocalTime.of(13, 00))
+                .endTime(LocalTime.of(12, 0))
+                .endTime(LocalTime.of(13, 0))
                 .build();
     }
     private static Lecturer getLecturer(){

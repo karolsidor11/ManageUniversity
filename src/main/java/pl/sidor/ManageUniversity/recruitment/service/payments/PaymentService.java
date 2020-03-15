@@ -1,10 +1,11 @@
 package pl.sidor.ManageUniversity.recruitment.service.payments;
 
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy;
+import pl.sidor.ManageUniversity.recruitment.response.PaymentResponse;
 
 public interface PaymentService {
 
-    PaymentForStudy pay(final PaymentForStudy paymentForStudy) throws Throwable;
+    PaymentResponse pay(final PaymentForStudy paymentForStudy);
 
-    PaymentForStudy checkPayments(final String name, final String lastName) throws Throwable;
+    PaymentResponse checkPayments(final String name, final String lastName);
 }
