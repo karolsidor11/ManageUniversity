@@ -1,10 +1,9 @@
 package pl.sidor.ManageUniversity.schedule.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.Objects;

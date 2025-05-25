@@ -27,7 +27,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentResponse findByNameAndLastName(final String name, final String lastName) {
-        Optional<Student> studentByNameAndLastName = studentRepo.findByNameAndLastName(name, lastName);
+        Optional<Student> studentByNameAndLastName = Optional.ofNullable(studentRepo.findByNameAndLastName(name, lastName));
         return StudentResponse.prepareStudentResponse(studentByNameAndLastName, ResponseException.brakStudenta(name, lastName));
     }
 

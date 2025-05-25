@@ -73,8 +73,8 @@ class StudentRatingsCardServiceImplTest extends Specification {
         String lastName = "Sidor"
 
         when:
-        studentRepo.findByNameAndLastName(name, lastName) >> Optional.of(StudentRatingsCardUtils.getStudentByNameAndLastName())
-        studentCardRepo.findByStudent(StudentRatingsCardUtils.getStudentByNameAndLastName().id) >> Optional.of(StudentRatingsCardUtils.getStudentRatingCard())
+        studentRepo.findByNameAndLastName(name, lastName) >> StudentRatingsCardUtils.getStudentByNameAndLastName()
+        studentCardRepo.findById(StudentRatingsCardUtils.getStudentByNameAndLastName().id) >> Optional.of(StudentRatingsCardUtils.getStudentRatingCard())
         def response = service.findByStudent(name, lastName)
 
         then:
@@ -87,7 +87,7 @@ class StudentRatingsCardServiceImplTest extends Specification {
         String lastName = "Sidor"
 
         when:
-        studentRepo.findByNameAndLastName(name, lastName) >> Optional.empty()
+        studentRepo.findByNameAndLastName(name, lastName) >> null
         def response = service.findByStudent(name, lastName)
 
         then:

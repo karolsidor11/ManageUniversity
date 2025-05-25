@@ -30,9 +30,9 @@ public class StudentRatingsCardServiceImpl implements StudentRatingsCardService 
 
     @Override
     public StudentRatingsCardResponse findByStudent(final String name, final String lastName) {
-        Optional<Student> byNameAndLastName = studentRepo.findByNameAndLastName(name, lastName);
+        Optional<Student> byNameAndLastName = Optional.ofNullable(studentRepo.findByNameAndLastName(name, lastName));
         if (byNameAndLastName.isPresent()) {
-            Optional<StudentRatingsCard> byStudent = studentCardRepo.findByStudent(byNameAndLastName.get().getId());
+            Optional<StudentRatingsCard> byStudent = studentCardRepo.findById(byNameAndLastName.get().getId());
             return StudentRatingsCardResponse.prepareStudentRatingCardResponse(byStudent, ResponseException.pustyObiekt());
         }
         return StudentRatingsCardResponse.prepareStudentRatingCardResponse(Optional.empty(), ResponseException.pustyObiekt());

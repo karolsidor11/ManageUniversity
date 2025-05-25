@@ -3,7 +3,6 @@ package pl.sidor.ManageUniversity.pdf;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import jdk.jfr.Registered;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;

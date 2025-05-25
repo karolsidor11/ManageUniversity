@@ -1,14 +1,12 @@
 package pl.sidor.ManageUniversity.lecturer.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import pl.sidor.ManageUniversity.model.Adres;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
-
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
