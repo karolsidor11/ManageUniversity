@@ -1,20 +1,19 @@
 package pl.sidor.ManageUniversity.recruitment.service.payments;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.AllArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import pl.sidor.ManageUniversity.exception.ResponseException;
 import pl.sidor.ManageUniversity.recruitment.model.Candidate;
-import pl.sidor.ManageUniversity.recruitment.model.Candidate_;
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy;
 import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo;
 import pl.sidor.ManageUniversity.recruitment.response.PaymentResponse;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,8 +48,8 @@ public class PaymentServiceImpl implements PaymentService {
         CriteriaQuery<Candidate> query = criteriaBuilder.createQuery(Candidate.class);
         Root<Candidate> root = query.from(Candidate.class);
 
-        Predicate namePredicate = criteriaBuilder.equal(root.get(Candidate_.name), candidate.getName());
-        Predicate lastNamePredicate = criteriaBuilder.equal(root.get(Candidate_.lastName), candidate.getLastName());
+        Predicate namePredicate = criteriaBuilder.equal(root.get("name"), candidate.getName());
+        Predicate lastNamePredicate = criteriaBuilder.equal(root.get("lastname"), candidate.getLastName());
 
         query.where(namePredicate, lastNamePredicate);
 

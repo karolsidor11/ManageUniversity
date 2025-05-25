@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.recruitment.payments
 
+import jakarta.persistence.EntityManager
 import pl.sidor.ManageUniversity.dto.CandidateDto
 import pl.sidor.ManageUniversity.recruitment.model.PaymentForStudy
 import pl.sidor.ManageUniversity.recruitment.repository.PaymentRepo
@@ -7,8 +8,6 @@ import pl.sidor.ManageUniversity.recruitment.service.payments.PaymentServiceImpl
 import pl.sidor.ManageUniversity.utils.TestCandidateData
 import pl.sidor.ManageUniversity.utils.TestPaymentForStudy
 import spock.lang.Specification
-
-import javax.persistence.EntityManager
 
 class PaymentServiceImplTest extends Specification {
 

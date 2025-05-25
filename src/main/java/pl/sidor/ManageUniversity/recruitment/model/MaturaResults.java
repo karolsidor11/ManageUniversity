@@ -1,8 +1,8 @@
 package pl.sidor.ManageUniversity.recruitment.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Data

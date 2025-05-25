@@ -2,6 +2,7 @@ package pl.sidor.ManageUniversity.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import jakarta.persistence.EntityManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -38,7 +39,6 @@ import pl.sidor.ManageUniversity.student.service.StudentService;
 import pl.sidor.ManageUniversity.student.service.StudentServiceImpl;
 import pl.sidor.ManageUniversity.student.validation.CheckUniqeStudentPredicate;
 
-import javax.persistence.EntityManager;
 
 @Configuration
 public class ApplicationConfig {

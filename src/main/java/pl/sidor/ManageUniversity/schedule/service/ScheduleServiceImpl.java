@@ -24,10 +24,8 @@ import pl.sidor.ManageUniversity.student.service.StudentService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.util.Collections.singletonList;
 import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
-import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
 
 @Transactional
 @AllArgsConstructor
@@ -110,7 +108,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         schedule.getSubjects().remove(subject.get());
-        schedule.setSubjects(newArrayList(Arrays.asList(scheduleUpdate.getSubjects())));
+        schedule.setSubjects((Arrays.asList(scheduleUpdate.getSubjects())));
         scheduleRepo.save(schedule);
 
         return ScheduleResponse.prepareResponse(Optional.of(schedule), ResponseException.pustyObiekt());

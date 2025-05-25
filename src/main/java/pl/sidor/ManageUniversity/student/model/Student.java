@@ -1,5 +1,8 @@
 package pl.sidor.ManageUniversity.student.model;
 
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,9 +10,6 @@ import lombok.NoArgsConstructor;
 import pl.sidor.ManageUniversity.evaluation.model.StudentRatingsCard;
 import pl.sidor.ManageUniversity.model.Adres;
 
-import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;

@@ -1,5 +1,6 @@
 package pl.sidor.ManageUniversity.evaluation.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +8,6 @@ import lombok.NoArgsConstructor;
 import pl.sidor.ManageUniversity.lecturer.model.Lecturer;
 import pl.sidor.ManageUniversity.schedule.model.Subject;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity

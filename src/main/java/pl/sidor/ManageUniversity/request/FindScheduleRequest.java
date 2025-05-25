@@ -1,6 +1,6 @@
 package pl.sidor.ManageUniversity.request;
 
-import com.sun.istack.NotNull;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

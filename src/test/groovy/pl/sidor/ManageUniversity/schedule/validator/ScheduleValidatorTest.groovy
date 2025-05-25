@@ -1,7 +1,6 @@
 package pl.sidor.ManageUniversity.schedule.validator
 
 import pl.sidor.ManageUniversity.schedule.enums.Days
-import pl.sidor.ManageUniversity.schedule.model.Schedule
 import pl.sidor.ManageUniversity.schedule.repository.ScheduleRepo
 import pl.sidor.ManageUniversity.schedule.utils.ScheduleUtils
 import spock.lang.Specification
@@ -13,7 +12,7 @@ class ScheduleValidatorTest extends Specification {
     private ScheduleValidator scheduleValidator = [scheduleRepo]
 
     @Unroll
-    def "should return #expectResult when #dane"() {
+    def "should return #isScheduleInDatabase when #dane"() {
         given:
         Days days = Days.Poniedzialek
         scheduleRepo.findByDayOfWeek(Days.Poniedzialek) >> ScheduleUtils.getSchedule(days)
@@ -23,11 +22,11 @@ class ScheduleValidatorTest extends Specification {
         isScheduleInDatabase == scheduleValidator.test(dane)
 
         where:
-        dane              || isScheduleInDatabase
-        Days.Wtorek       || false
-        Days.Poniedzialek || true
-        Days.Sroda        || false
-        Days.Czwartek     || false
-        Days.Piatek       || false
+        dane              | isScheduleInDatabase
+        Days.Wtorek       | false
+        Days.Poniedzialek | true
+        Days.Sroda        | false
+        Days.Czwartek     | false
+        Days.Piatek       | false
     }
 }
